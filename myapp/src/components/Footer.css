@@ -1,0 +1,63 @@
+.footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #181818;
+    color: white;
+    padding: 2rem 4rem;
+    flex-wrap: wrap;
+  }
+  
+  .footer-left img {
+    height: 60px;
+  }
+  
+  .footer-center {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    text-align: left;
+  }
+  
+  .footer-text p {
+    margin: 0;
+    line-height: 1.6;
+  }
+  
+  .footer-right {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .icon {
+    font-size: 1.5rem;
+  }
+  
+  .instagram-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  
+  .instagram-link:hover {
+    color: #e1306c; /* Color típico de Instagram */
+  }
+  
+  .whatsapp-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: white;
+    text-decoration: none;
+    margin-left: 1rem;
+    transition: color 0.3s ease;
+  }
+  
+  .whatsapp-link:hover {
+    color: #25D366; /* Color de WhatsApp */
+  }
+  

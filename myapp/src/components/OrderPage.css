@@ -1,0 +1,130 @@
+.order-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 16px;
+    display: grid;
+    gap: 32px;
+    grid-template-columns: repeat(3, 1fr); /* Siempre 3 columnas */
+  }
+  
+  .order-card {
+    display: flex;
+    gap: 16px;
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    align-items: center;
+  }
+  
+  .order-card img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 12px;
+  }
+  
+  .order-card-content {
+    flex: 1;
+  }
+  
+  .order-card h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0 0 4px;
+  }
+  
+  .order-card .description {
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+  
+  .order-card .price {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+  
+  .add-button {
+    background-color: #f4b221;
+    color: white;
+    font-weight: bold;
+    padding: 6px 18px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .add-button:hover {
+    background-color: #d99f1a;
+  }
+
+  .order-page {
+    padding: 32px;
+    background-color: #ffc100;
+    min-height: 100vh;
+    text-align: center;
+  }
+  
+  .order-page h2 {
+    font-size: 32px;
+    font-weight: bold;
+    color: #f4b221;
+    margin-bottom: 32px;
+  }
+  
+  .order-grid {
+    display: grid;
+    gap: 32px;
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .cart-summary {
+    padding: 20px;
+    text-align: center;
+    border-top: 1px solid #eee;
+    background-color: #fff;
+    margin-top: 40px;
+  }
+  
+  .finalize-container {
+    background-color: white;
+    padding: 24px 16px;
+    margin-top: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  .finalize-total {
+    font-size: 1.2rem;
+    margin-bottom: 16px;
+  }
+  
+  .finalize-total span {
+    font-weight: 700;
+  }
+  
+  .finalize-button {
+    background: linear-gradient(135deg, #facc15, #f59e0b);
+    color: #1f1f1f;
+    font-weight: 600;
+    font-size: 1.1rem;
+    padding: 14px 32px;
+    border: none;
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .finalize-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  }
+  
+  
+  
+  
