@@ -89,6 +89,7 @@
     margin-top: 40px;
   }
   
+  /*
   .finalize-container {
     background-color: white;
     padding: 24px 16px;
@@ -97,6 +98,38 @@
     box-shadow: 0 4px 18px rgba(0, 0, 0, 0.1);
     text-align: center;
   }
+  */
+
+  .finalize-container {
+    background-image: url('../imgs/fondoBurgers.png');
+    background-repeat: repeat;
+    background-size: 250px 150px; /* aumenta el tamaño = menos cantidad visible */
+    background-position: center;
+    background-color: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+  }
+  
+  .finalize-container::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: white;
+    opacity: 0.95; /* más opacidad = más sutil */
+    z-index: 2;
+  }
+  
+  .finalize-total,
+  .finalize-button {
+    position: relative;
+    z-index: 3;
+  }
+  
+  
   
   .finalize-total {
     font-size: 1.2rem;

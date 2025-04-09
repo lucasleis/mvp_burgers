@@ -143,6 +143,7 @@ const OrderPage = () => {
           </p>
           <button className="finalize-button">
             Finalizar Pedido
+            HACER MODAL PARA TERMINAR PEDIDO
           </button>
         </div>
       )}
