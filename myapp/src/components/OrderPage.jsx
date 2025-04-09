@@ -10,13 +10,20 @@ const OrderPage = () => {
 
   const openModal = (product) => {
     const removeOptionsByBurger = {
-      "Jordan": ["Sin Cheddar", "Sin Cebolla a la plancha", "Sin Medallón", "Sin Pan"],
-      "Ginobilli": ["Sin Queso Provolone", "Sin Salsa Criolla", "Sin Medallón", "Sin Pan"],
-      "Lebron": ["Sin Cheddar", "Sin Panceta", "Sin Aderezo MVP", "Sin Medallón", "Sin Pan"],
-      "Black Mamba": ["Sin Cheddar", "Sin Tomate", "Sin Lechuga", "Sin Cebolla cruda", "Sin Aderezo Tasty", "Sin Medallón", "Sin Pan"]
+      "Jordan": ["Sin Cheddar", "Sin Cebolla a la plancha" ],
+      "Ginobilli": ["Sin Queso Provolone", "Sin Salsa Criolla" ],
+      "Lebron": ["Sin Cheddar", "Sin Panceta", "Sin Aderezo MVP" ],
+      "Black Mamba": ["Sin Cheddar", "Sin Tomate", "Sin Lechuga", "Sin Cebolla cruda", "Sin Aderezo Tasty" ],
     };
 
-    const burgerName = product.name.split(" ")[0]; // Jordan, Ginobilli, etc.
+    var burgerName 
+
+    if (product.name.split(" ").length === 2) {
+      burgerName = product.name.split(" ")[0];
+    } else if (product.name.split(" ").length === 3){
+      burgerName = product.name.split(" ").slice(0, 2).join(" ");
+    }
+
 
     setSelectedProduct({
       ...product,

@@ -47,6 +47,7 @@
   }
   
   .order-now-button {
+    display: inline-block;
     background: linear-gradient(135deg, #facc15, #f59e0b);
     color: #1f1f1f;
     font-weight: 600;
@@ -57,6 +58,7 @@
     cursor: pointer;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin-top: 2rem;
   }
   
   .order-now-button:hover {
