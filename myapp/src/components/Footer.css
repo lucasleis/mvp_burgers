@@ -1,3 +1,4 @@
+/*
 .footer {
     display: flex;
     justify-content: space-between;
@@ -7,9 +8,21 @@
     padding: 2rem 4rem;
     flex-wrap: wrap;
   }
-  
+*/
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #181818;
+    color: white;
+    padding: 3rem 4rem;
+    font-size: 1.1rem; /* más grande */
+    flex-wrap: wrap;
+  }
+
   .footer-left img {
-    height: 60px;
+    height: 80px; /* un poco más grande también */
   }
   
   .footer-center {
@@ -31,7 +44,7 @@
   }
   
   .icon {
-    font-size: 1.5rem;
+    font-size: 2rem; 
   }
   
   .instagram-link {

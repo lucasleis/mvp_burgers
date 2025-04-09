@@ -9,7 +9,7 @@ import OrderPage from "./components/OrderPage";
 function App() {
   return (
     <Router>
-      <div>
+      <div className="app-container">
         <Header />
         <Routes>
           <Route path="/" element={<HomeSection />} />

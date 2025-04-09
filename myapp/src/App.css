@@ -36,3 +36,23 @@
     transform: rotate(360deg);
   }
 }
+
+/* Estilo para ocupar toda la pantalla sin scroll innecesario */
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+/* Layout general para que el footer quede al fondo si el contenido es corto */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Para que HomeSection ocupe el espacio disponible */
+main {
+  flex: 1;
+}
+

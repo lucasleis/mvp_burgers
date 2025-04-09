@@ -13,7 +13,7 @@ const Header = () => {
             // <li><a href="#contact">CONTACT</a></li>
           }
         </ul>
-        <button className="order-button">ORDER NOW</button>
+        { /* <button className="order-button">ORDER NOW</button> */}
       </nav>
     </header>
   );
