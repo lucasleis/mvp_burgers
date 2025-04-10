@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import "./OrderSummaryModal.css";
+import { FaTrash } from "react-icons/fa";
 
 const OrderSummaryModal = ({ isOpen, onClose, cart, setCart }) => {
   const [selectedOption, setSelectedOption] = useState("");
-  
+
   const deliveryCharge = selectedOption === "Delivery" ? 5000 : 0;
   const subtotal = cart.reduce((acc, item) => acc + item.totalPrice, 0);
   const total = subtotal + deliveryCharge;
@@ -25,12 +26,43 @@ const OrderSummaryModal = ({ isOpen, onClose, cart, setCart }) => {
 
         {cart.map((item, index) => (
           <div className="cart-item" key={index}>
-            <img src={item.image} alt={item.name} />
+            {item.image ? (
+              <img
+                src={item.image}
+                alt={item.name}
+                style={{
+                  width: "50px",
+                  height: "50px",
+                  objectFit: "cover",
+                  borderRadius: "6px"
+                }}
+              />
+            ) : (
+              <div
+                style={{
+                  width: "50px",
+                  height: "50px",
+                  borderRadius: "6px",
+                  backgroundColor: "#ccc",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "12px",
+                  color: "#666"
+                }}
+              >
+                Sin imagen
+              </div>
+            )}
+
             <div className="cart-item-info">
               <strong>{item.name}</strong>
               <p>${item.totalPrice.toLocaleString()}</p>
             </div>
-            <button className="remove-btn" onClick={() => handleRemoveItem(index)}>🗑️</button>
+
+            <button className="icon-btn" onClick={() => handleRemoveItem(index)}>
+              <FaTrash />
+            </button>
           </div>
         ))}
 

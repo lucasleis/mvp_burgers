@@ -3,6 +3,8 @@ import "./OrderPage.css";
 import imageBurger from "../imgs/burger.png";
 import BurgerModal from "./BurgerModal";
 import OrderSummaryModal from "./OrderSummaryModal";
+import { FaShoppingCart } from "react-icons/fa"; 
+
 
 const OrderPage = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -44,78 +46,18 @@ const OrderPage = () => {
   const totalCartPrice = cart.reduce((total, item) => total + item.totalPrice, 0);
 
   const products = [
-    {
-      name: "Jordan Simple",
-      description: "Medallon x1, Cheddar y Cebolla a la plancha",
-      price: 9000,
-      image: imageBurger
-    },
-    {
-      name: "Jordan Doble",
-      description: "Medallon x2, Cheddar y Cebolla a la plancha",
-      price: 11000,
-      image: imageBurger
-    },
-    {
-      name: "Jordan Triple",
-      description: "Medallon x3, Cheddar y Cebolla a la plancha",
-      price: 13000,
-      image: imageBurger
-    },
-    {
-      name: "Ginobilli Simple",
-      description: "Medallon x1, Queso Provolone y Salsa Criolla",
-      price: 9000,
-      image: imageBurger
-    },
-    {
-      name: "Ginobilli Doble",
-      description: "Medallon x2, Queso Provolone y Salsa Criolla",
-      price: 11000,
-      image: imageBurger
-    },
-    {
-      name: "Ginobilli Triple",
-      description: "Medallon x3, Queso Provolone y Salsa Criolla",
-      price: 13000,
-      image: imageBurger
-    },
-    {
-      name: "Lebron Simple",
-      description: "Medallon x1, Cheddar, Panceta y Aderezo MVP",
-      price: 10000,
-      image: imageBurger
-    },
-    {
-      name: "Lebron Doble",
-      description: "Medallon x2, Cheddar, Panceta y Aderezo MVP",
-      price: 12000,
-      image: imageBurger
-    },
-    {
-      name: "Lebron Triple",
-      description: "Medallon x3, Cheddar, Panceta y Aderezo MVP",
-      price: 14000,
-      image: imageBurger
-    },
-    {
-      name: "Black Mamba Simple",
-      description: "Medallon x1, Cheddar, Tomate, Lechuga, Cebolla cruda y Aderezo Tasty",
-      price: 10000,
-      image: imageBurger
-    },
-    {
-      name: "Black Mamba Doble",
-      description: "Medallon x2, Cheddar, Tomate, Lechuga, Cebolla cruda y Aderezo Tasty",
-      price: 12000,
-      image: imageBurger
-    },
-    {
-      name: "Black Mamba Triple",
-      description: "Medallon x3, Cheddar, Tomate, Lechuga, Cebolla cruda y Aderezo Tasty",
-      price: 14000,
-      image: imageBurger
-    }
+    { name: "Jordan Simple", description: "Medallon x1, Cheddar y Cebolla a la plancha", price: 9000, image: imageBurger },
+    { name: "Jordan Doble", description: "Medallon x2, Cheddar y Cebolla a la plancha", price: 11000, image: imageBurger },
+    { name: "Jordan Triple", description: "Medallon x3, Cheddar y Cebolla a la plancha", price: 13000, image: imageBurger },
+    { name: "Ginobilli Simple", description: "Medallon x1, Queso Provolone y Salsa Criolla", price: 9000, image: imageBurger },
+    { name: "Ginobilli Doble", description: "Medallon x2, Queso Provolone y Salsa Criolla", price: 11000, image: imageBurger },
+    { name: "Ginobilli Triple", description: "Medallon x3, Queso Provolone y Salsa Criolla", price: 13000, image: imageBurger },
+    { name: "Lebron Simple", description: "Medallon x1, Cheddar, Panceta y Aderezo MVP", price: 10000, image: imageBurger },
+    { name: "Lebron Doble", description: "Medallon x2, Cheddar, Panceta y Aderezo MVP", price: 12000, image: imageBurger },
+    { name: "Lebron Triple", description: "Medallon x3, Cheddar, Panceta y Aderezo MVP", price: 14000, image: imageBurger },
+    { name: "Black Mamba Simple", description: "Medallon x1, Cheddar, Tomate, Lechuga, Cebolla cruda y Aderezo Tasty", price: 10000, image: imageBurger },
+    { name: "Black Mamba Doble", description: "Medallon x2, Cheddar, Tomate, Lechuga, Cebolla cruda y Aderezo Tasty", price: 12000, image: imageBurger },
+    { name: "Black Mamba Triple", description: "Medallon x3, Cheddar, Tomate, Lechuga, Cebolla cruda y Aderezo Tasty", price: 14000, image: imageBurger },
   ];
 
   return (
@@ -154,7 +96,7 @@ const OrderPage = () => {
         className={`floating-cart ${isSummaryOpen ? "open" : ""}`}
         onClick={() => setIsSummaryOpen(!isSummaryOpen)}
       >
-        🛒
+        <FaShoppingCart  />
       </button>
 
       <BurgerModal isOpen={isModalOpen} onClose={closeModal} product={selectedProduct} />
@@ -162,6 +104,7 @@ const OrderPage = () => {
         isOpen={isSummaryOpen}
         onClose={() => setIsSummaryOpen(false)}
         cart={cart}
+        setCart={setCart}
         total={totalCartPrice}
       />
 

@@ -121,7 +121,8 @@ const BurgerModal = ({ isOpen, onClose, product }) => {
                   name: product.name,
                   quantity,
                   extras: selectedExtras,
-                  totalPrice: total
+                  totalPrice: total,
+                  image: product.image 
                 };
                 if (product.addToCart) {
                   product.addToCart(item);
