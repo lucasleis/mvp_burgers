@@ -158,6 +158,44 @@
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
   }
   
+  .floating-cart {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background-color: #f4b221;
+    border: none;
+    padding: 16px;
+    border-radius: 50%;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    z-index: 1000;
+  }
+
+  .floating-cart {
+    position: fixed;
+    top: 50%;
+    right: 20px;
+    background-color: #5c2d91;
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: right 0.3s ease;
+    transform: translateY(-50%);
+  }
+  
+  .floating-cart.open {
+    right: 405px; /* O la anchura exacta de tu modal */
+  }
+  
   
   
   

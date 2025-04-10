@@ -2,11 +2,14 @@ import React, { useState } from "react";
 import "./OrderPage.css";
 import imageBurger from "../imgs/burger.png";
 import BurgerModal from "./BurgerModal";
+import OrderSummaryModal from "./OrderSummaryModal";
 
 const OrderPage = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [cart, setCart] = useState([]);
+  const [isSummaryOpen, setIsSummaryOpen] = useState(false);
+
 
   const openModal = (product) => {
     const removeOptionsByBurger = {
@@ -141,14 +144,27 @@ const OrderPage = () => {
           <p className="finalize-total">
             Total del pedido: <span>${totalCartPrice.toLocaleString()}</span>
           </p>
-          <button className="finalize-button">
+          <button className="finalize-button" onClick={() => setIsSummaryOpen(true)}>
             Finalizar Pedido
-            HACER MODAL PARA TERMINAR PEDIDO
           </button>
         </div>
       )}
 
+      <button
+        className={`floating-cart ${isSummaryOpen ? "open" : ""}`}
+        onClick={() => setIsSummaryOpen(!isSummaryOpen)}
+      >
+        🛒
+      </button>
+
       <BurgerModal isOpen={isModalOpen} onClose={closeModal} product={selectedProduct} />
+      <OrderSummaryModal
+        isOpen={isSummaryOpen}
+        onClose={() => setIsSummaryOpen(false)}
+        cart={cart}
+        total={totalCartPrice}
+      />
+
     </div>
   );
 };
