@@ -18,6 +18,7 @@ const OrderSummaryModal = ({ isOpen, onClose, cart, setCart }) => {
     <div className={`order-summary-modal ${isOpen ? "open" : ""}`}>
       <div className="modal-header">
         <h2>MI PEDIDO</h2>
+        <button className="close-btn" onClick={onClose}>CERRAR</button>
       </div>
 
       <div className="modal-content">
@@ -56,7 +57,15 @@ const OrderSummaryModal = ({ isOpen, onClose, cart, setCart }) => {
 
             <div className="cart-item-info">
               <strong>{item.name}</strong>
-              <p>${item.totalPrice.toLocaleString()}</p>
+              <div className="customizations">
+              {item.extras && item.extras.map(([name, qty], i) => (
+                <p key={`extra-${i}`}>{name} x{qty}</p>
+              ))}
+                {item.removed && item.removed.map((rem, i) => (
+                  <p key={`removed-${i}`}>{rem}</p>
+                ))}
+              </div>
+              <p><strong>${item.totalPrice.toLocaleString()}</strong></p>
             </div>
 
             <button className="icon-btn" onClick={() => handleRemoveItem(index)}>
@@ -89,7 +98,7 @@ const OrderSummaryModal = ({ isOpen, onClose, cart, setCart }) => {
             onChange={(e) => setSelectedOption(e.target.value)}
           >
             <option value="" disabled hidden>Seleccionar</option>
-            <option value="Take Away">Take Away</option>
+            <option value="Take Away">Take Away. Belgrano 550, Avellaneda</option>
             <option value="Delivery">Delivery ($5000)</option>
           </select>
         </div>

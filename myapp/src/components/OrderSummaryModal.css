@@ -60,6 +60,7 @@
   
   .cart-item-info {
     flex: 1;
+    margin-left: 10px;
   }
   
   .summary {
@@ -164,3 +165,8 @@
     color: #333; /* oscurece un poco al pasar el mouse */
   }
   
+  .customizations p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #444;
+  }

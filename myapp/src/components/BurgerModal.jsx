@@ -5,8 +5,8 @@ import "./BurgerModal.css";
 
 const extrasList = [
   { name: "Extra Medallón", price: 3000 },
-  { name: "Bacon", price: 2000 },
-  { name: "Cheddar", price: 2000 }
+  { name: "Extra Bacon", price: 2000 },
+  { name: "Extra Cheddar", price: 2000 }
 ];
 
 const BurgerModal = ({ isOpen, onClose, product }) => {
@@ -117,13 +117,19 @@ const BurgerModal = ({ isOpen, onClose, product }) => {
               className="add-to-order-button"
               onClick={() => {
                 const selectedExtras = Object.entries(extras).filter(([_, qty]) => qty > 0);
+                const selectedRemoved = Array.from(document.querySelectorAll('.remove-option input:checked')).map(
+                  input => input.parentElement.textContent.trim()
+                );
+              
                 const item = {
                   name: product.name,
                   quantity,
                   extras: selectedExtras,
+                  removed: selectedRemoved, 
                   totalPrice: total,
                   image: product.image 
                 };
+              
                 if (product.addToCart) {
                   product.addToCart(item);
                 }
