@@ -170,3 +170,11 @@
     font-size: 0.85rem;
     color: #444;
   }
+
+  .map-container {
+    margin-top: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  

@@ -1,0 +1,60 @@
+.confirmation-container {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 2rem;
+    font-family: Arial, sans-serif;
+  }
+  
+  .confirmation-container h2 {
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
+    color: #333;
+  }
+  
+  .method,
+  .takeaway-address {
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+  }
+  
+  .delivery-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+  
+  .delivery-form label {
+    font-weight: bold;
+  }
+  
+  .delivery-form input {
+    padding: 0.5rem;
+    border: 1px solid #aaa;
+    border-radius: 6px;
+  }
+  
+  .map-wrapper {
+    height: 300px;
+    width: 100%;
+    margin-top: 1rem;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #ccc;
+  }
+  
+  .confirm-button {
+    margin-top: 2rem;
+    padding: 0.75rem 1.5rem;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  
+  .confirm-button:hover {
+    background-color: #333;
+  }
+  

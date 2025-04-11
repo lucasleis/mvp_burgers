@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./OrderSummaryModal.css";
+import DeliveryMap from "./DeliveryMap"; 
 import { FaTrash } from "react-icons/fa";
 
 const OrderSummaryModal = ({ isOpen, onClose, cart, setCart }) => {
@@ -98,9 +99,24 @@ const OrderSummaryModal = ({ isOpen, onClose, cart, setCart }) => {
             onChange={(e) => setSelectedOption(e.target.value)}
           >
             <option value="" disabled hidden>Seleccionar</option>
-            <option value="Take Away">Take Away. Belgrano 550, Avellaneda</option>
+            <option value="Take Away">Take Away. Sarmiento 251, Avellaneda</option>
             <option value="Delivery">Delivery ($5000)</option>
           </select>
+
+          {selectedOption === "Take Away" && (
+            <div className="map-container">
+              <iframe
+                title="Ubicación Take Away"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3282.7704576170363!2d-58.37150512342676!3d-34.63536437292671!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95a3335c0842fd3b%3A0x81b530bbf3f23968!2sSarmiento%20251%2C%20Avellaneda%2C%20Provincia%20de%20Buenos%20Aires!5e0!3m2!1ses-419!2sar!4v1712848461217!5m2!1ses-419!2sar"
+                width="100%"
+                height="250"
+                style={{ border: 0, borderRadius: "8px", marginTop: "1rem" }}
+                allowFullScreen=""
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              ></iframe>
+            </div>
+          )}
         </div>
 
         <textarea placeholder="Añadir comentarios..."></textarea>
