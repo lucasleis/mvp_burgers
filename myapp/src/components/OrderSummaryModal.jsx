@@ -18,7 +18,6 @@ const OrderSummaryModal = ({ isOpen, onClose, cart, setCart }) => {
     <div className={`order-summary-modal ${isOpen ? "open" : ""}`}>
       <div className="modal-header">
         <h2>MI PEDIDO</h2>
-        <button className="close-btn" onClick={onClose}>CERRAR</button>
       </div>
 
       <div className="modal-content">
@@ -84,7 +83,7 @@ const OrderSummaryModal = ({ isOpen, onClose, cart, setCart }) => {
         </div>
 
         <div className="store-select">
-          <label>Sucursal donde retirar el pedido:</label>
+          <label>Método de envio:</label>
           <select
             value={selectedOption}
             onChange={(e) => setSelectedOption(e.target.value)}
