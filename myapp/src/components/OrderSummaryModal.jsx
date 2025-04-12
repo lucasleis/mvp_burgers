@@ -123,7 +123,7 @@ const OrderSummaryModal = ({ isOpen, onClose, cart, setCart }) => {
 
         <div className="modal-buttons">
           <button className="secondary-btn" onClick={onClose}>SEGUIR COMPRANDO</button>
-          <button className="primary-btn">CONFIRMAR PEDIDO</button>
+          <button className="primary-btn">TERMINAR PEDIDO</button>
         </div>
       </div>
     </div>

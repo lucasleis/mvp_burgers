@@ -36,11 +36,9 @@
   
   .map-wrapper {
     height: 300px;
-    width: 100%;
     margin-top: 1rem;
     border-radius: 8px;
     overflow: hidden;
-    border: 1px solid #ccc;
   }
   
   .confirm-button {
@@ -57,4 +55,40 @@
   .confirm-button:hover {
     background-color: #333;
   }
+
+  .leaflet-container {
+    height: 100%;
+    width: 100%;
+  }
+  
+  .method-toggle {
+    display: flex;
+    width: 100%;
+    max-width: 400px;
+    margin: 1rem 0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 3px rgba(0,0,0,0.1);
+  }
+  
+  .method-option {
+    flex: 1;
+    padding: 12px 0;
+    text-align: center;
+    cursor: pointer;
+    background-color: white;
+    transition: background-color 0.3s;
+    font-weight: bold;
+    border-right: 1px solid #ccc;
+  }
+  
+  .method-option:last-child {
+    border-right: none;
+  }
+  
+  .method-option.active {
+    background-color: #e0e0e0; /* gris claro para seleccionado */
+  }
+  
   
