@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
-import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
+//import { Marker, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import "./OrderConfirmationPage.css";
 
@@ -8,7 +8,7 @@ const OrderConfirmationPage = () => {
   const location = useLocation();
   const { method: initialMethod } = location.state || {};
   const [method, setMethod] = useState(initialMethod || "Take Away");
-  const [position, setPosition] = useState(null);
+  // const [position, setPosition] = useState(null);
   const [address, setAddress] = useState("");
   const [floor, setFloor] = useState("");
   const [apartment, setApartment] = useState("");
@@ -21,15 +21,17 @@ const OrderConfirmationPage = () => {
     );
   };
 
-  const LocationMarker = () => {
-    useMapEvents({
-      click(e) {
-        setPosition(e.latlng);
-      }
-    });
-
-    return position ? <Marker position={position} /> : null;
-  };
+  /* 
+    const LocationMarker = () => {
+      useMapEvents({
+        click(e) {
+          setPosition(e.latlng);
+        }
+      });
+  
+      return position ? <Marker position={position} /> : null;
+    };
+  */
 
   return (
     <div className="confirmation-container">

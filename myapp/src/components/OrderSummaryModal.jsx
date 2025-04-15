@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import "./OrderSummaryModal.css";
-import DeliveryMap from "./DeliveryMap"; 
+// import DeliveryMap from "./DeliveryMap"; 
 import { FaTrash } from "react-icons/fa";
 
 import { useNavigate } from "react-router-dom";
 
 const OrderSummaryModal = ({ isOpen, onClose, cart, setCart }) => {
-  const [selectedOption, setSelectedOption] = useState("");
+  //const [selectedOption, setSelectedOption] = useState("");
+  const [selectedOption, ] = useState("");
 
   const deliveryCharge = selectedOption === "Delivery" ? 5000 : 0;
   const subtotal = cart.reduce((acc, item) => acc + item.totalPrice, 0);
