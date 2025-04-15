@@ -95,6 +95,7 @@ const OrderConfirmationPage = () => {
             placeholder="Ej: B"
           />
 
+          {/* 
           <p>Hacé clic en el mapa para seleccionar tu ubicación:</p>
           <div className="map-wrapper">
             <MapContainer center={[-34.63, -58.37]} zoom={13}>
@@ -105,6 +106,7 @@ const OrderConfirmationPage = () => {
               <LocationMarker />
             </MapContainer>
           </div>
+          */}
         </div>
       )}
 
@@ -112,7 +114,7 @@ const OrderConfirmationPage = () => {
         <div className="price-display">
           Total: <span className="price-amount">$3500</span>
         </div>
-        <button className="confirm-button" onClick={handleConfirm}>
+        <button className="primary-btn" onClick={handleConfirm}>
           Confirmar Compra
         </button>
       </div>
