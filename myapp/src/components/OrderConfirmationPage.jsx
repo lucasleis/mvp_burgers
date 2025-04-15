@@ -1,37 +1,47 @@
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
-//import { Marker, useMapEvents } from "react-leaflet";
+import { X } from "lucide-react";
 import "leaflet/dist/leaflet.css";
 import "./OrderConfirmationPage.css";
 
 const OrderConfirmationPage = () => {
   const location = useLocation();
-  const { method: initialMethod } = location.state || {};
+  const { method: initialMethod, total: initialTotal } = location.state || {};
   const [method, setMethod] = useState(initialMethod || "Take Away");
-  // const [position, setPosition] = useState(null);
   const [address, setAddress] = useState("");
   const [floor, setFloor] = useState("");
   const [apartment, setApartment] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [addressError, setAddressError] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState(initialMethod || "Efectivo");
+
+  const deliveryCharge = method === "Delivery" ? 5000 : 0;
+  const baseTotal = initialTotal || 0;
+  const finalTotal = baseTotal + deliveryCharge;
 
   const handleConfirm = () => {
-    alert(
-      `Pedido confirmado!\nMétodo: ${method}\nDirección: ${address} ${
-        floor ? ` - Piso ${floor}` : ""
-      } ${apartment ? ` - Depto ${apartment}` : ""}`
-    );
+    if (method === "Delivery" && address.trim() === "") {
+      setAddressError(true);
+      return;
+    }
+    setAddressError(false);
+    setShowModal(true);
   };
 
-  /* 
-    const LocationMarker = () => {
-      useMapEvents({
-        click(e) {
-          setPosition(e.latlng);
-        }
-      });
-  
-      return position ? <Marker position={position} /> : null;
-    };
-  */
+  const handleModalConfirm = () => {
+    setShowModal(false);
+    alert(
+      `Pedido confirmado!\nMétodo de pago: ${paymentMethod}\nMétodo: ${method}\nDirección: ${
+        method === "Take Away"
+          ? "Sarmiento 251, Avellaneda"
+          : `${address}${floor ? ` - Piso ${floor}` : ""}${apartment ? ` - Depto ${apartment}` : ""}`
+      }\nTotal: $${finalTotal.toLocaleString()}`
+    );   
+  };
+
+  const handleModalCancel = () => {
+    setShowModal(false);
+  };
 
   return (
     <div className="confirmation-container">
@@ -41,7 +51,10 @@ const OrderConfirmationPage = () => {
       <div className="method-toggle">
         <div
           className={`method-option ${method === "Take Away" ? "active" : ""}`}
-          onClick={() => setMethod("Take Away")}
+          onClick={() => {
+            setMethod("Take Away");
+            setAddressError(false);
+          }}
         >
           Take Away
         </div>
@@ -73,13 +86,23 @@ const OrderConfirmationPage = () => {
 
       {method === "Delivery" && (
         <div className="delivery-form">
+          <p className="delivery-charge">*Incluye recargo por Delivery ($5.000)</p>
           <label>Dirección:</label>
           <input
             type="text"
             value={address}
-            onChange={(e) => setAddress(e.target.value)}
+            onChange={(e) => {
+              setAddress(e.target.value);
+              if (e.target.value.trim() !== "") {
+                setAddressError(false);
+              }
+            }}
             placeholder="Ej: Av. Mitre 123"
+            className={addressError ? "input-error" : ""}
           />
+          {addressError && (
+            <p className="error-message">La dirección es obligatoria.</p>
+          )}
 
           <label>Piso (opcional):</label>
           <input
@@ -97,30 +120,66 @@ const OrderConfirmationPage = () => {
             placeholder="Ej: B"
           />
 
-          {/* 
-          <p>Hacé clic en el mapa para seleccionar tu ubicación:</p>
-          <div className="map-wrapper">
-            <MapContainer center={[-34.63, -58.37]} zoom={13}>
-              <TileLayer
-                attribution='&copy; OpenStreetMap'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
-              <LocationMarker />
-            </MapContainer>
-          </div>
-          */}
         </div>
       )}
 
+      <p className="method">Método de pago:</p>
+      <div className="method-toggle">
+        <div
+          className={`method-option ${paymentMethod === "Efectivo" ? "active" : ""}`}
+          onClick={() => setPaymentMethod("Efectivo")}
+        >
+          Efectivo
+        </div>
+        <div
+          className={`method-option ${paymentMethod === "Transferencia" ? "active" : ""}`}
+          onClick={() => setPaymentMethod("Transferencia")}
+        >
+          Transferencia
+        </div>
+      </div>
+
+
       <div className="order-footer">
         <div className="price-display">
-          Total: <span className="price-amount">$3500</span>
+          Total: <span className="price-amount">${finalTotal.toLocaleString()}</span>
         </div>
         <button className="primary-btn" onClick={handleConfirm}>
           Confirmar Compra
         </button>
       </div>
 
+      {showModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <button onClick={handleModalCancel} className="close-button">
+              <X size={24} />
+            </button>
+            <h3>Revisar pedido:</h3>
+            <p><strong>Método:</strong> {method}</p>
+            {method === "Delivery" ? (
+              <p>
+                <strong>Dirección:</strong> {address}
+                {floor && ` - Piso ${floor}`}
+                {apartment && ` - Depto ${apartment}`}
+              </p>
+            ) : (
+              <p><strong>Dirección:</strong> Sarmiento 251, Avellaneda</p>
+            )}
+            <p><strong>Método de pago: </strong>{paymentMethod}</p>
+            <p><strong>Total:</strong> ${finalTotal.toLocaleString()}</p>
+
+            <div className="modal-buttons">
+              <button onClick={handleModalCancel} className="secondary-btn">
+                Cancelar
+              </button>
+              <button onClick={handleModalConfirm} className="primary-btn">
+                Confirmar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -9,7 +9,7 @@ const OrderSummaryModal = ({ isOpen, onClose, cart, setCart }) => {
   //const [selectedOption, setSelectedOption] = useState("");
   const [selectedOption, ] = useState("");
 
-  const deliveryCharge = selectedOption === "Delivery" ? 5000 : 0;
+  const deliveryCharge = selectedOption === "Take Away" ? 5000 : 0;
   const subtotal = cart.reduce((acc, item) => acc + item.totalPrice, 0);
   const total = subtotal + deliveryCharge;
 
@@ -20,7 +20,7 @@ const OrderSummaryModal = ({ isOpen, onClose, cart, setCart }) => {
 
   const navigate = useNavigate();
   const handleConfirmClick = () => {
-    navigate("/confirmar", { state: { method: selectedOption } });
+    navigate("/confirmar", { state: { method: selectedOption, total } });
   };
   
 

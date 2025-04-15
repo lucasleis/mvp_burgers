@@ -29,9 +29,10 @@
   }
   
   .delivery-form input {
-    padding: 0.5rem;
+    padding: 0.9rem;
     border: 1px solid #aaa;
     border-radius: 6px;
+    font-size: 1rem; 
   }
   
   .map-wrapper {
@@ -141,4 +142,60 @@
     color: white;
   }
     
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  .modal-content {
+    position: relative; 
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    text-align: center;
+  }
+  
+  
+  .modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1.5rem;
+  }
+  
+  .input-error {
+    border: 2px solid red;
+  }
+  
+  .error-message {
+    color: red;
+    margin-top: 4px;
+    font-size: 0.9rem;
+  }
+
+  .close-button {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+  }
+
+  .transfer-msg {
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    color: #444;
+  }
+  
+  
   
