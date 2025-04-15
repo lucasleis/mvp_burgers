@@ -108,9 +108,15 @@ const OrderConfirmationPage = () => {
         </div>
       )}
 
-      <button className="confirm-button" onClick={handleConfirm}>
-        Confirmar Compra
-      </button>
+      { /*
+      <div className="order-footer">
+        <div className="price-display">
+          Total: <span className="price-amount">$3500</span>
+        </div>
+        <button className="confirm-button">Confirmar Compra</button>
+      </div>
+      */ }
+
     </div>
   );
 };

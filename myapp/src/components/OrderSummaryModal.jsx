@@ -3,6 +3,8 @@ import "./OrderSummaryModal.css";
 import DeliveryMap from "./DeliveryMap"; 
 import { FaTrash } from "react-icons/fa";
 
+import { useNavigate } from "react-router-dom";
+
 const OrderSummaryModal = ({ isOpen, onClose, cart, setCart }) => {
   const [selectedOption, setSelectedOption] = useState("");
 
@@ -14,6 +16,12 @@ const OrderSummaryModal = ({ isOpen, onClose, cart, setCart }) => {
     const updatedCart = cart.filter((_, index) => index !== indexToRemove);
     setCart(updatedCart);
   };
+
+  const navigate = useNavigate();
+  const handleConfirmClick = () => {
+    navigate("/confirmar", { state: { method: selectedOption } });
+  };
+  
 
   return (
     <div className={`order-summary-modal ${isOpen ? "open" : ""}`}>
@@ -123,7 +131,9 @@ const OrderSummaryModal = ({ isOpen, onClose, cart, setCart }) => {
 
         <div className="modal-buttons">
           <button className="secondary-btn" onClick={onClose}>SEGUIR COMPRANDO</button>
-          <button className="primary-btn">TERMINAR PEDIDO</button>
+          <button className="primary-btn" onClick={handleConfirmClick}>
+            TERMINAR PEDIDO
+          </button>
         </div>
       </div>
     </div>
