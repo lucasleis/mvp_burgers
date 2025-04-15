@@ -91,5 +91,36 @@
     background-color: #e0e0e0; 
   }
 
+  .order-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2rem;
+    padding: 1rem;
+    background-color: #f7f7f7;
+    border-top: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.05);
+  }
   
+  .price-display {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .price-amount {
+    color: #007bff;
+  }
+  
+  .order-footer .confirm-button {
+    margin-top: 0; 
+    background-color: #007bff;
+    transition: background-color 0.3s;
+  }
+  
+  .order-footer .confirm-button:hover {
+    background-color: #0056b3;
+  }
+    
   
