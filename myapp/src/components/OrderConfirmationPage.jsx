@@ -14,6 +14,7 @@ const OrderConfirmationPage = () => {
   const [showModal, setShowModal] = useState(false);
   const [addressError, setAddressError] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState(initialMethod || "Efectivo");
+  const [showTransferInfo, setShowTransferInfo] = useState(false);
 
   const deliveryCharge = method === "Delivery" ? 5000 : 0;
   const baseTotal = initialTotal || 0;
@@ -30,6 +31,12 @@ const OrderConfirmationPage = () => {
 
   const handleModalConfirm = () => {
     setShowModal(false);
+  
+    if (paymentMethod === "Transferencia") {
+      setShowTransferInfo(true);
+      return;
+    }
+  
     alert(
       `Pedido confirmado!\nMétodo de pago: ${paymentMethod}\nMétodo: ${method}\nDirección: ${
         method === "Take Away"
@@ -38,6 +45,7 @@ const OrderConfirmationPage = () => {
       }\nTotal: $${finalTotal.toLocaleString()}`
     );   
   };
+  
 
   const handleModalCancel = () => {
     setShowModal(false);
@@ -180,6 +188,40 @@ const OrderConfirmationPage = () => {
           </div>
         </div>
       )}
+
+      {showTransferInfo && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <button onClick={() => setShowTransferInfo(false)} className="close-button">
+              <X size={24} />
+            </button>
+            <h3>Datos para Transferencia</h3>
+            <p>Por favor, transferí a:</p>
+            <p><strong>ALIAS:</strong> MVP.BURGERS</p>
+            <p><strong>CBU:</strong> 0000003100000000123456</p>
+            <p>Y enviá el comprobante a:</p>
+            <p><strong>+541123456789</strong></p>
+            <div className="modal-buttons">
+              <button
+                onClick={() => {
+                  setShowTransferInfo(false);
+                  alert(
+                    `Pedido confirmado!\nMétodo de pago: ${paymentMethod}\nMétodo: ${method}\nDirección: ${
+                      method === "Take Away"
+                        ? "Sarmiento 251, Avellaneda"
+                        : `${address}${floor ? ` - Piso ${floor}` : ""}${apartment ? ` - Depto ${apartment}` : ""}`
+                    }\nTotal: $${finalTotal.toLocaleString()}`
+                  );
+                }}
+                className="primary-btn"
+              >
+                Listo, entendido
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };
