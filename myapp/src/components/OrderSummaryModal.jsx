@@ -100,6 +100,7 @@ const OrderSummaryModal = ({ isOpen, onClose, cart, setCart }) => {
           </div>
         </div>
 
+        {/*
         <div className="store-select">
           <label>Método de envio:</label>
           <select
@@ -126,6 +127,7 @@ const OrderSummaryModal = ({ isOpen, onClose, cart, setCart }) => {
             </div>
           )}
         </div>
+        */}
 
         <textarea placeholder="Añadir comentarios..."></textarea>
 
