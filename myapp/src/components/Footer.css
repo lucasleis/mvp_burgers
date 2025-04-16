@@ -1,65 +1,114 @@
-
 .footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #181818;
-    color: white;
-    padding: 1.5rem 4rem;
-    font-size: 1.3rem; 
-    flex-wrap: wrap;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #181818;
+  color: white;
+  padding: 1.5rem 4rem;
+  font-size: 1.3rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.footer-left img {
+  height: 100px;
+}
+
+.footer-center {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  text-align: left;
+}
+
+.footer-text p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.footer-right {
+  flex-direction: row; 
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+
+.icon {
+  font-size: 2rem;
+}
+
+.instagram-link,
+.whatsapp-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: white;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.instagram-link:hover {
+  color: #e1306c;
+}
+
+.whatsapp-link {
+  margin-left: 1rem;
+}
+
+.whatsapp-link:hover {
+  color: #25D366;
+}
+
+/* -------------------- */
+/* 🟣 MOBILE STYLES 🟣 */
+/* -------------------- */
+@media (max-width: 768px) {
+  .footer {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 2rem;
+    font-size: 1rem;
   }
 
-  .footer-left img {
-    height: 100px; 
-  }
-  
   .footer-center {
-    display: flex;
-    align-items: flex-start;
-    gap: 1rem;
-    text-align: left;
+    flex-direction: column;
+    gap: 0.5rem;
   }
-  
-  .footer-text p {
-    margin: 0;
-    line-height: 1.6;
-  }
-  
+
   .footer-right {
-    display: flex;
+    flex-direction: row;       /* 👉 importante */
     align-items: center;
-    gap: 0.5rem;
+    gap: 1rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;           /* por si el espacio es chico */
+    width: 100%;               
+    justify-content: flex-start;
   }
-  
-  .icon {
-    font-size: 2rem; 
-  }
-  
-  .instagram-link {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: white;
-    text-decoration: none;
-    transition: color 0.3s ease;
-  }
-  
-  .instagram-link:hover {
-    color: #e1306c; 
-  }
-  
+
+  .instagram-link,
   .whatsapp-link {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     color: white;
     text-decoration: none;
-    margin-left: 1rem;
     transition: color 0.3s ease;
+    margin-left: 0;
+  }
+
+  .footer-left img {
+    height: 80px;
+  }
+
+  .footer-right {
+    background: rgba(255, 0, 0, 0.1);
+    border: 1px dashed red;
   }
   
-  .whatsapp-link:hover {
-    color: #25D366; 
+  .whatsapp-link, .instagram-link {
+    background: rgba(0, 255, 0, 0.1);
+    border: 1px dashed green;
   }
-  
+}

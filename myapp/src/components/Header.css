@@ -3,15 +3,15 @@
     display: flex;
     justify-content: space-between; 
     align-items: center;
-    padding: 0 6%;
+    padding: 16px 6%; 
+    height: auto; 
 }
 
 .logo {
-    max-width: 200px;
+    max-width: 150px;
     height: auto;
 }
 
-/* NUEVO: navegación */
 .nav {
     display: flex;
     align-items: center;
@@ -32,7 +32,7 @@
     font-size: 14px;
 }
 
-/* NUEVO: botón ORDER NOW */
+/* Botón "ORDER NOW" */
 .order-button {
     background-color: #ffc100;
     color: #4f337c;
@@ -46,5 +46,46 @@
 }
 
 .order-button:hover {
-    background-color: #ffc100;
+    background-color: #ffd633;
+}
+
+/* -------------------- */
+/* 🟣 MOBILE STYLES 🟣 */
+/* -------------------- */
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1rem;
+        height: auto;
+    }
+
+    .logo {
+        max-width: 120px;
+    }
+
+    .nav {
+        width: 100%;
+        flex-direction: column;
+        align-items: flex-start;
+        margin-top: 1rem;
+    }
+
+    .nav-list {
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+    }
+
+    .nav-list li a {
+        font-size: 16px;
+    }
+
+    .order-button {
+        margin: 1rem 0 0 0;
+        width: 100%;
+        text-align: center;
+        font-size: 16px;
+        padding: 12px;
+    }
 }
