@@ -185,8 +185,21 @@
   right: 405px; 
 }
   
+
+
+/* 🟡 DESKTOP STYLES */
+.order-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px;
+  display: grid;
+  gap: 32px;
+  grid-template-columns: repeat(3, 1fr); 
+}
+
 /* 🟣 MOBILE STYLES 🟣 */
 @media (max-width: 768px) {
+
   .order-page {
     padding: 16px;
   }
@@ -196,20 +209,24 @@
   }
 
   .order-grid {
-    /* grid-template-columns: 4fr; /* 1 sola columna en mobile */
+    grid-template-columns: repeat(1, 1fr); /* 1 item por fila */
     gap: 20px;
     padding: 0;
   }
 
   .order-card {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 12px;
-    gap: 12px;
+    display: flex;
+    flex-direction: row; 
+    align-items: center;
+    gap: 16px;
+    background-color: white;
+    padding: 16px;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
 
   .order-card img {
-    width: 100%;
+    width: 40%;
     height: auto;
     border-radius: 10px;
   }
@@ -219,7 +236,7 @@
   }
 
   .order-card .description {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
   }
 
   .order-card .price {
@@ -228,12 +245,13 @@
 
   .add-button {
     width: 100%;
-    padding: 10px;
+    padding: 5px;
     font-size: 1rem;
   }
 
   .finalize-container {
     padding: 16px;
+    margin-top: 1rem;
   }
 
   .finalize-total {
@@ -258,5 +276,3 @@
     right: 310px; /* ajustar al ancho del modal si es necesario */
   }
 }
-  
-  
