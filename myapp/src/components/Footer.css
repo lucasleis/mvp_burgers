@@ -1,3 +1,5 @@
+/* 🟣 DESKTOP STYLES 🟣 */
+
 .footer {
   display: flex;
   justify-content: space-between;
@@ -5,38 +7,63 @@
   background-color: #181818;
   color: white;
   padding: 1.5rem 4rem;
-  font-size: 1.3rem;
+  font-size: 1.7rem;
   flex-wrap: wrap;
   gap: 1rem;
+}
+
+.footer-left,
+.footer-center,
+.footer-right {
+  flex: 1;                  /* ⬅️ que cada uno ocupe el mismo espacio */
+  display: flex;
+  align-items: center;
+  justify-content: center;  /* opcional: centrado horizontal dentro de cada tercio */
+}
+
+.footer-left {
+  justify-content: flex-start;
+}
+
+.footer-center {
+  justify-content: center;
+}
+
+.footer-right {
+  justify-content: flex-end;
 }
 
 .footer-left img {
   height: 100px;
 }
 
+/*
 .footer-center {
   display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-  text-align: left;
+  align-items: center;
+  gap: 1.5rem;
 }
+
+.footer-right {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1.5rem;
+}
+  */
 
 .footer-text p {
   margin: 0;
   line-height: 1.6;
 }
 
-.footer-right {
-  flex-direction: row; 
-  align-items: center;
-  gap: 1rem;
-  margin-top: 1rem;
-  flex-wrap: wrap;
+.footer-logo img {
+  height: 100px;
+  width: auto;
 }
 
-
 .icon {
-  font-size: 2rem;
+  font-size: 1.5rem;
 }
 
 .instagram-link,
@@ -61,54 +88,51 @@
   color: #25D366;
 }
 
-/* -------------------- */
+
 /* 🟣 MOBILE STYLES 🟣 */
-/* -------------------- */
 @media (max-width: 768px) {
   .footer {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 2rem;
-    font-size: 1rem;
-  }
-
-  .footer-center {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .footer-right {
-    flex-direction: row;       /* 👉 importante */
-    align-items: center;
-    gap: 1rem;
-    margin-top: 1rem;
-    flex-wrap: wrap;           /* por si el espacio es chico */
-    width: 100%;               
-    justify-content: flex-start;
-  }
-
-  .instagram-link,
-  .whatsapp-link {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 0.5rem;
-    color: white;
-    text-decoration: none;
-    transition: color 0.3s ease;
-    margin-left: 0;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .footer-left,
+  .footer-center,
+  .footer-right {
+    width: 100%;
+    justify-content: center; 
+    align-items: center;
+    display: flex;
+    flex-direction: column; 
+    gap: 1rem;
+    margin-bottom: 1rem;
   }
 
   .footer-left img {
     height: 80px;
   }
 
-  .footer-right {
-    background: rgba(255, 0, 0, 0.1);
-    border: 1px dashed red;
+  .footer-logo img {
+    height: 55px;
   }
-  
-  .whatsapp-link, .instagram-link {
-    background: rgba(0, 255, 0, 0.1);
-    border: 1px dashed green;
+
+  .icon {
+    font-size: 1.9rem; 
   }
+
+  .instagram-link,
+  .whatsapp-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    white-space: nowrap;
+    font-size: 0.9rem;
+  }
+
 }
