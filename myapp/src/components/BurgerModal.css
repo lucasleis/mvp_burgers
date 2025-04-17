@@ -219,5 +219,9 @@
     top: 0.5rem;
     right: 0.5rem;
   }
+
+  .extras-grid, .remove-grid {
+    gap: 0.1rem;
+  }
 }
 

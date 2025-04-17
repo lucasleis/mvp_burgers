@@ -158,7 +158,7 @@
   .modal-content {
     position: relative; 
     background: white;
-    padding: 2rem;
+    /* padding: 2rem; */
     border-radius: 8px;
     width: 90%;
     max-width: 500px;
