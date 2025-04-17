@@ -1,201 +1,262 @@
 .order-grid {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 16px;
-    display: grid;
-    gap: 32px;
-    grid-template-columns: repeat(3, 1fr); /* Siempre 3 columnas */
-  }
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px;
+  display: grid;
+  gap: 32px;
+  grid-template-columns: repeat(3, 1fr); 
+}
   
-  .order-card {
-    display: flex;
-    gap: 16px;
-    background-color: #fff;
-    border-radius: 12px;
-    padding: 16px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    align-items: center;
-  }
+.order-card {
+  display: flex;
+  gap: 16px;
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  align-items: center;
+}
   
-  .order-card img {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 12px;
-  }
+.order-card img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 12px;
+}
   
-  .order-card-content {
-    flex: 1;
-  }
+.order-card-content {
+  flex: 1;
+}
   
-  .order-card h3 {
-    font-size: 18px;
-    font-weight: bold;
-    margin: 0 0 4px;
-  }
+.order-card h3 {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0 0 4px;
+}
   
-  .order-card .description {
-    font-size: 14px;
-    margin-bottom: 8px;
-  }
-  
-  .order-card .price {
-    font-size: 16px;
-    font-weight: bold;
-    margin-bottom: 8px;
-  }
-  
-  .add-button {
-    background-color: #f4b221;
-    color: white;
-    font-weight: bold;
-    padding: 6px 18px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .add-button:hover {
-    background-color: #d99f1a;
-  }
+.order-card .description {
+  font-size: 14px;
+  margin-bottom: 8px;
+}
 
+.order-card .price {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+  
+.add-button {
+  background-color: #f4b221;
+  color: white;
+  font-weight: bold;
+  padding: 6px 18px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+  
+.add-button:hover {
+  background-color: #d99f1a;
+}
+
+.order-page {
+  padding: 32px;
+  background-color: #ffc100;
+  min-height: 100vh;
+  text-align: center;
+}
+  
+.order-page h2 {
+  font-size: 32px;
+  font-weight: bold;
+  color: #f4b221;
+  margin-bottom: 32px;
+}
+  
+.order-grid {
+  display: grid;
+  gap: 32px;
+  grid-template-columns: repeat(3, 1fr);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.cart-summary {
+  padding: 20px;
+  text-align: center;
+  border-top: 1px solid #eee;
+  background-color: #fff;
+  margin-top: 40px;
+}
+  
+.finalize-container {
+  background-image: url('../imgs/fondoBurgers.png');
+  background-repeat: repeat;
+  background-size: 250px 150px; 
+  background-position: center;
+  background-color: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+  
+.finalize-container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: white;
+  opacity: 0.95;
+  z-index: 2;
+}
+  
+.finalize-total,
+.finalize-button {
+  position: relative;
+  z-index: 3;
+}
+  
+  
+  
+.finalize-total {
+  font-size: 1.2rem;
+  margin-bottom: 16px;
+}
+
+.finalize-total span {
+  font-weight: 700;
+}
+
+.finalize-button {
+  background: linear-gradient(135deg, #facc15, #f59e0b);
+  color: #1f1f1f;
+  font-weight: 600;
+  font-size: 1.1rem;
+  padding: 14px 32px;
+  border: none;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+  
+.finalize-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+.floating-cart {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background-color: #f4b221;
+  border: none;
+  padding: 16px;
+  border-radius: 50%;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  z-index: 1000;
+}
+
+.floating-cart {
+  position: fixed;
+  top: 50%;
+  right: 20px;
+  background-color: #5c2d91;
+  color: white;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: right 0.3s ease;
+  transform: translateY(-50%);
+}
+  
+.floating-cart.open {
+  right: 405px; 
+}
+  
+/* 🟣 MOBILE STYLES 🟣 */
+@media (max-width: 768px) {
   .order-page {
-    padding: 32px;
-    background-color: #ffc100;
-    min-height: 100vh;
-    text-align: center;
-  }
-  
-  .order-page h2 {
-    font-size: 32px;
-    font-weight: bold;
-    color: #f4b221;
-    margin-bottom: 32px;
-  }
-  
-  .order-grid {
-    display: grid;
-    gap: 32px;
-    grid-template-columns: repeat(3, 1fr);
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-  .cart-summary {
-    padding: 20px;
-    text-align: center;
-    border-top: 1px solid #eee;
-    background-color: #fff;
-    margin-top: 40px;
-  }
-  
-  /*
-  .finalize-container {
-    background-color: white;
-    padding: 24px 16px;
-    margin-top: 30px;
-    border-radius: 12px;
-    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.1);
-    text-align: center;
-  }
-  */
-
-  .finalize-container {
-    background-image: url('../imgs/fondoBurgers.png');
-    background-repeat: repeat;
-    background-size: 250px 150px; /* aumenta el tamaño = menos cantidad visible */
-    background-position: center;
-    background-color: white;
-    padding: 2rem;
-    border-radius: 1rem;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    position: relative;
-    z-index: 1;
-    overflow: hidden;
-  }
-  
-  .finalize-container::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: white;
-    opacity: 0.95; /* más opacidad = más sutil */
-    z-index: 2;
-  }
-  
-  .finalize-total,
-  .finalize-button {
-    position: relative;
-    z-index: 3;
-  }
-  
-  
-  
-  .finalize-total {
-    font-size: 1.2rem;
-    margin-bottom: 16px;
-  }
-  
-  .finalize-total span {
-    font-weight: 700;
-  }
-  
-  .finalize-button {
-    background: linear-gradient(135deg, #facc15, #f59e0b);
-    color: #1f1f1f;
-    font-weight: 600;
-    font-size: 1.1rem;
-    padding: 14px 32px;
-    border: none;
-    border-radius: 9999px;
-    cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
-  
-  .finalize-button:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
-  }
-  
-  .floating-cart {
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
-    background-color: #f4b221;
-    border: none;
     padding: 16px;
-    border-radius: 50%;
-    font-size: 24px;
-    cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    z-index: 1000;
+  }
+
+  .order-header h1 {
+    font-size: 1.8rem;
+  }
+
+  .order-grid {
+    /* grid-template-columns: 4fr; /* 1 sola columna en mobile */
+    gap: 20px;
+    padding: 0;
+  }
+
+  .order-card {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .order-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+  }
+
+  .order-card h3 {
+    font-size: 1.1rem;
+  }
+
+  .order-card .description {
+    font-size: 0.9rem;
+  }
+
+  .order-card .price {
+    font-size: 1rem;
+  }
+
+  .add-button {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+  }
+
+  .finalize-container {
+    padding: 16px;
+  }
+
+  .finalize-total {
+    font-size: 1rem;
+  }
+
+  .finalize-button {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
   }
 
   .floating-cart {
-    position: fixed;
-    top: 50%;
+    bottom: 20px;
     right: 20px;
-    background-color: #5c2d91;
-    color: white;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    font-size: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-    cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: right 0.3s ease;
-    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
   }
-  
+
   .floating-cart.open {
-    right: 405px; /* O la anchura exacta de tu modal */
+    right: 310px; /* ajustar al ancho del modal si es necesario */
   }
-  
-  
+}
   
   
