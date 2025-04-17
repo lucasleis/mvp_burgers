@@ -106,6 +106,7 @@ const BurgerModal = ({ isOpen, onClose, product }) => {
 
             <div className="quantity-price">
               <div className="quantity-control">
+                <p>Cantidad: </p>
                 <button onClick={decrementQty} className="qty-btn">-</button>
                 <span>{quantity}</span>
                 <button onClick={incrementQty} className="qty-btn">+</button>
