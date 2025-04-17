@@ -275,4 +275,10 @@
   .floating-cart.open {
     right: 310px; /* ajustar al ancho del modal si es necesario */
   }
+
+  @media (max-width: 767px) {
+    .floating-cart {
+      display: none !important;
+    }
+  }
 }
