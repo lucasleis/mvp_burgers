@@ -62,20 +62,22 @@ def enviar_pedido():
     # Datos esperados desde el frontend
     method = data.get('method')                # "Take Away" o "Delivery"
     paymentMethod = data.get('paymentMethod')  # "Efectivo" o "Transferencia"
-    address = data.get('address') or ""
-    floor = data.get('floor') or ""
-    apartment = data.get('apartment') or ""
-    finalTotal = data.get('finalTotal') or 0
+    direccion = data.get('address') 
+    finalTotal = data.get('finalTotal')
     phoneNumber = data.get('phoneNumber')      # Ej: "541134567890"
 
     if not phoneNumber:
         return jsonify({"error": "Falta el número de teléfono"}), 400
+    if not address:
+        return jsonify({"error": "Falta el direccion en envio"}), 400
+    if not finalTotal:
+        return jsonify({"error": "Falta el precio del pedido"}), 400
 
     # Dirección formateada
-    direccion = (
-        "Sarmiento 251, Avellaneda" if method == "Take Away"
-        else f"{address} {f'- Piso {floor}' if floor else ''} {f'- Depto {apartment}' if apartment else ''}"
-    )
+    # direccion = (
+    #    "Sarmiento 251, Avellaneda" if method == "Take Away"
+    #    else f"{address} {f'- Piso {floor}' if floor else ''} {f'- Depto {apartment}' if apartment else ''}"
+    # )
 
     # Mensaje final
     mensaje = (

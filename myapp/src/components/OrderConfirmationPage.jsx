@@ -29,31 +29,104 @@ const OrderConfirmationPage = () => {
     setShowModal(true);
   };
 
-  const handleModalConfirm = () => {
-    setShowModal(false);
-  
-    if (paymentMethod === "Transferencia") {
-      setShowTransferInfo(true);
-      return;
-    }
-  
-    alert(
-      `Pedido confirmado!\nMétodo de pago: ${paymentMethod}\nMétodo: ${method}\nDirección: ${
-        method === "Take Away"
-          ? "Sarmiento 251, Avellaneda"
-          : `${address}${floor ? ` - Piso ${floor}` : ""}${apartment ? ` - Depto ${apartment}` : ""}`
-      }\nTotal: $${finalTotal.toLocaleString()}`
-    );   
-  };
+  /*
+    const handleModalConfirm = () => {
+      setShowModal(false);
+
+      if (paymentMethod === "Transferencia") {
+        setShowTransferInfo(true);
+        return;
+      }
+
+      alert(
+        `Pedido confirmado!\nMétodo de pago: ${paymentMethod}\nMétodo: ${method}\nDirección: ${
+          method === "Take Away"
+            ? "Sarmiento 251, Avellaneda"
+            : `${address}${floor ? ` - Piso ${floor}` : ""}${apartment ? ` - Depto ${apartment}` : ""}`
+        }\nTotal: $${finalTotal.toLocaleString()}`
+      );   
+    };
+  */
   
 
   const handleModalCancel = () => {
     setShowModal(false);
   };
 
+  const sendOrder = async ({
+    method,
+    paymentMethod,
+    finalTotal,
+    address,
+    phoneNumber
+  }) => {
+    try {
+      const response = await fetch("https://127.0.0.1:5000/enviarpedido", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          method: method,
+          paymentMethod: paymentMethod,
+          address: address,
+          finalTotal: finalTotal,
+          phoneNumber: phoneNumber
+        })
+      });
+  
+      const data = await response.json();
+  
+      if (data.success) {
+        alert("Pedido enviado!");
+      } else {
+        alert("Error al enviar pedido");
+      }
+    } catch (error) {
+      console.error("Error al realizar el fetch:", error);
+      alert("Error de conexión con el servidor");
+    }
+  };
+  
+
   return (
     <div className="confirmation-container">
       <h2>Confirmación de Pedido</h2>
+
+      {/* INSERTAR DATOS*/}
+      <div className="delivery-form">
+        <label>Numero de contacto:</label>
+        <input
+          type="text"
+          value={address}
+          onChange={(e) => {
+            setAddress(e.target.value);
+            if (e.target.value.trim() !== "") {
+              setAddressError(false);
+            }
+          }}
+          placeholder="Ej: +541123456789"
+          className={addressError ? "input-error" : ""}
+        />
+        {addressError && (
+          <p className="error-message">Un numero de contacto es obligatorio.</p>
+        )}
+
+        <label>Nombre de contacto:</label>
+        <input
+          type="text"
+          value={address}
+          onChange={(e) => {
+            setAddress(e.target.value);
+            if (e.target.value.trim() !== "") {
+              setAddressError(false);
+            }
+          }}
+          placeholder="Ej: Manuel"
+          className={addressError ? "input-error" : ""}
+        />
+        {addressError && (
+          <p className="error-message">Un nombre de contacto es obligatorio.</p>
+        )}
+      </div>
 
       <p className="method">Método de envío:</p>
       <div className="method-toggle">
@@ -181,7 +254,22 @@ const OrderConfirmationPage = () => {
               <button onClick={handleModalCancel} className="secondary-btn">
                 Cancelar
               </button>
-              <button onClick={handleModalConfirm} className="primary-btn">
+              {/*<button onClick={handleModalConfirm} className="primary-btn"> */}
+              <button className="primary-btn" onClick={() => {
+                  const addressFormatted = method === "Take Away"
+                    ? "Sarmiento 251, Avellaneda"
+                    : `${address}${floor ? ` - Piso ${floor}` : ""}${apartment ? ` - Depto ${apartment}` : ""}`;
+                
+                  sendOrder({
+                    method: "Delivery",
+                    paymentMethod: "Efectivo",
+                    finalTotal: finalTotal.toLocaleString(),
+                    address: addressFormatted,
+                    phoneNumber: "",
+                    username: "manuel"
+                  })
+                  }}
+                >
                 Confirmar
               </button>
             </div>
@@ -202,20 +290,34 @@ const OrderConfirmationPage = () => {
             <p>Y enviá el comprobante a:</p>
             <p><strong>+541123456789</strong></p>
             <div className="modal-buttons">
-              <button
-                onClick={() => {
+              <button className="primary-btn" onClick={() => {
                   setShowTransferInfo(false);
-                  alert(
-                    `Pedido confirmado!\nMétodo de pago: ${paymentMethod}\nMétodo: ${method}\nDirección: ${
-                      method === "Take Away"
-                        ? "Sarmiento 251, Avellaneda"
-                        : `${address}${floor ? ` - Piso ${floor}` : ""}${apartment ? ` - Depto ${apartment}` : ""}`
-                    }\nTotal: $${finalTotal.toLocaleString()}`
-                  );
-                }}
-                className="primary-btn"
-              >
-                Listo, entendido
+                  /*
+                    alert(
+                      `Pedido confirmado!\nMétodo de pago: ${paymentMethod}\nMétodo: ${method}\nDirección: ${
+                        method === "Take Away"
+                          ? "Sarmiento 251, Avellaneda"
+                          : `${address}${floor ? ` - Piso ${floor}` : ""}${apartment ? ` - Depto ${apartment}` : ""}`
+                      }\nTotal: $${finalTotal.toLocaleString()}`
+                    );
+
+
+                    const addressFormatted = method === "Take Away"
+                      ? "Sarmiento 251, Avellaneda"
+                      : `${address}${floor ? ` - Piso ${floor}` : ""}${apartment ? ` - Depto ${apartment}` : ""}`;
+
+                    sendOrder({
+                      method: "Delivery",
+                      paymentMethod: "Efectivo",
+                      finalTotal: finalTotal.toLocaleString(),
+                      address: addressFormatted,
+                      phoneNumber: "",
+                      username: "manuel"
+                    })
+                  */
+                  }}
+                >
+                Entendido!
               </button>
             </div>
           </div>
