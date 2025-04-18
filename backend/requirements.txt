@@ -1,2 +1,8 @@
+# ENV
+requests
 python-dotenv
-google-generativeai
+
+#google-generativeai
+
+# API
+flask
