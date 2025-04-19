@@ -13,10 +13,10 @@ from email.mime.multipart import MIMEMultipart
 
 # FUNCIONES
 
-def enviar_telegram():
+def enviar_telegram(mensaje):
     token = os.getenv("TELEGRAM_TOKEN")
     chat_id = os.getenv("TELEGRAM_CHAT_ID")
-    mensaje = "¡Alerta! La página ha agregado productos."
+    mensaje = mensaje
 
     url = f"https://api.telegram.org/bot{token}/sendMessage"
     params = {"chat_id": chat_id, "text": mensaje}
@@ -68,16 +68,18 @@ def enviar_pedido():
 
     if not phoneNumber:
         return jsonify({"error": "Falta el número de teléfono"}), 400
-    if not address:
+    if not direccion:
         return jsonify({"error": "Falta el direccion en envio"}), 400
     if not finalTotal:
         return jsonify({"error": "Falta el precio del pedido"}), 400
 
-    # Dirección formateada
-    # direccion = (
-    #    "Sarmiento 251, Avellaneda" if method == "Take Away"
-    #    else f"{address} {f'- Piso {floor}' if floor else ''} {f'- Depto {apartment}' if apartment else ''}"
-    # )
+    """
+        # Dirección formateada
+        direccion = (
+            "Sarmiento 251, Avellaneda" if method == "Take Away"
+            else f"{address} {f'- Piso {floor}' if floor else ''} {f'- Depto {apartment}' if apartment else ''}"
+        )
+    """
 
     # Mensaje final
     mensaje = (
@@ -90,8 +92,8 @@ def enviar_pedido():
 
     print("Mensaje: " + mensaje)
 
-    #enviar_telegram()
     enviar_mail(mensaje)
+    enviar_telegram(mensaje)
 
     return jsonify({"success": True, "message": "Pedido procesado"}), 200
 
