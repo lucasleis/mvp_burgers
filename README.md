@@ -3,7 +3,7 @@
 Este proyecto contiene el frontend hecho en React y el backend en Python (Flask), organizados para ejecutarse de forma conjunta usando Docker.
 
 ---
-
+<!--
 ## Estructura del proyecto
 MVP_BURGERS/ 
 │ 
@@ -18,6 +18,7 @@ MVP_BURGERS/
 │ └── Dockerfile 
 │ ├── docker-compose.yml 
 └── README.md
+-->
 
 ## Requisitos
 
@@ -33,10 +34,9 @@ MVP_BURGERS/
    cd MVP_BURGERS
    docker-compose up --build
 
-    en caso de solo querer levantar frontend o backend:
+    En caso de solo querer levantar frontend o backend:
     - docker compose up --build backend
     - docker compose up --build frontend
-
 
 
 ## Acceso a las aplicaciones:
