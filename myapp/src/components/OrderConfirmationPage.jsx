@@ -20,6 +20,8 @@ const OrderConfirmationPage = () => {
   const [nombreError, setNameError] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState(initialMethod || "Efectivo");
   // const [showTransferInfo, setShowTransferInfo] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
 
   const deliveryCharge = method === "Delivery" ? 5000 : 0;
   const baseTotal = initialTotal || 0;
@@ -277,26 +279,38 @@ const OrderConfirmationPage = () => {
             <p><strong>Total:</strong> ${finalTotal.toLocaleString()}</p>
 
             <div className="modal-buttons">
-              <button onClick={handleModalCancel} className="secondary-btn">
+              <button
+                onClick={handleModalCancel}
+                className="secondary-btn"
+                disabled={isSubmitting}
+              >
                 Cancelar
               </button>
-              {/*<button onClick={handleModalConfirm} className="primary-btn"> */}
-              <button className="primary-btn" onClick={() => {
-                  const addressFormatted = method === "Take Away"
-                    ? "Sarmiento 251, Avellaneda"
-                    : `${address}${floor ? ` - Piso ${floor}` : ""}${apartment ? ` - Depto ${apartment}` : ""}`;
+
+              <button
+                className="primary-btn"
+                disabled={isSubmitting}
+                onClick={async () => {
+                  setIsSubmitting(true); 
                 
-                  sendOrder({
-                    method: method,
-                    paymentMethod: paymentMethod,
+                  const addressFormatted =
+                    method === "Take Away"
+                      ? "Sarmiento 251, Avellaneda"
+                      : `${address}${floor ? ` - Piso ${floor}` : ""}${apartment ? ` - Depto ${apartment}` : ""}`;
+                
+                  await sendOrder({
+                    method,
+                    paymentMethod,
                     finalTotal: finalTotal.toLocaleString(),
                     address: addressFormatted,
                     phoneNumber: telefono,
-                    username: nombre
-                  })
-                  }}
-                >
-                Confirmar
+                    username: nombre,
+                  });
+                
+                  setIsSubmitting(false); 
+                }}
+              >
+                {isSubmitting ? "Enviando..." : "Confirmar"}
               </button>
             </div>
           </div>

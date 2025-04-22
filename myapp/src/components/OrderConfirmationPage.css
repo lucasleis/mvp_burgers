@@ -197,5 +197,18 @@
     color: #444;
   }
   
+  .primary-btn:disabled {
+    background: #aaa;
+    color: #eee;
+    cursor: not-allowed;
+    border-color: #aaa;
+  }
+
+  .secondary-btn:disabled {
+    background: #ddd;
+    color: #888;
+    cursor: not-allowed;
+    border-color: #ccc;
+  }
   
   
