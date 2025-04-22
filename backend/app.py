@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 
 # API
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import requests
 
 # Mail
@@ -54,6 +55,7 @@ def enviar_mail(cuerpo):
 
 
 app = Flask(__name__)
+CORS(app, origins=["http://localhost:3000"])
 
 @app.route('/enviarpedido', methods=['POST'])
 def enviar_pedido():
@@ -65,6 +67,7 @@ def enviar_pedido():
     direccion = data.get('address') 
     finalTotal = data.get('finalTotal')
     phoneNumber = data.get('phoneNumber')      # Ej: "541134567890"
+    phoneNumber = "541134567890"
 
     if not phoneNumber:
         return jsonify({"error": "Falta el número de teléfono"}), 400
