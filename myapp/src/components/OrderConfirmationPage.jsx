@@ -61,7 +61,15 @@ const OrderConfirmationPage = () => {
     phoneNumber
   }) => {
     try {
-      const response = await fetch("https://127.0.0.1:5000/enviarpedido", {
+      console.log(JSON.stringify({
+        method,
+        paymentMethod,
+        address,
+        finalTotal,
+        phoneNumber
+      }));
+      
+      const response = await fetch("http://127.0.0.1:5000/enviarpedido", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -82,7 +90,7 @@ const OrderConfirmationPage = () => {
       }
     } catch (error) {
       console.error("Error al realizar el fetch:", error);
-      alert("Error de conexión con el servidor");
+      //alert("Error de conexión con el servidor: ", error);
     }
   };
   
@@ -300,20 +308,6 @@ const OrderConfirmationPage = () => {
                           : `${address}${floor ? ` - Piso ${floor}` : ""}${apartment ? ` - Depto ${apartment}` : ""}`
                       }\nTotal: $${finalTotal.toLocaleString()}`
                     );
-
-
-                    const addressFormatted = method === "Take Away"
-                      ? "Sarmiento 251, Avellaneda"
-                      : `${address}${floor ? ` - Piso ${floor}` : ""}${apartment ? ` - Depto ${apartment}` : ""}`;
-
-                    sendOrder({
-                      method: "Delivery",
-                      paymentMethod: "Efectivo",
-                      finalTotal: finalTotal.toLocaleString(),
-                      address: addressFormatted,
-                      phoneNumber: "",
-                      username: "manuel"
-                    })
                   */
                   }}
                 >
