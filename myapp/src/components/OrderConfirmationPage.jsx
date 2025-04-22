@@ -9,10 +9,14 @@ const OrderConfirmationPage = () => {
   const { method: initialMethod, total: initialTotal } = location.state || {};
   const [method, setMethod] = useState(initialMethod || "Take Away");
   const [address, setAddress] = useState("");
+  const [telefono, setPhone] = useState("");
+  const [nombre, setName] = useState("");
   const [floor, setFloor] = useState("");
   const [apartment, setApartment] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [addressError, setAddressError] = useState(false);
+  const [telefonoError, setPhoneError] = useState(false);
+  const [nombreError, setNameError] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState(initialMethod || "Efectivo");
   const [showTransferInfo, setShowTransferInfo] = useState(false);
 
@@ -21,13 +25,31 @@ const OrderConfirmationPage = () => {
   const finalTotal = baseTotal + deliveryCharge;
 
   const handleConfirm = () => {
+    let hasError = false;
+  
+    if (telefono.trim() === "") {
+      setPhoneError(true);
+      hasError = true;
+    }
+  
+    if (nombre.trim() === "") {
+      setNameError(true);
+      hasError = true;
+    }
+  
     if (method === "Delivery" && address.trim() === "") {
       setAddressError(true);
-      return;
+      hasError = true;
     }
-    setAddressError(false);
+  
+    if (hasError) return;
+  
+    // Si todo está OK, mostramos el modal de confirmación
     setShowModal(true);
   };
+  
+
+  ////// AGREGAR FUNCION setShowTransferInfo(true) ////////////////////////////////
 
   /*
     const handleModalConfirm = () => {
@@ -104,34 +126,34 @@ const OrderConfirmationPage = () => {
         <label>Numero de contacto:</label>
         <input
           type="text"
-          value={address}
+          value={telefono}
           onChange={(e) => {
-            setAddress(e.target.value);
+            setPhone(e.target.value);
             if (e.target.value.trim() !== "") {
-              setAddressError(false);
+              setPhoneError(false);
             }
           }}
           placeholder="Ej: +541123456789"
-          className={addressError ? "input-error" : ""}
+          className={telefonoError ? "input-error" : ""}
         />
-        {addressError && (
+        {telefonoError && (
           <p className="error-message">Un numero de contacto es obligatorio.</p>
         )}
 
         <label>Nombre de contacto:</label>
         <input
           type="text"
-          value={address}
+          value={nombre}
           onChange={(e) => {
-            setAddress(e.target.value);
+            setName(e.target.value);
             if (e.target.value.trim() !== "") {
-              setAddressError(false);
+              setNameError(false);
             }
           }}
           placeholder="Ej: Manuel"
-          className={addressError ? "input-error" : ""}
+          className={nombreError ? "input-error" : ""}
         />
-        {addressError && (
+        {nombreError && (
           <p className="error-message">Un nombre de contacto es obligatorio.</p>
         )}
       </div>
@@ -273,8 +295,8 @@ const OrderConfirmationPage = () => {
                     paymentMethod: "Efectivo",
                     finalTotal: finalTotal.toLocaleString(),
                     address: addressFormatted,
-                    phoneNumber: "",
-                    username: "manuel"
+                    phoneNumber: telefono,
+                    username: nombre
                   })
                   }}
                 >
