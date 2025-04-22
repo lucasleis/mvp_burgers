@@ -55,7 +55,7 @@ def enviar_mail(cuerpo):
 
 
 app = Flask(__name__)
-CORS(app, origins=["http://localhost:3000"])
+CORS(app, origins=["http://0.0.0.0:3000"])
 
 @app.route('/enviarpedido', methods=['POST'])
 def enviar_pedido():
@@ -107,4 +107,5 @@ def enviar_pedido():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000)
+
