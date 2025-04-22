@@ -22,8 +22,10 @@ MVP_BURGERS/
 
 ## Requisitos
 
-- [Docker]
-- [Docker Compose]
+- Docker
+- Docker Compose
+- Python 
+- React
 
 
 ## Cómo levantar el proyecto
