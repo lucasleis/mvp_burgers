@@ -55,42 +55,39 @@ def enviar_mail(cuerpo):
 
 
 app = Flask(__name__)
-CORS(app, origins=["http://0.0.0.0:3000"])
+CORS(app, supports_credentials=True, origins=["http://localhost:3000"])
 
 @app.route('/enviarpedido', methods=['POST'])
 def enviar_pedido():
     data = request.json
 
-    # Datos esperados desde el frontend
-    method = data.get('method')                # "Take Away" o "Delivery"
-    paymentMethod = data.get('paymentMethod')  # "Efectivo" o "Transferencia"
-    direccion = data.get('address') 
-    finalTotal = data.get('finalTotal')
-    phoneNumber = data.get('phoneNumber')      # Ej: "541134567890"
-    phoneNumber = "541134567890"
+    method = data.get('method')
+    paymentMethod = data.get('paymentMethod')
+    direccion = data.get('address')
+    finalTotal_raw = data.get('finalTotal')
+    phoneNumber = data.get('phoneNumber')
 
+    # Validaciones básicas
     if not phoneNumber:
         return jsonify({"error": "Falta el número de teléfono"}), 400
     if not direccion:
-        return jsonify({"error": "Falta el direccion en envio"}), 400
-    if not finalTotal:
+        return jsonify({"error": "Falta la dirección de envío"}), 400
+    if not finalTotal_raw:
         return jsonify({"error": "Falta el precio del pedido"}), 400
 
-    """
-        # Dirección formateada
-        direccion = (
-            "Sarmiento 251, Avellaneda" if method == "Take Away"
-            else f"{address} {f'- Piso {floor}' if floor else ''} {f'- Depto {apartment}' if apartment else ''}"
-        )
-    """
+    # Limpieza y conversión de finalTotal
+    try:
+        finalTotal = int(str(finalTotal_raw).replace(",", "").replace(".", ""))
+    except ValueError:
+        return jsonify({"error": "El total no es un número válido"}), 400
 
-    # Mensaje final
     mensaje = (
         f"Nuevo Pedido!\n"
         f"Método de pago: {paymentMethod}\n"
-        f"Método: {method}\n"
+        f"Método de envio: {method}\n"
         f"Dirección: {direccion.strip()}\n"
-        f"Total: ${int(finalTotal):,}".replace(",", ".")
+        f"Numero: {phoneNumber}\n"
+        f"Total: ${finalTotal:,}".replace(",", ".")
     )
 
     print("Mensaje: " + mensaje)
@@ -99,9 +96,6 @@ def enviar_pedido():
     enviar_telegram(mensaje)
 
     return jsonify({"success": True, "message": "Pedido procesado"}), 200
-
-    # hacer un try 
-    # en caso de que falle que me envie a mi si fallo en algo
 
 
 
