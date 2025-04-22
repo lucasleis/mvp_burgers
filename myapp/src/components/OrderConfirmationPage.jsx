@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import { X } from "lucide-react";
 import "leaflet/dist/leaflet.css";
 import "./OrderConfirmationPage.css";
+import { useNavigate } from "react-router-dom";
 
 const OrderConfirmationPage = () => {
   const location = useLocation();
@@ -18,11 +19,13 @@ const OrderConfirmationPage = () => {
   const [telefonoError, setPhoneError] = useState(false);
   const [nombreError, setNameError] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState(initialMethod || "Efectivo");
-  const [showTransferInfo, setShowTransferInfo] = useState(false);
+  // const [showTransferInfo, setShowTransferInfo] = useState(false);
 
   const deliveryCharge = method === "Delivery" ? 5000 : 0;
   const baseTotal = initialTotal || 0;
   const finalTotal = baseTotal + deliveryCharge;
+
+  const navigate = useNavigate();
 
   const handleConfirm = () => {
     let hasError = false;
@@ -47,29 +50,6 @@ const OrderConfirmationPage = () => {
     // Si todo está OK, mostramos el modal de confirmación
     setShowModal(true);
   };
-  
-
-  ////// AGREGAR FUNCION setShowTransferInfo(true) ////////////////////////////////
-
-  /*
-    const handleModalConfirm = () => {
-      setShowModal(false);
-
-      if (paymentMethod === "Transferencia") {
-        setShowTransferInfo(true);
-        return;
-      }
-
-      alert(
-        `Pedido confirmado!\nMétodo de pago: ${paymentMethod}\nMétodo: ${method}\nDirección: ${
-          method === "Take Away"
-            ? "Sarmiento 251, Avellaneda"
-            : `${address}${floor ? ` - Piso ${floor}` : ""}${apartment ? ` - Depto ${apartment}` : ""}`
-        }\nTotal: $${finalTotal.toLocaleString()}`
-      );   
-    };
-  */
-  
 
   const handleModalCancel = () => {
     setShowModal(false);
@@ -91,7 +71,6 @@ const OrderConfirmationPage = () => {
         phoneNumber
       }));
       
-      /*
       const response = await fetch("http://127.0.0.1:5000/enviarpedido", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -107,19 +86,21 @@ const OrderConfirmationPage = () => {
       const data = await response.json();
   
       if (data.success) {
-        alert("Pedido enviado!");
-        if (paymentMethod === "Transferencia") {
-          setShowTransferInfo(true);
-          return;
+        // alert("Pedido enviado!");
+        navigate("/pedido-exitoso", {
+        state: {
+          method,
+          paymentMethod,
+          finalTotal: finalTotal.toLocaleString(),
+          address: address,
+          phoneNumber: telefono,
+          username: nombre,
         }
+      });
       } else {
         alert("Error al enviar pedido");
       }
-      */
-      if (paymentMethod === "Transferencia") {
-        setShowTransferInfo(true);
-        return;
-      }
+      
 
     } catch (error) {
       console.error("Error al realizar el fetch:", error);
@@ -139,16 +120,20 @@ const OrderConfirmationPage = () => {
           type="text"
           value={telefono}
           onChange={(e) => {
-            setPhone(e.target.value);
-            if (e.target.value.trim() !== "") {
+            const input = e.target.value;
+            setPhone(input);
+            const numericOnly = input.replace(/\D/g, ""); // Quita todo lo que no sea número
+            if (numericOnly.length > 7) {
               setPhoneError(false);
+            } else {
+              setPhoneError(true);
             }
           }}
           placeholder="Ej: +541123456789"
           className={telefonoError ? "input-error" : ""}
         />
         {telefonoError && (
-          <p className="error-message">Un numero de contacto es obligatorio.</p>
+          <p className="error-message">Ingresá un número válido (mínimo 8 dígitos).</p>
         )}
 
         <label>Nombre de contacto:</label>
@@ -317,40 +302,6 @@ const OrderConfirmationPage = () => {
           </div>
         </div>
       )}
-
-      {showTransferInfo && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <button onClick={() => setShowTransferInfo(false)} className="close-button">
-              <X size={24} />
-            </button>
-            <h3>Datos para Transferencia</h3>
-            <p>Por favor, transferí a:</p>
-            <p><strong>ALIAS:</strong> MVP.BURGERS</p>
-            <p><strong>CBU:</strong> 0000003100000000123456</p>
-            <p>Y enviá el comprobante a:</p>
-            <p><strong>+541123456789</strong></p>
-            <div className="modal-buttons">
-              <button className="primary-btn" onClick={() => {
-                  setShowTransferInfo(false);
-                  /*
-                    alert(
-                      `Pedido confirmado!\nMétodo de pago: ${paymentMethod}\nMétodo: ${method}\nDirección: ${
-                        method === "Take Away"
-                          ? "Sarmiento 251, Avellaneda"
-                          : `${address}${floor ? ` - Piso ${floor}` : ""}${apartment ? ` - Depto ${apartment}` : ""}`
-                      }\nTotal: $${finalTotal.toLocaleString()}`
-                    );
-                  */
-                  }}
-                >
-                Entendido!
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
     </div>
   );
 };

@@ -6,6 +6,7 @@ import Footer from "./components/Footer";
 import HomeSection from "./components/HomeSection";
 import OrderPage from "./components/OrderPage"; 
 import OrderConfirmationPage from "./components/OrderConfirmationPage";
+import OrderSuccess from "./components/OrderSuccess"; 
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/" element={<HomeSection />} />
           <Route path="/order" element={<OrderPage />} />
           <Route path="/confirmar" element={<OrderConfirmationPage />} />
+          <Route path="/pedido-exitoso" element={<OrderSuccess />} /> 
         </Routes>
         <Footer />
       </div>
@@ -24,4 +26,3 @@ function App() {
 }
 
 export default App;
-
