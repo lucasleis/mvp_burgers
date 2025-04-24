@@ -177,11 +177,11 @@ const OrderConfirmationPage = () => {
 
       {method === "Take Away" && (
         <>
-          <p className="takeaway-address">Dirección: Sarmiento 251, Avellaneda</p>
+          <p className="takeaway-address">Dirección: Sarmiento 253, Avellaneda</p>
           <div className="map-container">
             <iframe
               title="Ubicación Take Away"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3282.7704576170363!2d-58.37150512342676!3d-34.63536437292671!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95a3335c0842fd3b%3A0x81b530bbf3f23968!2sSarmiento%20251%2C%20Avellaneda%2C%20Provincia%20de%20Buenos%20Aires!5e0!3m2!1ses-419!2sar!4v1712848461217!5m2!1ses-419!2sar"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3282.7704576170363!2d-58.37150512342676!3d-34.63536437292671!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95a3335c0842fd3b%3A0x81b530bbf3f23968!2sSarmiento%20253%2C%20Avellaneda%2C%20Provincia%20de%20Buenos%20Aires!5e0!3m2!1ses-419!2sar!4v1712848461217!5m2!1ses-419!2sar"
               width="100%"
               height="250"
               style={{ border: 0, borderRadius: "8px", marginTop: "1rem" }}
@@ -273,7 +273,7 @@ const OrderConfirmationPage = () => {
                 {apartment && ` - Depto ${apartment}`}
               </p>
             ) : (
-              <p><strong>Dirección:</strong> Sarmiento 251, Avellaneda</p>
+              <p><strong>Dirección:</strong> Sarmiento 253, Avellaneda. Depto A.</p>
             )}
             <p><strong>Método de pago: </strong>{paymentMethod}</p>
             <p><strong>Total:</strong> ${finalTotal.toLocaleString()}</p>
@@ -295,7 +295,7 @@ const OrderConfirmationPage = () => {
                 
                   const addressFormatted =
                     method === "Take Away"
-                      ? "Sarmiento 251, Avellaneda"
+                      ? "Sarmiento 253, Avellaneda. Depto A."
                       : `${address}${floor ? ` - Piso ${floor}` : ""}${apartment ? ` - Depto ${apartment}` : ""}`;
                 
                   await sendOrder({
