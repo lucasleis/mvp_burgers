@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './HomeSection.css';
-import burgerImg from '../imgs/burgerSinFondo.png';
+import burgerImg from '../imgs/mascota_sinfondo.png';
 import { Link } from 'react-router-dom';
-import OrderInfoModal from './InfoHorarios'; // Importar el modal
+import OrderInfoModal from './InfoHorarios'; 
 
 const HomeSection = () => {
   const [showModal, setShowModal] = useState(false);
