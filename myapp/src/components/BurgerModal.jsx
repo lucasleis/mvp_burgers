@@ -71,6 +71,7 @@ const BurgerModal = ({ isOpen, onClose, product }) => {
           <div className="burger-info">
             <h2 className="burger-name">{product.name}</h2>
             <p className="burger-description">{product.description}</p>
+            <p className="burger-description">Todas las hamburguesas vienen con papas.</p>
 
             <div className="section">
               <h3 className="section-title">Extras</h3>
