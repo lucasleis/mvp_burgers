@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import "./OrderPage.css";
 import imageBurger from "../imgs/burger.png";
 import BurgerModal from "./BurgerModal";
@@ -33,7 +33,23 @@ const OrderPage = () => {
     setSelectedProduct({
       ...product,
       removeOptions: removeOptionsByBurger[burgerName] || [],
-      addToCart: (item) => setCart([...cart, item])
+      // addToCart: (item) => setCart([...cart, item])
+      addToCart: (item) => {
+        setCart((prevCart) => {
+          const wasEmpty = prevCart.length === 0; 
+          const newCart = [...prevCart, item];
+          
+          if (wasEmpty) {
+            setTimeout(() => {
+              if (finalizeButtonRef.current) {
+                finalizeButtonRef.current.scrollIntoView({ behavior: 'smooth' });
+              }
+            }, 100); 
+          }
+      
+          return newCart;
+        });
+      }
     });
     setIsModalOpen(true);
   };
@@ -59,6 +75,8 @@ const OrderPage = () => {
     { name: "Black Mamba Doble", description: "Medallon x2, Cheddar, Tomate, Lechuga, Cebolla cruda y Aderezo Tasty", price: 12000, image: imageBurger },
     { name: "Black Mamba Triple", description: "Medallon x3, Cheddar, Tomate, Lechuga, Cebolla cruda y Aderezo Tasty", price: 14000, image: imageBurger },
   ];
+
+  const finalizeButtonRef = useRef(null);
 
   return (
     <div className="order-page">
@@ -86,9 +104,14 @@ const OrderPage = () => {
           <p className="finalize-total">
             Total del pedido: <span>${totalCartPrice.toLocaleString()}</span>
           </p>
-          <button className="finalize-button" onClick={() => setIsSummaryOpen(true)}>
-            Finalizar Pedido
-          </button>
+          <button
+  ref={finalizeButtonRef}
+  className="finalize-button"
+  onClick={() => setIsSummaryOpen(true)}
+>
+  Finalizar Pedido
+</button>
+
         </div>
       )}
 

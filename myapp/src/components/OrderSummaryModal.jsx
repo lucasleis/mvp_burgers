@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import "./OrderSummaryModal.css";
-// import DeliveryMap from "./DeliveryMap"; 
 import { FaTrash } from "react-icons/fa";
-
 import { useNavigate } from "react-router-dom";
 
 const OrderSummaryModal = ({ isOpen, onClose, cart, setCart }) => {
