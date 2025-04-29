@@ -13,10 +13,18 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
+# BD
+import redis
+
+
 load_dotenv()
 
-# VARIABLES
-pedidos = []        # Lista para guardar pedidos
+
+# BD
+redis_host = os.getenv("REDIS_HOST", "localhost")                           # Busca la var en .env y si no existe levanta en localhost 
+r = redis.Redis(host=redis_host, port=6379, decode_responses=True)          # Conexión al Redis del contenedor Docker
+# r.set("prueba", "Hola mundo")
+# print(r.get("prueba"))
 
 
 # SEGURIDAD 
@@ -26,11 +34,6 @@ USUARIOS = {
     "admin": os.getenv("ADMIN_PASS")  
 }
 
-@auth.verify_password
-def verificar_contraseña(username, password):
-    print( os.getenv("ADMIN_PASS"))
-    if username in USUARIOS and USUARIOS[username] == password:
-        return username
 
 # FUNCIONES
 
@@ -73,6 +76,31 @@ def enviar_mail(cuerpo):
         print(f"Error al enviar el correo: {e}")
 
 
+@auth.verify_password
+def verificar_contraseña(username, password):
+    if username in USUARIOS and USUARIOS[username] == password:
+        return username
+
+# FUNCIONES PARA BD
+
+def guardar_pedido(pedido):
+    nuevo_id = r.incr("pedido:id")  # ID incremental
+    pedido["id"] = nuevo_id
+    pedido["estado"] = "pendiente"
+    r.hset(f"pedido:{nuevo_id}", mapping=pedido)
+    r.rpush("pedidos", nuevo_id)
+
+def obtener_pedidos_por_estado(estado):
+    pedidos_ids = r.lrange("pedidos", 0, -1)
+    pedidos_filtrados = []
+    for pid in pedidos_ids:
+        pedido = r.hgetall(f"pedido:{pid}")
+        if pedido.get("estado") == estado:
+            pedido["id"] = int(pid)
+            pedido["total"] = int(pedido["total"])  # convertir a int para render
+            pedidos_filtrados.append(pedido)
+    return pedidos_filtrados
+
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True, origins=["http://localhost:3000"])
@@ -112,44 +140,43 @@ def enviar_pedido():
 
     print("Mensaje: " + mensaje)
 
-    # enviar_mail(mensaje)
-    # enviar_telegram(mensaje)
+    enviar_mail(mensaje)
+    enviar_telegram(mensaje)
 
-    pedidos.append({
-        "id": len(pedidos) + 1,
+    guardar_pedido({
         "direccion": direccion.strip(),
         "total": finalTotal,
         "telefono": phoneNumber,
         "metodo_envio": method,
-        "metodo_pago": paymentMethod,
-        "estado": "pendiente"
+        "metodo_pago": paymentMethod
     })
 
     return jsonify({"success": True, "message": "Pedido procesado"}), 200
 
+
 @app.route('/admin/pedidos')
 @auth.login_required
 def ver_pedidos():
-    pendientes = [p for p in pedidos if p["estado"] == "pendiente"]
-    enviados = [p for p in pedidos if p["estado"] == "enviado"]
+    pendientes = obtener_pedidos_por_estado("pendiente")
+    enviados = obtener_pedidos_por_estado("enviado")
     return render_template('pedidos.html', pendientes=pendientes, enviados=enviados)
+
+
+def actualizar_estado_pedido(pedido_id, nuevo_estado):
+    clave = f"pedido:{pedido_id}"
+    if r.exists(clave):
+        r.hset(clave, "estado", nuevo_estado)
 
 @app.post('/admin/enviar/<int:pedido_id>')
 @auth.login_required
 def marcar_como_enviado(pedido_id):
-    for pedido in pedidos:
-        if pedido["id"] == pedido_id:
-            pedido["estado"] = "enviado"
-            break
+    actualizar_estado_pedido(pedido_id, "enviado")
     return redirect('/admin/pedidos')
 
 @app.post('/admin/pendiente/<int:pedido_id>')
 @auth.login_required
 def marcar_como_pendiente(pedido_id):
-    for pedido in pedidos:
-        if pedido["id"] == pedido_id:
-            pedido["estado"] = "pendiente"
-            break
+    actualizar_estado_pedido(pedido_id, "pendiente")
     return redirect('/admin/pedidos')
 
 

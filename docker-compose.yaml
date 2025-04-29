@@ -10,6 +10,9 @@ services:
       - ./backend:/app
     environment:
       - FLASK_ENV=development
+      - REDIS_HOST=redis
+    depends_on:
+      - redis
 
   frontend:
     build:
@@ -23,3 +26,14 @@ services:
     tty: true
     environment:
       - CHOKIDAR_USEPOLLING=true
+
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+
+volumes:
+  redis-data:

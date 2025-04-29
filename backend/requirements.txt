@@ -8,3 +8,6 @@ python-dotenv
 flask
 flask-cors
 flask-httpauth
+
+#BD
+redis
