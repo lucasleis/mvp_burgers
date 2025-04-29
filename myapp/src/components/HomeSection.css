@@ -7,7 +7,7 @@
   padding: 0 5%;
   box-sizing: border-box;
   gap: 2rem;
-  min-height: 80vh; 
+  min-height: 70vh; 
 }
 
 .text-content {
@@ -75,7 +75,7 @@
   .home-section {
     flex-direction: column;
     text-align: center;
-    padding: 4rem 2rem;
+    /* padding: 4rem 2rem; */
   }
 
   .text-content h1 {
