@@ -7,3 +7,4 @@ python-dotenv
 # API
 flask
 flask-cors
+flask-httpauth

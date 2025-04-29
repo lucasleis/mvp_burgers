@@ -3,14 +3,34 @@ import os
 from dotenv import load_dotenv
 
 # API
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template, redirect
 from flask_cors import CORS
+from flask_httpauth import HTTPBasicAuth
 import requests
 
 # Mail
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+
+load_dotenv()
+
+# VARIABLES
+pedidos = []        # Lista para guardar pedidos
+
+
+# SEGURIDAD 
+auth = HTTPBasicAuth()
+
+USUARIOS = {
+    "admin": os.getenv("ADMIN_PASS")  
+}
+
+@auth.verify_password
+def verificar_contraseña(username, password):
+    print( os.getenv("ADMIN_PASS"))
+    if username in USUARIOS and USUARIOS[username] == password:
+        return username
 
 # FUNCIONES
 
@@ -92,11 +112,45 @@ def enviar_pedido():
 
     print("Mensaje: " + mensaje)
 
-    enviar_mail(mensaje)
-    enviar_telegram(mensaje)
+    # enviar_mail(mensaje)
+    # enviar_telegram(mensaje)
+
+    pedidos.append({
+        "id": len(pedidos) + 1,
+        "direccion": direccion.strip(),
+        "total": finalTotal,
+        "telefono": phoneNumber,
+        "metodo_envio": method,
+        "metodo_pago": paymentMethod,
+        "estado": "pendiente"
+    })
 
     return jsonify({"success": True, "message": "Pedido procesado"}), 200
 
+@app.route('/admin/pedidos')
+@auth.login_required
+def ver_pedidos():
+    pendientes = [p for p in pedidos if p["estado"] == "pendiente"]
+    enviados = [p for p in pedidos if p["estado"] == "enviado"]
+    return render_template('pedidos.html', pendientes=pendientes, enviados=enviados)
+
+@app.post('/admin/enviar/<int:pedido_id>')
+@auth.login_required
+def marcar_como_enviado(pedido_id):
+    for pedido in pedidos:
+        if pedido["id"] == pedido_id:
+            pedido["estado"] = "enviado"
+            break
+    return redirect('/admin/pedidos')
+
+@app.post('/admin/pendiente/<int:pedido_id>')
+@auth.login_required
+def marcar_como_pendiente(pedido_id):
+    for pedido in pedidos:
+        if pedido["id"] == pedido_id:
+            pedido["estado"] = "pendiente"
+            break
+    return redirect('/admin/pedidos')
 
 
 

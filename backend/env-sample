@@ -1,1 +1,9 @@
-API_KEY_GEMINI="key"
+MAIL_USER="user@mail.com"
+MAIL_PASS="MAIL_PASS"
+MAIL_SENDER="user@mail.com"
+MAIL_RECIEVER="user@mail.com"
+
+TELEGRAM_TOKEN="token"
+TELEGRAM_CHAT_ID="numbers"
+
+ADMIN_PASS="passwd"
