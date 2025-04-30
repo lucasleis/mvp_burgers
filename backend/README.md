@@ -1,30 +1,45 @@
-# MVP Burgers
+# MVP Burgers - Backend
 
 ## Descripción
 
-MVP Burgers es un sistema de procesamiento de mensajes que permite tomar pedidos de hamburguesas de manera automatizada. Se conecta con la API de Google Gemini para interpretar los pedidos en lenguaje natural y devolver un resumen con los productos seleccionados y su precio total.
+MVP Burgers es el backend de un sistema de pedidos de hamburguesas automatizado. Permite la gestión de pedidos y la comunicación con el frontend y otros servicios, como el envío de notificaciones por correo electrónico y Telegram. El backend está desarrollado en **Python (Flask)** y utiliza **Redis** para almacenar los pedidos.
 
+---
 
 ## Características
 
-- Procesamiento de lenguaje natural para interpretar pedidos.
-- Conexión con la API de Google Gemini.
-- Cálculo automático del total del pedido.
-- Identificación de hamburguesas y extras.
+- **Gestión de pedidos**: Permite registrar, consultar y modificar pedidos.
+- **Notificaciones automáticas**: Envío de notificaciones por **Telegram** y **correo electrónico**.
+- **Panel administrativo**: Visualización y gestión de pedidos pendientes y enviados.
+- **Almacenamiento en Redis**: Utiliza Redis para almacenar los pedidos.
+- **Autenticación básica**: Acceso al panel de administración protegido por autenticación básica.
+- **Borrado automático de pedidos**: Los pedidos se eliminan automáticamente cada día a las 15:00.
+- **Integración con Google Gemini**: Procesamiento de pedidos mediante la API de Google Gemini para interpretación de lenguaje natural.
 
+---
 
-## Uso
+## Requisitos
 
-Ejecuta el script para procesar un pedido:
+- Docker
+- Docker Compose
+- Python 3.x
+- Redis
 
-```
-python pedido_gemini.py
-```
+---
 
-### Ejemplo de salida:
-```
-Has pedido:
-- 1 x Jordan doble ($11000)
-- 1 x Lebron simple ($10000) + 1 x queso ($2000)
-El total es $23000.
-```
+## Instalación
+
+1. Clona el repositorio:
+   ```bash
+   git clone https://tu-repo.git
+   cd MVP_BURGERS/backend
+
+2. Instalar las dependencias:
+   ```bash
+    pip install -r requirements.txt
+
+3. Configura el archivo .env
+
+4. Levantar el servicio de backend con Docker Compose:
+   ```bash
+    docker-compose up --build backend
