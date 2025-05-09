@@ -13,6 +13,7 @@ const BurgerModal = ({ isOpen, onClose, product }) => {
   const [quantity, setQuantity] = useState(1);
   const [extras, setExtras] = useState({});
   const [removeOptions, setRemoveOptions] = useState([]);
+  const [selectedRemoved, setSelectedRemoved] = useState([]);
 
   useEffect(() => {
     if (product) {
@@ -24,29 +25,17 @@ const BurgerModal = ({ isOpen, onClose, product }) => {
       );
       setQuantity(1);
       setRemoveOptions(product.removeOptions || []);
+      setSelectedRemoved([]);
     }
   }, [product]);
 
   if (!product) return null;
 
-  const incrementExtra = (name) => {
-    setExtras({ ...extras, [name]: extras[name] + 1 });
-  };
-
-  const decrementExtra = (name) => {
-    if (extras[name] > 0) {
-      setExtras({ ...extras, [name]: extras[name] - 1 });
-    }
-  };
-
-  const incrementQty = () => {
-    setQuantity(quantity + 1);
-  };
-
-  const decrementQty = () => {
-    if (quantity > 1) {
-      setQuantity(quantity - 1);
-    }
+  const updateExtra = (name, delta) => {
+    setExtras((prev) => ({
+      ...prev,
+      [name]: Math.max(prev[name] + delta, 0)
+    }));
   };
 
   const calculateTotal = () => {
@@ -57,12 +46,29 @@ const BurgerModal = ({ isOpen, onClose, product }) => {
     return (product.price + extrasTotal) * quantity;
   };
 
-  const total = calculateTotal();
+  const handleAddToCart = () => {
+    const selectedExtras = Object.entries(extras).filter(([_, qty]) => qty > 0);
+
+    const item = {
+      name: product.name,
+      quantity,
+      extras: selectedExtras,
+      removed: selectedRemoved,
+      totalPrice: calculateTotal(),
+      image: product.image
+    };
+
+    if (product.addToCart) {
+      product.addToCart(item);
+    }
+
+    onClose();
+  };
 
   return (
     <Dialog open={isOpen} onClose={onClose} className="burger-modal-overlay">
       <div className="burger-modal-container">
-        <button onClick={onClose} className="close-button">
+        <button onClick={onClose} className="close-button" aria-label="Cerrar modal">
           <X size={24} />
         </button>
 
@@ -76,16 +82,16 @@ const BurgerModal = ({ isOpen, onClose, product }) => {
             <div className="section">
               <h3 className="section-title">Extras</h3>
               <div className="extras-grid">
-                {extrasList.map((extra, idx) => (
-                  <div key={idx} className="extra-item">
+                {extrasList.map((extra) => (
+                  <div key={extra.name} className="extra-item">
                     <div className="extra-details">
                       <span>{extra.name}</span>
                       <span className="extra-price">${extra.price.toLocaleString()}</span>
                     </div>
                     <div className="counter">
-                      <button onClick={() => decrementExtra(extra.name)} className="qty-btn">-</button>
+                      <button onClick={() => updateExtra(extra.name, -1)} className="qty-btn" aria-label={`Quitar ${extra.name}`}>-</button>
                       <span>{extras[extra.name]}</span>
-                      <button onClick={() => incrementExtra(extra.name)} className="qty-btn">+</button>
+                      <button onClick={() => updateExtra(extra.name, 1)} className="qty-btn" aria-label={`Agregar ${extra.name}`}>+</button>
                     </div>
                   </div>
                 ))}
@@ -96,9 +102,20 @@ const BurgerModal = ({ isOpen, onClose, product }) => {
               <div className="section">
                 <h3 className="section-title">Quitar</h3>
                 <div className="remove-grid">
-                  {removeOptions.map((opt, idx) => (
-                    <label key={idx} className="remove-option">
-                      <input type="checkbox" /> {opt}
+                  {removeOptions.map((opt) => (
+                    <label key={opt} className="remove-option">
+                      <input
+                        type="checkbox"
+                        checked={selectedRemoved.includes(opt)}
+                        onChange={() => {
+                          setSelectedRemoved((prev) =>
+                            prev.includes(opt)
+                              ? prev.filter((r) => r !== opt)
+                              : [...prev, opt]
+                          );
+                        }}
+                      />{" "}
+                      {opt}
                     </label>
                   ))}
                 </div>
@@ -108,37 +125,19 @@ const BurgerModal = ({ isOpen, onClose, product }) => {
             <div className="quantity-price">
               <div className="quantity-control">
                 <p>Cantidad: </p>
-                <button onClick={decrementQty} className="qty-btn">-</button>
+                <button onClick={() => setQuantity(Math.max(quantity - 1, 1))} className="qty-btn" aria-label="Disminuir cantidad">-</button>
                 <span>{quantity}</span>
-                <button onClick={incrementQty} className="qty-btn">+</button>
+                <button onClick={() => setQuantity(quantity + 1)} className="qty-btn" aria-label="Aumentar cantidad">+</button>
               </div>
-              <p className="total-price">${total.toLocaleString()}</p>
+              <p className="total-price">${calculateTotal().toLocaleString()}</p>
             </div>
 
             <button
               className="add-to-order-button"
-              onClick={() => {
-                const selectedExtras = Object.entries(extras).filter(([_, qty]) => qty > 0);
-                const selectedRemoved = Array.from(document.querySelectorAll('.remove-option input:checked')).map(
-                  input => input.parentElement.textContent.trim()
-                );
-              
-                const item = {
-                  name: product.name,
-                  quantity,
-                  extras: selectedExtras,
-                  removed: selectedRemoved, 
-                  totalPrice: total,
-                  image: product.image 
-                };
-              
-                if (product.addToCart) {
-                  product.addToCart(item);
-                }
-                onClose();
-              }}
+              onClick={handleAddToCart}
+              aria-label="Agregar a mi pedido"
             >
-              AGREGAR A MI PEDIDO (${total.toLocaleString()})
+              AGREGAR A MI PEDIDO (${calculateTotal().toLocaleString()})
             </button>
           </div>
         </div>

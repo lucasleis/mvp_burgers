@@ -2,24 +2,17 @@ import './Header.css';
 import logo from '../imgs/logo.png';
 import { Link } from 'react-router-dom';
 
-
 const Header = () => {
   return (
-    <header className="header">
-      {/* <img src={logo} alt="MVP Burgers Logo" className="logo" /> */}
-      <Link to="/">
-        <img src={logo} alt="MVP Burgers Logo" className="logo" />
+    <header className="header" role="banner">
+      <Link to="/" className="logo-link" aria-label="Ir a la página principal">
+        <img src={logo} alt="MVP Burgers Logo" className="logo" loading="lazy" />
       </Link>
 
-      <nav className="nav">
+      <nav className="nav" aria-label="Navegación principal">
         <ul className="nav-list">
-          {
-            // <li><a href="#home">HOME</a></li>
-            // <li><a href="#menu">MENU</a></li>
-            // <li><a href="#contact">CONTACT</a></li>
-          }
+          {/* Futuro: enlaces del menú */}
         </ul>
-        { /* <button className="order-button">ORDER NOW</button> */}
       </nav>
     </header>
   );

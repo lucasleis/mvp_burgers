@@ -1,11 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./OrderSummaryModal.css";
 import { FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 const OrderSummaryModal = ({ isOpen, onClose, cart, setCart }) => {
-  //const [selectedOption, setSelectedOption] = useState("");
   const [selectedOption, ] = useState("");
+  
+  // Asegurarse de que se reciba correctamente el carrito
+  useEffect(() => {
+    if (!Array.isArray(cart)) {
+      console.error("cart should be an array.");
+    }
+  }, [cart]);
 
   const deliveryCharge = selectedOption === "Take Away" ? 5000 : 0;
   const subtotal = cart.reduce((acc, item) => acc + item.totalPrice, 0);
@@ -18,9 +24,12 @@ const OrderSummaryModal = ({ isOpen, onClose, cart, setCart }) => {
 
   const navigate = useNavigate();
   const handleConfirmClick = () => {
+    if (cart.length === 0) {
+      alert("No hay productos en tu carrito.");
+      return;
+    }
     navigate("/confirmar", { state: { method: selectedOption, total } });
   };
-  
 
   return (
     <div className={`order-summary-modal ${isOpen ? "open" : ""}`}>
@@ -38,37 +47,18 @@ const OrderSummaryModal = ({ isOpen, onClose, cart, setCart }) => {
               <img
                 src={item.image}
                 alt={item.name}
-                style={{
-                  width: "50px",
-                  height: "50px",
-                  objectFit: "cover",
-                  borderRadius: "6px"
-                }}
+                className="cart-item-image"
               />
             ) : (
-              <div
-                style={{
-                  width: "50px",
-                  height: "50px",
-                  borderRadius: "6px",
-                  backgroundColor: "#ccc",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: "12px",
-                  color: "#666"
-                }}
-              >
-                Sin imagen
-              </div>
+              <div className="cart-item-no-image">Sin imagen</div>
             )}
 
             <div className="cart-item-info">
               <strong>{item.name}</strong>
               <div className="customizations">
-              {item.extras && item.extras.map(([name, qty], i) => (
-                <p key={`extra-${i}`}>{name} x{qty}</p>
-              ))}
+                {item.extras && item.extras.map(([name, qty], i) => (
+                  <p key={`extra-${i}`}>{name} x{qty}</p>
+                ))}
                 {item.removed && item.removed.map((rem, i) => (
                   <p key={`removed-${i}`}>{rem}</p>
                 ))}
@@ -99,8 +89,8 @@ const OrderSummaryModal = ({ isOpen, onClose, cart, setCart }) => {
           </div>
         </div>
 
-        {/*
-        <div className="store-select">
+        {/* El método de envío podría ser implementado aquí si se requiere */}
+        {/* <div className="store-select">
           <label>Método de envio:</label>
           <select
             value={selectedOption}
@@ -110,23 +100,7 @@ const OrderSummaryModal = ({ isOpen, onClose, cart, setCart }) => {
             <option value="Take Away">Take Away. Sarmiento 251, Avellaneda</option>
             <option value="Delivery">Delivery ($5000)</option>
           </select>
-
-          {selectedOption === "Take Away" && (
-            <div className="map-container">
-              <iframe
-                title="Ubicación Take Away"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3282.7704576170363!2d-58.37150512342676!3d-34.63536437292671!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95a3335c0842fd3b%3A0x81b530bbf3f23968!2sSarmiento%20251%2C%20Avellaneda%2C%20Provincia%20de%20Buenos%20Aires!5e0!3m2!1ses-419!2sar!4v1712848461217!5m2!1ses-419!2sar"
-                width="100%"
-                height="250"
-                style={{ border: 0, borderRadius: "8px", marginTop: "1rem" }}
-                allowFullScreen=""
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-              ></iframe>
-            </div>
-          )}
-        </div>
-        */}
+        </div> */}
 
         <textarea placeholder="Añadir comentarios..."></textarea>
 

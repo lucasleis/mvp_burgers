@@ -5,12 +5,12 @@ import { FaWhatsapp, FaInstagram } from 'react-icons/fa';
 
 const Footer = () => {
   return (
-    <footer className="footer">
-
+    <footer className="footer" role="contentinfo">
+      
       {/* Logo */}
       <div className="footer-left">
         <div className="footer-logo">
-          <img src={logo} alt="Logo" />
+          <img src={logo} alt="MVP Burgers logo" loading="lazy" />
         </div>
       </div>
 
@@ -21,9 +21,10 @@ const Footer = () => {
           target="_blank" 
           rel="noopener noreferrer"
           className="whatsapp-link"
+          aria-label="Contactar por WhatsApp"
         >
-          <FaWhatsapp className="icon" />
-          <span>+541123456789</span>
+          <FaWhatsapp className="icon" aria-hidden="true" />
+          <span>+54 11 2345 6789</span>
         </a>
       </div>
 
@@ -34,8 +35,9 @@ const Footer = () => {
           target="_blank" 
           rel="noopener noreferrer"
           className="instagram-link"
+          aria-label="Visitar Instagram de MVP Burgers"
         >
-          <FaInstagram className="icon" />
+          <FaInstagram className="icon" aria-hidden="true" />
           <span>@mvp.burgers</span>
         </a>
       </div>

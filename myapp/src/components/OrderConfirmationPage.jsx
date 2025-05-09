@@ -298,6 +298,7 @@ const OrderConfirmationPage = () => {
                       ? "Sarmiento 253, Avellaneda. Depto A."
                       : `${address}${floor ? ` - Piso ${floor}` : ""}${apartment ? ` - Depto ${apartment}` : ""}`;
                 
+                  
                   await sendOrder({
                     method,
                     paymentMethod,
