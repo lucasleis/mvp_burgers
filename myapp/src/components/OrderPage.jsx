@@ -14,18 +14,18 @@ const removeOptionsByBurger = {
 };
 
 const products = [
-  { name: "Jordan Simple", description: "Medallon x1, Cheddar y Cebolla a la plancha", price: 9000, image: imageBurger },
-  { name: "Jordan Doble", description: "Medallon x2, Cheddar y Cebolla a la plancha", price: 11000, image: imageBurger },
-  { name: "Jordan Triple", description: "Medallon x3, Cheddar y Cebolla a la plancha", price: 13000, image: imageBurger },
-  { name: "Ginobilli Simple", description: "Medallon x1, Queso Provolone y Salsa Criolla", price: 9000, image: imageBurger },
-  { name: "Ginobilli Doble", description: "Medallon x2, Queso Provolone y Salsa Criolla", price: 11000, image: imageBurger },
-  { name: "Ginobilli Triple", description: "Medallon x3, Queso Provolone y Salsa Criolla", price: 13000, image: imageBurger },
-  { name: "Lebron Simple", description: "Medallon x1, Cheddar, Panceta y Aderezo MVP", price: 10000, image: imageBurger },
-  { name: "Lebron Doble", description: "Medallon x2, Cheddar, Panceta y Aderezo MVP", price: 12000, image: imageBurger },
-  { name: "Lebron Triple", description: "Medallon x3, Cheddar, Panceta y Aderezo MVP", price: 14000, image: imageBurger },
-  { name: "Black Mamba Simple", description: "Medallon x1, Cheddar, Tomate, Lechuga, Cebolla cruda y Aderezo Tasty", price: 10000, image: imageBurger },
-  { name: "Black Mamba Doble", description: "Medallon x2, Cheddar, Tomate, Lechuga, Cebolla cruda y Aderezo Tasty", price: 12000, image: imageBurger },
-  { name: "Black Mamba Triple", description: "Medallon x3, Cheddar, Tomate, Lechuga, Cebolla cruda y Aderezo Tasty", price: 14000, image: imageBurger },
+  { name: "Jordan", description: "Carne, Cheddar y Cebolla a la plancha", price: 9000, image: imageBurger },
+  // { name: "Jordan Doble", description: "Medallon x2, Cheddar y Cebolla a la plancha", price: 11000, image: imageBurger },
+  // { name: "Jordan Triple", description: "Medallon x3, Cheddar y Cebolla a la plancha", price: 13000, image: imageBurger },
+  { name: "Ginobilli", description: "Carne, Queso Provolone y Salsa Criolla", price: 9000, image: imageBurger },
+  // { name: "Ginobilli Doble", description: "Medallon x2, Queso Provolone y Salsa Criolla", price: 11000, image: imageBurger },
+  // { name: "Ginobilli Triple", description: "Medallon x3, Queso Provolone y Salsa Criolla", price: 13000, image: imageBurger },
+  { name: "Lebron", description: "Carne, Cheddar, Panceta y Aderezo MVP", price: 10000, image: imageBurger },
+  // { name: "Lebron Doble", description: "Medallon x2, Cheddar, Panceta y Aderezo MVP", price: 12000, image: imageBurger },
+  // { name: "Lebron Triple", description: "Medallon x3, Cheddar, Panceta y Aderezo MVP", price: 14000, image: imageBurger },
+  { name: "Black Mamba", description: "Carne, Cheddar, Tomate, Lechuga, Cebolla cruda y Aderezo Tasty", price: 10000, image: imageBurger },
+  // { name: "Black Mamba Doble", description: "Medallon x2, Cheddar, Tomate, Lechuga, Cebolla cruda y Aderezo Tasty", price: 12000, image: imageBurger },
+  // { name: "Black Mamba Triple", description: "Medallon x3, Cheddar, Tomate, Lechuga, Cebolla cruda y Aderezo Tasty", price: 14000, image: imageBurger },
 ];
 
 const OrderPage = () => {
