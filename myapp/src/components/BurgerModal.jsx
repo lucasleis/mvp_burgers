@@ -89,12 +89,16 @@ const BurgerModal = ({ isOpen, onClose, product }) => {
         </button>
 
         <div className="burger-modal-content">
-          <img src={product.image} alt={product.name} className="burger-image" />
-          <div className="burger-info">
-            <h2 className="burger-name">{product.name}</h2>
-            <p className="burger-description">{product.description}</p>
-            <p className="burger-description">Todas las hamburguesas vienen con papas.</p>
+          <div className="burger-header">
+            <img src={product.image} alt={product.name} className="burger-image" />
+            <div className="burger-header-texts">
+              <h2 className="burger-name">{product.name}</h2>
+              <p className="burger-description">{product.description}</p>
+              <p className="burger-remark">Todas las hamburguesas vienen con papas.</p>
+            </div>
+          </div>
 
+          <div className="burger-info">
             <div className="section">
               <h3 className="section-title">Tipo de Hamburguesa</h3>
               <div className="burger-type-grid">

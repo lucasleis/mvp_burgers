@@ -5,7 +5,7 @@ services:
     build:
       context: ./backend
     ports:
-      - "5000:5000"
+      - "5001:5000"  
     volumes:
       - ./backend:/app
     environment:
@@ -18,7 +18,7 @@ services:
     build:
       context: ./myapp
     ports:
-      - "3000:3000"
+      - "3001:3000"  
     volumes:
       - ./myapp:/app
       - /app/node_modules
@@ -27,11 +27,10 @@ services:
     environment:
       - CHOKIDAR_USEPOLLING=true
 
-
   redis:
     image: redis:7
     ports:
-      - "6379:6379"
+      - "6380:6379"  
     volumes:
       - redis-data:/data
 
