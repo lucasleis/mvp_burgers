@@ -27,7 +27,7 @@ const products = [
   { name: "Black-Mamba", description: "Carne, Cheddar, Tomate, Lechuga, Cebolla cruda y Aderezo Tasty", price: 10000, image: imageBurger },
   // { name: "Black Mamba Doble", description: "Medallon x2, Cheddar, Tomate, Lechuga, Cebolla cruda y Aderezo Tasty", price: 12000, image: imageBurger },
   // { name: "Black Mamba Triple", description: "Medallon x3, Cheddar, Tomate, Lechuga, Cebolla cruda y Aderezo Tasty", price: 14000, image: imageBurger },
-  { name: "34", description: "Carne, Cheddar y Manteca derretida", price: 10000, image: imageBurger },
+  { name: "Shaq", description: "Carne, Cheddar y Manteca derretida", price: 10000, image: imageBurger },
 ];
 
 const OrderPage = () => {

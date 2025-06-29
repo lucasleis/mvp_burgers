@@ -4,6 +4,7 @@
   padding: 16px;
   display: grid;
   gap: 32px;
+  margin-bottom: 1rem;
   grid-template-columns: repeat(3, 1fr); 
 }
   
@@ -62,7 +63,7 @@
 .order-page {
   padding: 32px;
   background-color: #ffc100;
-  min-height: 100vh;
+  min-height: 61.3vh;
   text-align: center;
 }
   
@@ -79,6 +80,7 @@
   grid-template-columns: repeat(3, 1fr);
   max-width: 1200px;
   margin: 0 auto;
+  margin-bottom: 1rem;
 }
 
 .cart-summary {
@@ -185,17 +187,6 @@
   right: 405px; 
 }
   
-
-
-/* 🟡 DESKTOP STYLES */
-.order-grid {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 16px;
-  display: grid;
-  gap: 32px;
-  grid-template-columns: repeat(3, 1fr); 
-}
 
 /* 🟣 MOBILE STYLES 🟣 */
 @media (max-width: 768px) {
