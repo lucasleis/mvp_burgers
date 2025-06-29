@@ -7,7 +7,7 @@
   padding: 0 5%;
   box-sizing: border-box;
   gap: 2rem;
-  min-height: 70vh; 
+  min-height: 67vh; 
 }
 
 .text-content {
@@ -91,5 +91,9 @@
   .image-container img {
     max-height: 40vh;
   }
+
+  h1 {
+    display: none;
+  } 
 }
 

@@ -19,14 +19,6 @@ const HomeSection = () => {
     <section className="home-section">
       {showModal && <OrderInfoModal onClose={handleCloseModal} />}
 
-      <div className="text-content">
-        <h1>MVP</h1>
-        <h1>BURGERS</h1>
-        <Link to="/order" className="order-now-button" aria-label="Ir a la sección de pedidos">
-          Hacé tu pedido online
-        </Link>
-      </div>
-
       <div className="image-container">
         <img
           src={burgerImg}
@@ -36,6 +28,15 @@ const HomeSection = () => {
           height="300"
         />
       </div>
+
+      <div className="text-content">
+        <h1>MVP</h1>
+        <h1>BURGERS</h1>
+        <Link to="/order" className="order-now-button" aria-label="Ir a la sección de pedidos">
+          Hacé tu pedido online
+        </Link>
+      </div>
+
     </section>
   );
 };

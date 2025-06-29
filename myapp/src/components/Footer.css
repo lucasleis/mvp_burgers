@@ -1,24 +1,29 @@
-/* 🟣 DESKTOP STYLES 🟣 */
+/* 🟣 GLOBAL STYLES 🟣 */
+body {
+  font-family: 'Poppins', sans-serif;
+}
 
+/* 🟣 DESKTOP FOOTER 🟣 */
 .footer {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
-  background-color: #181818;
-  color: white;
-  padding: 1.5rem 4rem;
-  font-size: 1.7rem;
-  flex-wrap: wrap;
-  gap: 1rem;
+  text-align: center;
+  padding: 2rem 3rem;
+  font-size: 1.4rem;
+  background-color: #121212;
+  color: #e0e0e0;
+  border-top: 1px solid #333;
 }
+
 
 .footer-left,
 .footer-center,
 .footer-right {
-  flex: 1;                  /* ⬅️ que cada uno ocupe el mismo espacio */
+  flex: 1;
   display: flex;
   align-items: center;
-  justify-content: center;  /* opcional: centrado horizontal dentro de cada tercio */
+  justify-content: center;
 }
 
 .footer-left {
@@ -30,36 +35,22 @@
 }
 
 .footer-right {
-  justify-content: flex-end;
-}
-
-.footer-left img {
-  height: 100px;
-}
-
-/*
-.footer-center {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-}
-
-.footer-right {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 1.5rem;
-}
-  */
-
-.footer-text p {
-  margin: 0;
-  line-height: 1.6;
+  justify-content: center;
 }
 
 .footer-logo img {
-  height: 100px;
-  width: auto;
+  height: 75px;
+  opacity: 0.9;
+  transition: opacity 0.3s;
+}
+
+.footer-logo img:hover {
+  opacity: 1;
+}
+
+.footer-center span,
+.footer-right span {
+  font-size: 1.2rem;
 }
 
 .icon {
@@ -68,71 +59,113 @@
 
 .instagram-link,
 .whatsapp-link {
+  gap: 0.4rem;
+  font-size: 1.2rem;
+  opacity: 0.8;
+  transition: opacity 0.3s, color 0.3s;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
   color: white;
   text-decoration: none;
-  transition: color 0.3s ease;
 }
 
-.instagram-link:hover {
-  color: #e1306c;
-}
-
-.whatsapp-link {
-  margin-left: 1rem;
-}
-
+.instagram-link:hover,
 .whatsapp-link:hover {
-  color: #25D366;
+  opacity: 1;
+  color: white;
+}
+
+.footer-credits {
+  width: 100%;
+  text-align: center;
+  font-size: 1.1rem;
+  color: #999;
+  margin-top: 2rem;
+  border-top: 1px solid #333;
+  padding-top: 1rem;
+  font-style: italic;
+}
+
+.footer-credits a {
+  color: #999;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.footer-credits a:hover {
+  color: white;
+  text-decoration: underline;
+}
+
+.footer-contact-row {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  width: 100%;
+  margin-bottom: 1rem;
 }
 
 
-/* 🟣 MOBILE STYLES 🟣 */
+
 @media (max-width: 768px) {
+
+  .header {
+    padding: 0.1rem;
+  }
+
   .footer {
-    display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     text-align: center;
   }
 
-  .footer-left,
-  .footer-center,
-  .footer-right {
-    width: 100%;
-    justify-content: center; 
-    align-items: center;
+  /* Contenedor que agrupa WhatsApp + Instagram en línea */
+  .footer-contact-row {
     display: flex;
-    flex-direction: column; 
-    gap: 1rem;
+    justify-content: center;
+    gap: 2rem;
+    width: 100%;
     margin-bottom: 1rem;
   }
 
-  .footer-left img {
-    height: 80px;
+  /* Ocultamos los márgenes/paddings anteriores que no nos sirven */
+  .footer-center,
+  .footer-right {
+    flex: none;
+    width: auto;
+    justify-content: center;
+    flex-direction: row; /* línea horizontal */
+    gap: 0.5rem;
+    margin-bottom: 0;
   }
 
   .footer-logo img {
     height: 55px;
   }
 
+  .footer-center span,
+  .footer-right span {
+    font-size: 0.8rem;
+  }
+
   .icon {
-    font-size: 1.9rem; 
+    font-size: 1.4rem;
   }
 
   .instagram-link,
   .whatsapp-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: white;
-    text-decoration: none;
-    transition: color 0.3s ease;
-    white-space: nowrap;
     font-size: 0.9rem;
+    white-space: nowrap;
+    align-items: center;
   }
 
+  .footer-credits {
+    width: 100%;
+    text-align: center;
+    margin-top: 0; /* opcional para ajustar */
+  }
+
+  p {
+    font-size: 0.76rem;
+  }
 }
