@@ -20,14 +20,14 @@ const Footer = () => {
         {/* WhatsApp */} 
         <div className="footer-center">
           <a 
-            href="https://wa.me/5491123456789" 
+            href="https://wa.me/5491164999160" 
             target="_blank" 
             rel="noopener noreferrer"
             className="whatsapp-link"
             aria-label="Contactar por WhatsApp"
           >
             <FaWhatsapp className="icon" aria-hidden="true" />
-            <span>+54 11 2345 6789</span>
+            <span>+54 11 6499 9160</span>
           </a>
         </div>
 

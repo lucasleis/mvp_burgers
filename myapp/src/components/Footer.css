@@ -163,7 +163,8 @@ body {
   .footer-credits {
     width: 100%;
     text-align: center;
-    margin-top: 0; /* opcional para ajustar */
+    margin-top: 0;
+    margin-bottom: 1rem;
   }
 
   p {
