@@ -136,6 +136,11 @@
   box-shadow: 0 0 0 1px #facc15;
 }
 
+.burger-type-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .type-name {
   font-weight: bold;
   font-size: 0.9rem;
@@ -274,11 +279,11 @@
   }
 
   .burger-description {
-    font-size: 0.8rem;
+    font-size: 0.7rem;
   }
 
   .burger-remark {
-    font-size: 0.75rem;
+    font-size: 0.65rem;
   }
 
   .section {
@@ -321,7 +326,7 @@
   }
 
   .extra-details {
-    font-size: 0.8rem;
+    font-size: 0.7rem;
   }
 
   .extra-price {
@@ -329,12 +334,12 @@
   }
 
   .remove-option {
-    font-size: 0.75rem;
-    gap: 0.3rem;
+    font-size: 0.7rem;
+    gap: 0.2rem;
   }
 
   .quantity-price {
-    margin-top: 0.75rem;
+    margin-top: 0.4rem;
   }
 
   .quantity-control {
@@ -355,7 +360,7 @@
   .add-to-order-button {
     font-size: 0.9rem;
     padding: 0.6rem;
-    margin-top: 0.75rem;
+    margin-top: 0.5rem;
   }
 
   .close-button {
@@ -396,7 +401,7 @@
   }
 
   .burger-description {
-    font-size: 1.2rem;
+    font-size: 1rem;
   }
 
   .burger-remark {

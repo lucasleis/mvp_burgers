@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Administrar Menú</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="p-4">
+  <div class="container">
+    <h1>Administrar Menú</h1>
+
+    <h3>Agregar nuevo producto</h3>
+    <form method="post" action="/admin/menu" class="mb-5">
+      <div class="mb-3">
+        <label class="form-label">Nombre</label>
+        <input name="name" class="form-control" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Descripción</label>
+        <input name="description" class="form-control" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Precio Simple</label>
+        <input name="price_simple" type="number" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Precio Doble</label>
+        <input name="price_double" type="number" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Precio Triple</label>
+        <input name="price_triple" type="number" class="form-control" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">URL de Imagen</label>
+        <input name="image" class="form-control" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Ingredientes a quitar (separados por coma)</label>
+        <input name="removeOptions" class="form-control">
+      </div>
+
+      <button class="btn btn-primary">Agregar producto</button>
+    </form>
+
+    <h3>Productos actuales</h3>
+    {% for producto in productos %}
+      <div class="card mb-3 p-3">
+        <h4>{{ producto.name }}</h4>
+        <p><strong>Descripción:</strong> {{ producto.description }}</p>
+        <p><strong>Precio Simple:</strong> ${{ producto.price_simple }}</p>
+        <p><strong>Precio Doble:</strong> ${{ producto.price_double }}</p>
+        <p><strong>Precio Triple:</strong> ${{ producto.price_triple }}</p>
+        <p><strong>Ingredientes para quitar:</strong> {{ producto.removeOptions | join(", ") }}</p>
+
+        <div class="d-flex gap-2 mt-2">
+          <form>
+            <button type="button" class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#editForm{{ producto.id }}">
+              Editar
+            </button>
+          </form>
+
+          <form method="post" action="/admin/menu/eliminar/{{ producto.id }}" onsubmit="return confirm('¿Eliminar este producto?')">
+            <button class="btn btn-danger">Eliminar</button>
+          </form>
+        </div>
+
+        <!-- Formulario de edición colapsable -->
+        <div class="collapse mt-3" id="editForm{{ producto.id }}">
+          <form method="post" action="/admin/menu/editar/{{ producto.id }}">
+            <input type="hidden" name="name" value="{{ producto.name }}">
+
+            <div class="mb-2">
+              <label class="form-label">Descripción</label>
+              <input name="description" value="{{ producto.description }}" class="form-control" required>
+            </div>
+            <div class="mb-2">
+              <label class="form-label">Precio Simple</label>
+              <input name="price_simple" type="number" value="{{ producto.price_simple }}" class="form-control" required>
+            </div>
+            <div class="mb-2">
+              <label class="form-label">Precio Doble</label>
+              <input name="price_double" type="number" value="{{ producto.price_double }}" class="form-control" required>
+            </div>
+            <div class="mb-2">
+              <label class="form-label">Precio Triple</label>
+              <input name="price_triple" type="number" value="{{ producto.price_triple }}" class="form-control" required>
+            </div>
+            <div class="mb-2">
+              <label class="form-label">Ingredientes a quitar</label>
+              <input name="removeOptions" value="{{ producto.removeOptions | join(', ') }}" class="form-control">
+            </div>
+            <div class="mb-2">
+              <label class="form-label">URL de imagen</label>
+              <input name="image" value="{{ producto.image }}" class="form-control" required>
+            </div>
+            <button class="btn btn-success mt-2">Guardar cambios</button>
+          </form>
+        </div>
+
+      </div>
+    {% endfor %}
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

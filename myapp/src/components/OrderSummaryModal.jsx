@@ -39,8 +39,11 @@ const OrderSummaryModal = ({ isOpen, onClose, cart, setCart }) => {
       </div>
 
       <div className="modal-content">
-        <p className="item-count">({cart.length} artículo{cart.length !== 1 ? "s" : ""})</p>
-
+        <p className="item-count">
+          ({cart.reduce((total, item) => total + item.quantity, 0)} artículo
+          {cart.reduce((total, item) => total + item.quantity, 0) !== 1 ? "s" : ""})
+        </p>
+        
         {cart.map((item, index) => (
           <div className="cart-item" key={index}>
             {item.image ? (
@@ -55,6 +58,7 @@ const OrderSummaryModal = ({ isOpen, onClose, cart, setCart }) => {
 
             <div className="cart-item-info">
               <strong>{item.name}</strong>
+              <p>Cantidad: {item.quantity}</p>
               <div className="customizations">
                 {item.extras && item.extras.map(([name, qty], i) => (
                   <p key={`extra-${i}`}>{name} x{qty}</p>
@@ -89,23 +93,12 @@ const OrderSummaryModal = ({ isOpen, onClose, cart, setCart }) => {
           </div>
         </div>
 
-        {/* El método de envío podría ser implementado aquí si se requiere */}
-        {/* <div className="store-select">
-          <label>Método de envio:</label>
-          <select
-            value={selectedOption}
-            onChange={(e) => setSelectedOption(e.target.value)}
-          >
-            <option value="" disabled hidden>Seleccionar</option>
-            <option value="Take Away">Take Away. Sarmiento 251, Avellaneda</option>
-            <option value="Delivery">Delivery ($5000)</option>
-          </select>
-        </div> */}
-
         <textarea placeholder="Añadir comentarios..."></textarea>
 
         <div className="modal-buttons">
-          <button className="secondary-btn" onClick={onClose}>SEGUIR COMPRANDO</button>
+          <button className="secondary-btn" onClick={onClose}>
+            SEGUIR COMPRANDO
+          </button>
           <button className="primary-btn" onClick={handleConfirmClick}>
             TERMINAR PEDIDO
           </button>

@@ -22,7 +22,7 @@ load_dotenv()
 
 # BD
 redis_host = os.getenv("REDIS_HOST", "localhost")                           # Busca la var en .env y si no existe levanta en localhost 
-r = redis.Redis(host=redis_host, port=6379, decode_responses=True)          # Conexión al Redis del contenedor Docker
+r = redis.Redis(host=redis_host, port=6380, decode_responses=True)          # Conexión al Redis del contenedor Docker
 # r.set("prueba", "Hola mundo")
 # print(r.get("prueba"))
 
@@ -178,6 +178,114 @@ def marcar_como_enviado(pedido_id):
 def marcar_como_pendiente(pedido_id):
     actualizar_estado_pedido(pedido_id, "pendiente")
     return redirect('/admin/pedidos')
+
+
+### Menu ###
+@app.route('/admin/menu')
+@auth.login_required
+def ver_menu():
+    ids = r.lrange("products", 0, -1)
+    productos = []
+
+    for pid in ids:
+        data = r.hgetall(f"product:{pid}")
+        if data:
+            data["id"] = int(pid)
+            # Nuevos campos de precios por tipo
+            data["price_simple"] = int(data.get("price_simple", 0))
+            data["price_double"] = int(data.get("price_double", 0))
+            data["price_triple"] = int(data.get("price_triple", 0))
+            data["removeOptions"] = r.lrange(f"removeOptions:{data['name']}", 0, -1)
+            productos.append(data)
+
+    return render_template("menu.html", productos=productos)
+
+@app.route("/menu", methods=["GET"])
+def obtener_menu_json():
+    ids = r.lrange("products", 0, -1)
+    productos = []
+
+    for pid in ids:
+        data = r.hgetall(f"product:{pid}")
+        if data:
+            data["id"] = int(pid)
+            data["price_simple"] = int(data.get("price_simple", 0))
+            data["price_double"] = int(data.get("price_double", 0))
+            data["price_triple"] = int(data.get("price_triple", 0))
+            data["removeOptions"] = r.lrange(f"removeOptions:{data['name']}", 0, -1)
+            productos.append(data)
+
+    return jsonify(productos)
+
+@app.post('/admin/menu')
+@auth.login_required
+def agregar_producto_form():
+    name = request.form.get("name")
+    description = request.form.get("description")
+    price_simple = request.form.get("price_simple")
+    price_double = request.form.get("price_double")
+    price_triple = request.form.get("price_triple")
+    image = request.form.get("image")
+    remove_raw = request.form.get("removeOptions", "")
+
+    if not all([name, description, price_simple, price_double, price_triple, image]):
+        return "Faltan campos", 400
+
+    pid = r.incr("product:id")
+    r.rpush("products", pid)
+
+    r.hset(f"product:{pid}", mapping={
+        "name": name,
+        "description": description,
+        "price_simple": price_simple,
+        "price_double": price_double,
+        "price_triple": price_triple,
+        "image": image
+    })
+
+    for item in [x.strip() for x in remove_raw.split(",") if x.strip()]:
+        r.rpush(f"removeOptions:{name}", item)
+
+    return redirect("/admin/menu")
+
+@app.post('/admin/menu/eliminar/<int:product_id>')
+@auth.login_required
+def eliminar_producto_form(product_id):
+    clave_producto = f"product:{product_id}"
+
+    if not r.exists(clave_producto):
+        return "Producto no encontrado", 404
+
+    nombre = r.hget(clave_producto, "name")
+    r.delete(clave_producto)
+    r.lrem("products", 0, str(product_id))
+    r.delete(f"removeOptions:{nombre}")
+
+    return redirect("/admin/menu")
+
+@app.route("/admin/menu/editar/<int:producto_id>", methods=["POST"])
+def editar_producto(producto_id):
+    key = f"product:{producto_id}"
+    if not r.exists(key):
+        return "Producto no encontrado", 404
+
+    r.hset(key, mapping={
+        "description": request.form["description"],
+        "price_simple": int(request.form["price_simple"]),
+        "price_double": int(request.form["price_double"]),
+        "price_triple": int(request.form["price_triple"]),
+        "image": request.form["image"]
+    })
+
+    # Actualizar ingredientes a quitar
+    r.delete(f"removeOptions:{request.form['name']}")
+    remove_options = request.form["removeOptions"].split(",")
+    clean_options = [opt.strip() for opt in remove_options if opt.strip()]
+    if clean_options:
+        r.rpush(f"removeOptions:{request.form['name']}", *clean_options)
+
+    return redirect("/admin/menu")
+
 
 
 

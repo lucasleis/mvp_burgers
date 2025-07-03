@@ -9,11 +9,6 @@ const extrasList = [
   { name: "Extra Cheddar", price: 2000 }
 ];
 
-const burgerTypes = [
-  { name: "Simple", multiplier: 1, description: "1 medallón" },
-  { name: "Doble", multiplier: 1.2, description: "2 medallones" },
-  { name: "Triple", multiplier: 1.4, description: "3 medallones" }
-];
 
 const BurgerModal = ({ isOpen, onClose, product }) => {
   const [quantity, setQuantity] = useState(1);
@@ -33,11 +28,40 @@ const BurgerModal = ({ isOpen, onClose, product }) => {
       setQuantity(1);
       setRemoveOptions(product.removeOptions || []);
       setSelectedRemoved([]);
-      setSelectedType("Simple");
+      setSelectedType(
+        (product.price_simple > 0 && "Simple") ||
+        (product.price_double > 0 && "Doble") ||
+        (product.price_triple > 0 && "Triple") ||
+        ""
+      );
     }
   }, [product]);
 
   if (!product) return null;
+
+  const burgerTypes = [
+    {
+      name: "Simple",
+      multiplier: 1,
+      description: "1 medallón",
+      price: product.price_simple,
+      disabled: product.price_simple === 0
+    },
+    {
+      name: "Doble",
+      multiplier: 1,
+      description: "2 medallones",
+      price: product.price_double,
+      disabled: product.price_double === 0
+    },
+    {
+      name: "Triple",
+      multiplier: 1,
+      description: "3 medallones",
+      price: product.price_triple,
+      disabled: product.price_triple === 0
+    }
+  ];
 
   const updateExtra = (name, delta) => {
     setExtras((prev) => ({
@@ -52,7 +76,7 @@ const BurgerModal = ({ isOpen, onClose, product }) => {
 
   const calculateTotal = () => {
     const selectedTypeData = getSelectedTypeData();
-    const basePrice = product.price * selectedTypeData.multiplier;
+    const basePrice = selectedTypeData.price || 0;
     const extrasTotal = extrasList.reduce(
       (total, extra) => total + extras[extra.name] * extra.price,
       0
@@ -62,7 +86,7 @@ const BurgerModal = ({ isOpen, onClose, product }) => {
 
   const handleAddToCart = () => {
     const selectedExtras = Object.entries(extras).filter(([_, qty]) => qty > 0);
-    const selectedTypeData = getSelectedTypeData();
+    // const selectedTypeData = getSelectedTypeData();
 
     const item = {
       name: `${product.name} ${selectedType}`,
@@ -106,13 +130,16 @@ const BurgerModal = ({ isOpen, onClose, product }) => {
                   <button
                     key={type.name}
                     className={`burger-type-btn ${selectedType === type.name ? 'selected' : ''}`}
-                    onClick={() => setSelectedType(type.name)}
+                    onClick={() => {
+                      if (!type.disabled) setSelectedType(type.name);
+                    }}
+                    disabled={type.disabled}
                     aria-label={`Seleccionar ${type.name}`}
                   >
                     <div className="type-name">{type.name}</div>
                     <div className="type-description">{type.description}</div>
                     <div className="type-price">
-                      ${(product.price * type.multiplier).toLocaleString()}
+                      {type.price > 0 ? `$${type.price.toLocaleString()}` : "No disponible"}
                     </div>
                   </button>
                 ))}

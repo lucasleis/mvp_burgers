@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./OrderPage.css";
 import imageBurger from "../imgs/burger.png";
 import BurgerModal from "./BurgerModal";
@@ -6,6 +6,7 @@ import OrderSummaryModal from "./OrderSummaryModal";
 import { FaShoppingCart } from "react-icons/fa";
 
 // Opciones para quitar ingredientes según tipo de burger
+/*
 const removeOptionsByBurger = {
   "Jordan": ["Sin Cheddar", "Sin Cebolla a la plancha"],
   "Ginobilli": ["Sin Queso Provolone", "Sin Salsa Criolla"],
@@ -29,6 +30,7 @@ const products = [
   // { name: "Black Mamba Triple", description: "Medallon x3, Cheddar, Tomate, Lechuga, Cebolla cruda y Aderezo Tasty", price: 14000, image: imageBurger },
   { name: "Shaq", description: "Carne, Cheddar y Manteca derretida", price: 10000, image: imageBurger },
 ];
+*/
 
 const OrderPage = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -37,17 +39,26 @@ const OrderPage = () => {
   const [isSummaryOpen, setIsSummaryOpen] = useState(false);
   const finalizeButtonRef = useRef(null);
 
+  const [products, setProducts] = useState([]);
+  useEffect(() => {
+    fetch("http://localhost:5000/menu")  // o la URL de tu backend
+      .then((res) => res.json())
+      .then((data) => {
+        // Asignar imagen por defecto
+        const productosConImagen = data.map((prod) => ({
+          ...prod,
+          image: imageBurger
+        }));
+        setProducts(productosConImagen);
+      })
+      .catch((err) => console.error("Error al cargar menú:", err));
+  }, []);
+
   const openModal = (product) => {
     if (!product?.name) return;
 
-    const words = product.name.split(" ");
-    let burgerKey = words.length >= 2 ? words.slice(0, words.length - 1).join(" ") : words[0];
-
-    const removeOptions = removeOptionsByBurger[burgerKey] || [];
-
     setSelectedProduct({
       ...product,
-      removeOptions,
       addToCart: (item) => {
         setCart((prevCart) => {
           const wasEmpty = prevCart.length === 0;
@@ -67,12 +78,14 @@ const OrderPage = () => {
     setIsModalOpen(true);
   };
 
+
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedProduct(null);
   };
 
   const totalCartPrice = cart.reduce((total, item) => total + item.totalPrice, 0);
+
 
   return (
     <div className="order-page">
@@ -87,7 +100,13 @@ const OrderPage = () => {
             <div className="order-card-content">
               <h3>{product.name}</h3>
               <p className="description">{product.description}</p>
-              <p className="price">$ {product.price.toLocaleString()}</p>
+              <p className="price">
+                {Number(product.price_simple)
+                  ? `$ ${Number(product.price_simple).toLocaleString()}`
+                  : Number(product.price_double)
+                  ? `$ ${Number(product.price_double).toLocaleString()}`
+                  : "Precio no disponible"}
+              </p>
               <button className="add-button" onClick={() => openModal(product)}>
                 AGREGAR
               </button>
