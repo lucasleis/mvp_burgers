@@ -73,7 +73,7 @@ const OrderConfirmationPage = () => {
         phoneNumber
       }));
       
-      const response = await fetch("http://127.0.0.1:5000/enviarpedido", {
+      const response = await fetch("http://backend:5000/enviarpedido", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

@@ -22,7 +22,7 @@ load_dotenv()
 
 # BD
 redis_host = os.getenv("REDIS_HOST", "localhost")                           # Busca la var en .env y si no existe levanta en localhost 
-r = redis.Redis(host=redis_host, port=6380, decode_responses=True)          # Conexión al Redis del contenedor Docker
+r = redis.Redis(host=redis_host, port=6379, decode_responses=True)          # Conexión al Redis del contenedor Docker
 # r.set("prueba", "Hola mundo")
 # print(r.get("prueba"))
 
@@ -103,7 +103,7 @@ def obtener_pedidos_por_estado(estado):
 
 
 app = Flask(__name__)
-CORS(app, supports_credentials=True, origins=["http://localhost:3000"])
+CORS(app, supports_credentials=True, origins=["http://localhost:3001"])
 
 @app.route('/enviarpedido', methods=['POST'])
 def enviar_pedido():

@@ -41,7 +41,7 @@ const OrderPage = () => {
 
   const [products, setProducts] = useState([]);
   useEffect(() => {
-    fetch("http://localhost:5000/menu")  // o la URL de tu backend
+    fetch("http://backend:5000/menu")  // o la URL de tu backend
       .then((res) => res.json())
       .then((data) => {
         // Asignar imagen por defecto
