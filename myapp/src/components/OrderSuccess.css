@@ -1,10 +1,13 @@
-/* src/pages/OrderSuccess.css */
+
 .order-success-container {
   padding: 2rem;
   max-width: 600px;
   margin: auto;
   text-align: center;
-  min-height: 364px;
+  min-height: 58.6vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .order-details {
@@ -22,4 +25,44 @@
   border-radius: 12px;
   border: 1px solid #ffeeba;
 }
-  
+
+/* ----------------------------
+   Mobile (default)
+---------------------------- */
+@media (max-width: 768px) {
+  .order-success-container {
+    padding: 1.5rem 1rem;
+    font-size: 0.95rem;
+  }
+
+  .order-details,
+  .transfer-info {
+    font-size: 0.9rem;
+    padding: 0.75rem;
+  }
+
+  .order-details p,
+  .transfer-info p {
+    margin: 0.5rem 0;
+  }
+
+  .order-success-container {
+    min-height: 53.9vh;
+  }
+}
+
+/* ----------------------------
+   Desktop (768px o más)
+---------------------------- */
+@media (min-width: 769px) {
+  .order-success-container {
+    padding: 3rem 2rem;
+    font-size: 1rem;
+  }
+
+  .order-details,
+  .transfer-info {
+    font-size: 1rem;
+    padding: 1.5rem;
+  }
+}
