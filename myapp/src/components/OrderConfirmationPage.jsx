@@ -66,13 +66,15 @@ const OrderConfirmationPage = () => {
     phoneNumber
   }) => {
     try {
-      console.log(JSON.stringify({
-        method,
-        paymentMethod,
-        address,
-        finalTotal,
-        phoneNumber
-      }));
+      /*
+        console.log(JSON.stringify({
+          method,
+          paymentMethod,
+          address,
+          finalTotal,
+          phoneNumber
+        }));
+      */
       
       const response = await fetch(`${backendUrl}/enviarpedido`, {
         method: "POST",

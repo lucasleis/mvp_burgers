@@ -1,18 +1,18 @@
-# Imagen base
-FROM node:20
+# Etapa 1: Build de la app
+FROM node:20 AS build
 
-# Setea el directorio de trabajo
 WORKDIR /app
-
-# Copia los archivos y paquetes
 COPY package*.json ./
 RUN npm install
-
-# Copia el resto de la app
 COPY . .
+RUN npm run build
 
-# Expone el puerto de desarrollo de React (3000)
+# Etapa 2: Servidor estático
+FROM node:20
+
+RUN npm install -g serve
+WORKDIR /app
+COPY --from=build /app/build ./build
+
 EXPOSE 3000
-
-# Comando para iniciar la app
-CMD ["npm", "start"]
+CMD ["serve", "-s", "build", "-l", "3000"]
