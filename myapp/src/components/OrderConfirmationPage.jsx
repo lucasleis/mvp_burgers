@@ -21,7 +21,8 @@ const OrderConfirmationPage = () => {
   const [paymentMethod, setPaymentMethod] = useState(initialMethod || "Efectivo");
   // const [showTransferInfo, setShowTransferInfo] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
   const deliveryCharge = method === "Delivery" ? 5000 : 0;
   const baseTotal = initialTotal || 0;
@@ -73,7 +74,7 @@ const OrderConfirmationPage = () => {
         phoneNumber
       }));
       
-      const response = await fetch("http://backend:5000/enviarpedido", {
+      const response = await fetch(`${backendUrl}/enviarpedido`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

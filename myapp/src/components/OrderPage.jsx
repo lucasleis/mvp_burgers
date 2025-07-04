@@ -39,9 +39,11 @@ const OrderPage = () => {
   const [isSummaryOpen, setIsSummaryOpen] = useState(false);
   const finalizeButtonRef = useRef(null);
 
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
+
   const [products, setProducts] = useState([]);
   useEffect(() => {
-    fetch("http://backend:5000/menu")  // o la URL de tu backend
+    fetch(`${backendUrl}/menu`)
       .then((res) => res.json())
       .then((data) => {
         // Asignar imagen por defecto
