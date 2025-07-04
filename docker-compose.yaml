@@ -18,10 +18,10 @@ services:
     build:
       context: ./myapp
     ports:
-      - "3001:3000"  
-    volumes:
-      - ./myapp:/app
-      - /app/node_modules
+      - "3001:3001"  
+    #volumes:
+    #  - ./myapp:/app
+    #  - /app/node_modules
     stdin_open: true
     tty: true
     environment:

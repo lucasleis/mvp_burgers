@@ -102,8 +102,12 @@ def obtener_pedidos_por_estado(estado):
     return pedidos_filtrados
 
 
+frontend_url = os.getenv("FRONTEND_URL", "http://localhost:3001")
+
 app = Flask(__name__)
-CORS(app, supports_credentials=True, origins=["http://localhost:3001"])
+CORS(app, supports_credentials=True, origins=[frontend_url])
+#CORS(app, supports_credentials=True, origins=["http://localhost:3001"])
+
 
 @app.route('/enviarpedido', methods=['POST'])
 def enviar_pedido():
