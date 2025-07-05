@@ -22,7 +22,7 @@ load_dotenv()
 
 # BD
 redis_host = os.getenv("REDIS_HOST", "localhost")                           # Busca la var en .env y si no existe levanta en localhost 
-r = redis.Redis(host=redis_host, port=6379, decode_responses=True)          # Conexión al Redis del contenedor Docker
+r = redis.Redis(host=redis_host, port=6380, decode_responses=True)          # Conexión al Redis del contenedor Docker
 # r.set("prueba", "Hola mundo")
 # print(r.get("prueba"))
 
@@ -105,7 +105,7 @@ def obtener_pedidos_por_estado(estado):
 frontend_url = os.getenv("FRONTEND_URL", "http://localhost:3001")
 
 app = Flask(__name__)
-CORS(app, supports_credentials=True, origins=[frontend_url])
+CORS(app, supports_credentials=True, origins=[frontend_url, "http://localhost:3000", "http://localhost:3001"])
 #CORS(app, supports_credentials=True, origins=["http://localhost:3001"])
 
 
@@ -290,6 +290,85 @@ def editar_producto(producto_id):
 
     return redirect("/admin/menu")
 
+
+### Extras ###
+@app.route('/admin/extras')
+@auth.login_required
+def ver_extras():
+    ids = r.lrange("extras", 0, -1)
+    extras = []
+
+    for eid in ids:
+        data = r.hgetall(f"extra:{eid}")
+        if data:
+            data["id"] = int(eid)
+            data["price"] = int(data.get("price", 0))
+            extras.append(data)
+
+    return render_template("extras.html", extras=extras)
+
+@app.route("/extras", methods=["GET"])
+def obtener_extras_json():
+    ids = r.lrange("extras", 0, -1)
+    extras = []
+
+    for eid in ids:
+        data = r.hgetall(f"extra:{eid}")
+        if data:
+            data["id"] = int(eid)
+            data["price"] = int(data.get("price", 0))
+            extras.append(data)
+
+    return jsonify(extras)
+
+@app.post('/admin/extras')
+@auth.login_required
+def agregar_extra_form():
+    name = request.form.get("name")
+    price = request.form.get("price")
+
+    if not all([name, price]):
+        return "Faltan campos", 400
+
+    eid = r.incr("extra:id")
+    r.rpush("extras", eid)
+
+    r.hset(f"extra:{eid}", mapping={
+        "name": name,
+        "price": price
+    })
+
+    return redirect("/admin/extras")
+
+@app.post('/admin/extras/eliminar/<int:extra_id>')
+@auth.login_required
+def eliminar_extra_form(extra_id):
+    clave_extra = f"extra:{extra_id}"
+
+    if not r.exists(clave_extra):
+        return "Extra no encontrado", 404
+
+    r.delete(clave_extra)
+    r.lrem("extras", 0, str(extra_id))
+
+    return redirect("/admin/extras")
+
+@app.route("/admin/extras/editar/<int:extra_id>", methods=["POST"])
+@auth.login_required
+def editar_extra(extra_id):
+    key = f"extra:{extra_id}"
+    if not r.exists(key):
+        return "Extra no encontrado", 404
+
+    name = request.form["name"]
+    price = request.form["price"]
+
+    r.hset(key, mapping={
+        "name": name,
+        "price": int(price)
+    })
+
+    return redirect("/admin/extras")
 
 
 
