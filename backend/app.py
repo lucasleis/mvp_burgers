@@ -372,6 +372,44 @@ def editar_extra(extra_id):
 
 
 
+### Estado de toma de pedidos ###
+def is_store_open() -> bool:
+    """Devuelve True si estamos aceptando pedidos."""
+    value = r.get("store_open")
+    # Si la clave no existe asumimos tienda abierta
+    return value != "false"
+
+def set_store_open(value: bool) -> None:
+    """Actualiza el flag en Redis."""
+    r.set("store_open", "true" if value else "false")
+
+@app.get("/status")
+def get_status():
+    return jsonify({"open": is_store_open()})
+
+# (Opcional) endpoint seguro para cambiar el estado vía JSON.
+@app.post("/status")
+@auth.login_required
+def set_status_api():
+    data = request.get_json() or {}
+    if "open" not in data:
+        return jsonify({"error": "Campo 'open' requerido"}), 400
+    set_store_open(bool(data["open"]))
+    return jsonify({"success": True, "open": is_store_open()})
+
+@app.route("/admin/status", methods=["GET", "POST"])
+@auth.login_required
+def admin_status():
+    if request.method == "POST":
+        # hidden input con name="open" y value="true/false"
+        nuevo_estado = request.form.get("open", "true") == "true"
+        set_store_open(nuevo_estado)
+        return redirect("/admin/status")
+
+    return render_template("status.html", abierto=is_store_open())
+
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
 

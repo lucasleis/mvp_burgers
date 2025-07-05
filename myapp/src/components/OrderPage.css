@@ -186,6 +186,33 @@
 .floating-cart.open {
   right: 405px; 
 }
+
+.order-page.closed {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffc100;
+  padding: 32px;
+  text-align: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 61.3vh;
+}
+
+.order-page.closed h1 {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 16px;
+  color: black; 
+}
+
+.order-page.closed p {
+  font-size: 1.25rem;
+  color: #1f1f1f;
+  max-width: 600px;
+  line-height: 1.5;
+}
+
   
 
 /* 🟣 MOBILE STYLES 🟣 */
@@ -257,6 +284,21 @@
 
   .floating-cart {
     display: none !important;
+  }
+
+  .order-page.closed {
+    padding: 24px;
+    max-height: 10vh;
+    min-height: 53.9vh;
+  }
+
+  .order-page.closed h1 {
+    font-size: 2rem;
+  }
+
+  .order-page.closed p {
+    font-size: 1rem;
+    padding: 0 10px;
   }
 
 }

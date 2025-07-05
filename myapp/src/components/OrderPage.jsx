@@ -5,33 +5,6 @@ import BurgerModal from "./BurgerModal";
 import OrderSummaryModal from "./OrderSummaryModal";
 import { FaShoppingCart } from "react-icons/fa";
 
-// Opciones para quitar ingredientes según tipo de burger
-/*
-const removeOptionsByBurger = {
-  "Jordan": ["Sin Cheddar", "Sin Cebolla a la plancha"],
-  "Ginobilli": ["Sin Queso Provolone", "Sin Salsa Criolla"],
-  "Lebron": ["Sin Cheddar", "Sin Panceta", "Sin Aderezo MVP"],
-  "Black-Mamba": ["Sin Cheddar", "Sin Tomate", "Sin Lechuga", "Sin Cebolla cruda", "Sin Aderezo Tasty"],
-  "34": ["Sin Cheddar"],
-};
-
-const products = [
-  { name: "Jordan", description: "Carne, Cheddar y Cebolla a la plancha", price: 9000, image: imageBurger },
-  // { name: "Jordan Doble", description: "Medallon x2, Cheddar y Cebolla a la plancha", price: 11000, image: imageBurger },
-  // { name: "Jordan Triple", description: "Medallon x3, Cheddar y Cebolla a la plancha", price: 13000, image: imageBurger },
-  { name: "Ginobilli", description: "Carne, Queso Provolone y Salsa Criolla", price: 9000, image: imageBurger },
-  // { name: "Ginobilli Doble", description: "Medallon x2, Queso Provolone y Salsa Criolla", price: 11000, image: imageBurger },
-  // { name: "Ginobilli Triple", description: "Medallon x3, Queso Provolone y Salsa Criolla", price: 13000, image: imageBurger },
-  { name: "Lebron", description: "Carne, Cheddar, Panceta y Aderezo MVP", price: 10000, image: imageBurger },
-  // { name: "Lebron Doble", description: "Medallon x2, Cheddar, Panceta y Aderezo MVP", price: 12000, image: imageBurger },
-  // { name: "Lebron Triple", description: "Medallon x3, Cheddar, Panceta y Aderezo MVP", price: 14000, image: imageBurger },
-  { name: "Black-Mamba", description: "Carne, Cheddar, Tomate, Lechuga, Cebolla cruda y Aderezo Tasty", price: 10000, image: imageBurger },
-  // { name: "Black Mamba Doble", description: "Medallon x2, Cheddar, Tomate, Lechuga, Cebolla cruda y Aderezo Tasty", price: 12000, image: imageBurger },
-  // { name: "Black Mamba Triple", description: "Medallon x3, Cheddar, Tomate, Lechuga, Cebolla cruda y Aderezo Tasty", price: 14000, image: imageBurger },
-  { name: "Shaq", description: "Carne, Cheddar y Manteca derretida", price: 10000, image: imageBurger },
-];
-*/
-
 const OrderPage = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -42,19 +15,39 @@ const OrderPage = () => {
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
   const [products, setProducts] = useState([]);
+  const [blocked, setBlocked] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  // Verificamos si la tienda está abierta
   useEffect(() => {
-    fetch(`${backendUrl}/menu`)
+    fetch(`${backendUrl}/status`)
       .then((res) => res.json())
       .then((data) => {
-        // Asignar imagen por defecto
-        const productosConImagen = data.map((prod) => ({
-          ...prod,
-          image: imageBurger
-        }));
-        setProducts(productosConImagen);
+        setBlocked(!data.open);
+        setLoading(false);
       })
-      .catch((err) => console.error("Error al cargar menú:", err));
-  }, []);
+      .catch((err) => {
+        console.error("Error al verificar estado de la tienda:", err);
+        setBlocked(true);
+        setLoading(false);
+      });
+  }, [backendUrl]);
+
+  // Cargamos el menú si está abierta
+  useEffect(() => {
+    if (!blocked) {
+      fetch(`${backendUrl}/menu`)
+        .then((res) => res.json())
+        .then((data) => {
+          const productosConImagen = data.map((prod) => ({
+            ...prod,
+            image: imageBurger,
+          }));
+          setProducts(productosConImagen);
+        })
+        .catch((err) => console.error("Error al cargar menú:", err));
+    }
+  }, [backendUrl, blocked]);
 
   const openModal = (product) => {
     if (!product?.name) return;
@@ -62,24 +55,21 @@ const OrderPage = () => {
     setSelectedProduct({
       ...product,
       addToCart: (item) => {
-        setCart((prevCart) => {
-          const wasEmpty = prevCart.length === 0;
-          const newCart = [...prevCart, item];
+        const wasEmpty = cart.length === 0;
+        const newCart = [...cart, item];
 
-          if (wasEmpty && finalizeButtonRef.current) {
-            setTimeout(() => {
-              finalizeButtonRef.current.scrollIntoView({ behavior: 'smooth' });
-            }, 100);
-          }
+        if (wasEmpty && finalizeButtonRef.current) {
+          setTimeout(() => {
+            finalizeButtonRef.current.scrollIntoView({ behavior: "smooth" });
+          }, 100);
+        }
 
-          return newCart;
-        });
+        setCart(newCart);
       },
     });
 
     setIsModalOpen(true);
   };
-
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -88,6 +78,19 @@ const OrderPage = () => {
 
   const totalCartPrice = cart.reduce((total, item) => total + item.totalPrice, 0);
 
+  if (loading) {
+    return <p className="p-4">Cargando estado de la tienda...</p>;
+  }
+
+  if (blocked) {
+    return (
+      <div className="order-page closed">
+        <h1>😔 Lo sentimos</h1>
+        <p>No estamos tomando pedidos en este momento.</p>
+        <p>¡Volvé más tarde!</p>
+      </div>
+    );
+  }
 
   return (
     <div className="order-page">
