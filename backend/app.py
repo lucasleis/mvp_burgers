@@ -109,6 +109,8 @@ CORS(app, supports_credentials=True, origins=[frontend_url, "http://localhost:30
 #CORS(app, supports_credentials=True, origins=["http://localhost:3001"])
 
 
+### Pedidos ###
+
 @app.route('/enviarpedido', methods=['POST'])
 def enviar_pedido():
     data = request.json
@@ -157,14 +159,12 @@ def enviar_pedido():
 
     return jsonify({"success": True, "message": "Pedido procesado"}), 200
 
-
 @app.route('/admin/pedidos')
 @auth.login_required
 def ver_pedidos():
     pendientes = obtener_pedidos_por_estado("pendiente")
     enviados = obtener_pedidos_por_estado("enviado")
     return render_template('pedidos.html', pendientes=pendientes, enviados=enviados)
-
 
 def actualizar_estado_pedido(pedido_id, nuevo_estado):
     clave = f"pedido:{pedido_id}"
@@ -182,6 +182,7 @@ def marcar_como_enviado(pedido_id):
 def marcar_como_pendiente(pedido_id):
     actualizar_estado_pedido(pedido_id, "pendiente")
     return redirect('/admin/pedidos')
+
 
 
 ### Menu ###
@@ -289,6 +290,7 @@ def editar_producto(producto_id):
         r.rpush(f"removeOptions:{request.form['name']}", *clean_options)
 
     return redirect("/admin/menu")
+
 
 
 ### Extras ###
@@ -407,6 +409,15 @@ def admin_status():
         return redirect("/admin/status")
 
     return render_template("status.html", abierto=is_store_open())
+
+
+
+### Administrador ###
+
+@app.route("/admin")
+def admin_dashboard():
+    return render_template("admin.html")
+
 
 
 

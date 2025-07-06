@@ -1,0 +1,113 @@
+/* estado_tienda.css */
+
+/* Contenedor principal */
+.container {
+  max-width: 700px;
+  margin: 0 auto;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #222;
+}
+
+/* Títulos */
+h1 {
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 1.5rem;
+  font-size: 2.5rem;
+}
+
+/* Alertas de estado */
+.alert {
+  font-size: 1.1rem;
+  font-weight: 500;
+  padding: 1rem 1.25rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+
+.alert strong {
+  font-weight: 700;
+}
+
+/* Formularios */
+form {
+  margin-top: 1rem;
+}
+
+form button {
+  width: 100%;
+  padding: 0.6rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+.btn-danger:hover {
+  background-color: #a71d2a;
+  border-color: #a71d2a;
+}
+
+.btn-success {
+  background-color: #198754;
+  border-color: #198754;
+}
+
+.btn-success:hover {
+  background-color: #146c43;
+  border-color: #146c43;
+}
+
+/* Botón volver al administrador */
+.btn-secondary {
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+  display: inline-block;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
+  color: #fff;
+}
+
+/* Link de volver al panel */
+.btn-link {
+  color: #0d6efd;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  display: inline-block;
+}
+
+.btn-link:hover {
+  text-decoration: underline;
+  color: #084298;
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+  h1 {
+    font-size: 2rem;
+  }
+
+  .alert {
+    font-size: 1rem;
+  }
+
+  form button {
+    font-size: 1rem;
+    padding: 0.5rem 0;
+  }
+
+  .btn-secondary, .btn-link {
+    font-size: 0.95rem;
+  }
+}
