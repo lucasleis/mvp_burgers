@@ -179,6 +179,63 @@ textarea {
   overflow: hidden;
 }
 
+.delivery-time-section {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.delivery-time-section select {
+  appearance: none;
+  padding: 0.6rem 1rem;
+  font-size: 1rem;
+  color: #333;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.delivery-time-section select:focus {
+  border-color: #ff8800;
+  box-shadow: 0 0 0 2px rgba(255, 136, 0, 0.3);
+  outline: none;
+}
+
+.delivery-time-section label {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #333;
+}
+
+.delivery-time-section {
+  position: relative;
+}
+
+.delivery-time-section select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: white;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='12' viewBox='0 0 24 24' width='12' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 12px;
+  padding: 0.6rem 2.5rem 0.6rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+
+
 @media (max-width: 768px) {
   .order-summary-modal {
     width: 100%;

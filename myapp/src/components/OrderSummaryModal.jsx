@@ -4,9 +4,9 @@ import { FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 const OrderSummaryModal = ({ isOpen, onClose, cart, setCart }) => {
-  const [selectedOption, ] = useState("");
-  
-  // Asegurarse de que se reciba correctamente el carrito
+  const [selectedOption, ] = useState(""); // usar  este estado para Take Away o Delivery 
+  const [deliveryTime, setDeliveryTime] = useState("");
+
   useEffect(() => {
     if (!Array.isArray(cart)) {
       console.error("cart should be an array.");
@@ -28,7 +28,8 @@ const OrderSummaryModal = ({ isOpen, onClose, cart, setCart }) => {
       alert("No hay productos en tu carrito.");
       return;
     }
-    navigate("/confirmar", { state: { method: selectedOption, total } });
+    
+    navigate("/confirmar", { state: { method: selectedOption, total, deliveryTime } });
   };
 
   return (
@@ -91,6 +92,20 @@ const OrderSummaryModal = ({ isOpen, onClose, cart, setCart }) => {
             <strong>TOTAL</strong>
             <strong>${total.toLocaleString()}</strong>
           </div>
+        </div>
+
+        {/* Horario de entrega */}
+        <div className="delivery-time-section">
+        <select id="delivery-time" value={deliveryTime} onChange={(e) => setDeliveryTime(e.target.value)} >
+          <option value="" disabled hidden> Seleccionar horario de Entrega </option>
+          <option value="20:00-20:30">20:00 - 20:30</option>
+          <option value="20:30-21:00">20:30 - 21:00</option>
+          <option value="21:00-21:30">21:00 - 21:30</option>
+          <option value="21:30-22:00">21:30 - 22:00</option>
+          <option value="22:00-22:30">22:00 - 22:30</option>
+          <option value="22:30-23:00">22:30 - 23:00</option>
+          <option value="23:00-23:30">23:00 - 23:30</option>
+        </select>
         </div>
 
         <textarea placeholder="Añadir comentarios..."></textarea>

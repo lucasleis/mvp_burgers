@@ -120,6 +120,7 @@ def enviar_pedido():
     direccion = data.get('address')
     finalTotal_raw = data.get('finalTotal')
     phoneNumber = data.get('phoneNumber')
+    delivery_time = data.get('deliveryTime')
 
     # Validaciones básicas
     if not phoneNumber:
@@ -141,7 +142,8 @@ def enviar_pedido():
         f"Método de envio: {method}\n"
         f"Dirección: {direccion.strip()}\n"
         f"Numero: {phoneNumber}\n"
-        f"Total: ${finalTotal:,}".replace(",", ".")
+        f"Total: ${finalTotal:,}".replace(",", ".")+"\n"
+        f"Entrega estimada: {delivery_time}"
     )
 
     print("Mensaje: " + mensaje)
@@ -154,7 +156,8 @@ def enviar_pedido():
         "total": finalTotal,
         "telefono": phoneNumber,
         "metodo_envio": method,
-        "metodo_pago": paymentMethod
+        "metodo_pago": paymentMethod,
+        "tiempo_entrega": delivery_time
     })
 
     return jsonify({"success": True, "message": "Pedido procesado"}), 200

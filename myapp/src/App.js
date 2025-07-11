@@ -3,7 +3,9 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import ErrorBoundary from "./components/ErrorBoundary"; // Debes crear este componente
+import ErrorBoundary from "./components/ErrorBoundary"; 
+import ScrollToTop from "./components/ScrollToTop"; // 
+
 
 // Lazy load de componentes de página
 const HomeSection = lazy(() => import("./components/HomeSection"));
@@ -14,6 +16,7 @@ const OrderSuccess = lazy(() => import("./components/OrderSuccess"));
 function App() {
   return (
     <Router>
+      <ScrollToTop /> {/* scroll al top en cada ruta */}
       <div className="app-container">
         <Header />
         <ErrorBoundary>

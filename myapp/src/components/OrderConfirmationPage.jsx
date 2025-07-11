@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { X } from "lucide-react";
 import "leaflet/dist/leaflet.css";
@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 const OrderConfirmationPage = () => {
   const location = useLocation();
-  const { method: initialMethod, total: initialTotal } = location.state || {};
+  const { method: initialMethod, total: initialTotal, deliveryTime } = location.state || {};
   const [method, setMethod] = useState(initialMethod || "Take Away");
   const [address, setAddress] = useState("");
   const [telefono, setPhone] = useState("");
@@ -24,6 +24,11 @@ const OrderConfirmationPage = () => {
   
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
+  // scrollear hasta errores
+  const telefonoRef = useRef(null);
+  const nombreRef = useRef(null);
+  const addressRef = useRef(null);
+
   const deliveryCharge = method === "Delivery" ? 5000 : 0;
   const baseTotal = initialTotal || 0;
   const finalTotal = baseTotal + deliveryCharge;
@@ -32,27 +37,35 @@ const OrderConfirmationPage = () => {
 
   const handleConfirm = () => {
     let hasError = false;
-  
+    let firstErrorRef = null;
+
     if (telefono.trim() === "") {
       setPhoneError(true);
       hasError = true;
+      if (!firstErrorRef) firstErrorRef = telefonoRef;
     }
-  
+
     if (nombre.trim() === "") {
       setNameError(true);
       hasError = true;
+      if (!firstErrorRef) firstErrorRef = nombreRef;
     }
-  
+
     if (method === "Delivery" && address.trim() === "") {
       setAddressError(true);
       hasError = true;
+      if (!firstErrorRef) firstErrorRef = addressRef;
     }
-  
-    if (hasError) return;
-  
+
+    if (hasError && firstErrorRef?.current) {
+      firstErrorRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+
     // Si todo está OK, mostramos el modal de confirmación
     setShowModal(true);
   };
+
 
   const handleModalCancel = () => {
     setShowModal(false);
@@ -66,15 +79,6 @@ const OrderConfirmationPage = () => {
     phoneNumber
   }) => {
     try {
-      /*
-        console.log(JSON.stringify({
-          method,
-          paymentMethod,
-          address,
-          finalTotal,
-          phoneNumber
-        }));
-      */
       
       const response = await fetch(`${backendUrl}/enviarpedido`, {
         method: "POST",
@@ -84,7 +88,8 @@ const OrderConfirmationPage = () => {
           paymentMethod: paymentMethod,
           address: address,
           finalTotal: finalTotal,
-          phoneNumber: phoneNumber
+          phoneNumber: phoneNumber,
+          deliveryTime: deliveryTime
         })
       });
   
@@ -100,6 +105,7 @@ const OrderConfirmationPage = () => {
           address: address,
           phoneNumber: telefono,
           username: nombre,
+          deliveryTime: deliveryTime,
         }
       });
       } else {
@@ -123,6 +129,7 @@ const OrderConfirmationPage = () => {
         <label>Numero de contacto:</label>
         <input
           type="text"
+          ref={telefonoRef}
           value={telefono}
           onChange={(e) => {
             const input = e.target.value;
@@ -144,6 +151,7 @@ const OrderConfirmationPage = () => {
         <label>Nombre de contacto:</label>
         <input
           type="text"
+          ref={nombreRef}
           value={nombre}
           onChange={(e) => {
             setName(e.target.value);
@@ -202,6 +210,7 @@ const OrderConfirmationPage = () => {
           <label>Dirección:</label>
           <input
             type="text"
+            ref={addressRef}
             value={address}
             onChange={(e) => {
               setAddress(e.target.value);
@@ -282,16 +291,12 @@ const OrderConfirmationPage = () => {
             <p><strong>Total:</strong> ${finalTotal.toLocaleString()}</p>
 
             <div className="modal-buttons">
-              <button
-                onClick={handleModalCancel}
-                className="secondary-btn"
-                disabled={isSubmitting}
-              >
+              <button onClick={handleModalCancel} className="modal-btn cancel" disabled={isSubmitting}>
                 Cancelar
               </button>
 
               <button
-                className="primary-btn"
+                className="modal-btn confirm"
                 disabled={isSubmitting}
                 onClick={async () => {
                   setIsSubmitting(true); 
@@ -309,6 +314,7 @@ const OrderConfirmationPage = () => {
                     address: addressFormatted,
                     phoneNumber: telefono,
                     username: nombre,
+                    deliveryTime: deliveryTime, 
                   });
                 
                   setIsSubmitting(false); 

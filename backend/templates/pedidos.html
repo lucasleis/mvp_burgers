@@ -19,7 +19,8 @@
         <div class="card mb-3 p-3">
           <p><strong>Método de envío:</strong> {{ pedido.metodo_envio }}</p>
           <p><strong>Dirección:</strong> {{ pedido.direccion }}</p>
-          <p><strong>Nombre:</strong> {{ pedido.id }}</p>
+          <p><strong>Pedido N°:</strong> {{ pedido.id }}</p>
+          <p><strong>Entrega estimada:</strong> {{ pedido.tiempo_entrega or 'No especificado' }}</p>
           <p><strong>Teléfono:</strong> {{ pedido.telefono }}</p>
           <p><strong>Método de pago:</strong> {{ pedido.metodo_pago }}</p>
           <p><strong>Total:</strong> ${{ pedido.total }}</p>
@@ -35,7 +36,8 @@
         <div class="card mb-3 p-3 bg-light">
           <p><strong>Método de envio:</strong> {{ pedido.metodo_envio }}</p>
           <p><strong>Dirección:</strong> {{ pedido.direccion }}</p>
-          <p><strong>Nombre:</strong> {{ pedido.id }}</p>
+          <p><strong>Pedido N°:</strong> {{ pedido.id }}</p>
+          <p><strong>Entrega estimada:</strong> {{ pedido.tiempo_entrega or 'No especificado' }}</p>
           <p><strong>Teléfono:</strong> {{ pedido.telefono }}</p>
           <p><strong>Método de pago:</strong> {{ pedido.metodo_pago }}</p>
           <p><strong>Total:</strong> ${{ pedido.total }}</p>
