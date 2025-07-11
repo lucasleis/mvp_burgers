@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 const OrderSummaryModal = ({ isOpen, onClose, cart, setCart }) => {
   const [selectedOption, ] = useState(""); // usar  este estado para Take Away o Delivery 
   const [deliveryTime, setDeliveryTime] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
 
   useEffect(() => {
     if (!Array.isArray(cart)) {
@@ -25,10 +27,11 @@ const OrderSummaryModal = ({ isOpen, onClose, cart, setCart }) => {
   const navigate = useNavigate();
   const handleConfirmClick = () => {
     if (cart.length === 0) {
-      alert("No hay productos en tu carrito.");
+      setErrorMessage("No hay productos en tu carrito.");
       return;
     }
-    
+
+    setErrorMessage(""); 
     navigate("/confirmar", { state: { method: selectedOption, total, deliveryTime } });
   };
 
@@ -44,6 +47,12 @@ const OrderSummaryModal = ({ isOpen, onClose, cart, setCart }) => {
           ({cart.reduce((total, item) => total + item.quantity, 0)} artículo
           {cart.reduce((total, item) => total + item.quantity, 0) !== 1 ? "s" : ""})
         </p>
+
+        {errorMessage && (
+          <div className="error-message">
+            {errorMessage}
+          </div>
+        )}
         
         {cart.map((item, index) => (
           <div className="cart-item" key={index}>

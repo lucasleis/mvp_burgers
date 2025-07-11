@@ -234,6 +234,14 @@ textarea {
   cursor: pointer;
 }
 
+.error-message {
+  color: red;
+  font-weight: bold;
+  margin: 1rem 0;
+  text-align: center;
+}
+
+
 
 
 @media (max-width: 768px) {
