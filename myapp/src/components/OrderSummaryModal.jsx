@@ -15,6 +15,13 @@ const OrderSummaryModal = ({ isOpen, onClose, cart, setCart }) => {
     }
   }, [cart]);
 
+  useEffect(() => {
+    if (cart.length > 0) {
+      setErrorMessage("");
+    }
+  }, [cart]);
+
+
   const deliveryCharge = selectedOption === "Take Away" ? 5000 : 0;
   const subtotal = cart.reduce((acc, item) => acc + item.totalPrice, 0);
   const total = subtotal + deliveryCharge;
