@@ -39,7 +39,15 @@ const OrderPage = () => {
       fetch(`${backendUrl}/menu`)
         .then((res) => res.json())
         .then((data) => {
-          const productosConImagen = data.map((prod) => ({
+
+          // Ordenar los productos por precio (usando price_simple o price_double)
+          const productosOrdenados = [...data].sort((a, b) => {
+            const precioA = Number(a.price_simple) || Number(a.price_double) || 0;
+            const precioB = Number(b.price_simple) || Number(b.price_double) || 0;
+            return precioA - precioB; // ascendente, de menor a mayor
+          });
+
+          const productosConImagen = productosOrdenados.map((prod) => ({
             ...prod,
             image: imageBurger,
           }));

@@ -81,7 +81,7 @@ const OrderSummaryModal = ({ isOpen, onClose, cart, setCart }) => {
                   <p key={`extra-${i}`}>{name} x{qty}</p>
                 ))}
                 {item.removed && item.removed.map((rem, i) => (
-                  <p key={`removed-${i}`}>{rem}</p>
+                  <p key={`removed-${i}`}>Sin {rem}</p>
                 ))}
               </div>
               <p><strong>${item.totalPrice.toLocaleString()}</strong></p>
@@ -113,7 +113,7 @@ const OrderSummaryModal = ({ isOpen, onClose, cart, setCart }) => {
         {/* Horario de entrega */}
         <div className="delivery-time-section">
         <select id="delivery-time" value={deliveryTime} onChange={(e) => setDeliveryTime(e.target.value)} >
-          <option value="" disabled hidden> Seleccionar horario de Entrega </option>
+          <option value="" disabled hidden> Horario de Entrega </option>
           <option value="20:00-20:30">20:00 - 20:30</option>
           <option value="20:30-21:00">20:30 - 21:00</option>
           <option value="21:00-21:30">21:00 - 21:30</option>
