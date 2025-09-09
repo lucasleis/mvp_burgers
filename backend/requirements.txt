@@ -8,6 +8,10 @@ python-dotenv
 flask
 flask-cors
 flask-httpauth
+Flask-Login
+Flask-WTF
+Flask-Limiter
+flask-talisman
 
 #BD
 redis
