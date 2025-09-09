@@ -24,7 +24,8 @@
           <p><strong>Teléfono:</strong> {{ pedido.telefono }}</p>
           <p><strong>Método de pago:</strong> {{ pedido.metodo_pago }}</p>
           <p><strong>Total:</strong> ${{ pedido.total }}</p>
-          <form method="post" action="/admin/enviar/{{ pedido.id }}">
+          <form method="post" action="/admin/enviar/{{ pedido.id }}" class="state-form" data-msg="¿Marcar este pedido como Enviado?">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <button class="btn btn-success">Marcar como Enviado</button>
           </form>
         </div>
@@ -34,14 +35,15 @@
         <h3>Enviados</h3>
         {% for pedido in enviados %}
         <div class="card mb-3 p-3 bg-light">
-          <p><strong>Método de envio:</strong> {{ pedido.metodo_envio }}</p>
+          <p><strong>Método de envío:</strong> {{ pedido.metodo_envio }}</p>
           <p><strong>Dirección:</strong> {{ pedido.direccion }}</p>
           <p><strong>Pedido N°:</strong> {{ pedido.id }}</p>
           <p><strong>Entrega estimada:</strong> {{ pedido.tiempo_entrega or 'No especificado' }}</p>
           <p><strong>Teléfono:</strong> {{ pedido.telefono }}</p>
           <p><strong>Método de pago:</strong> {{ pedido.metodo_pago }}</p>
           <p><strong>Total:</strong> ${{ pedido.total }}</p>
-          <form method="post" action="/admin/pendiente/{{ pedido.id }}">
+          <form method="post" action="/admin/pendiente/{{ pedido.id }}" class="state-form" data-msg="¿Volver este pedido a Pendiente?">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <button class="btn btn-warning">Volver a Pendiente</button>
           </form>
         </div>
@@ -49,5 +51,16 @@
       </div>
     </div>
   </div>
+
+  <script>
+    // Confirmaciones seguras para cambios de estado
+    document.querySelectorAll('.state-form').forEach(form => {
+      form.addEventListener('submit', e => {
+        if (!confirm(form.dataset.msg)) {
+          e.preventDefault();
+        }
+      });
+    });
+  </script>
 </body>
 </html>

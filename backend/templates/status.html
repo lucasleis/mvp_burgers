@@ -15,19 +15,36 @@
     <h1>Estado de la Tienda</h1>
 
     {% if abierto %}
-      <div class="alert alert-success">La tienda está <strong>ABIERTA</strong> y acepta pedidos.</div>
-      <form method="post">
+      <div class="alert alert-success">
+        La tienda está <strong>ABIERTA</strong> y acepta pedidos.
+      </div>
+      <form method="post" class="status-form" data-msg="¿Seguro que deseas cerrar los pedidos?">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <input type="hidden" name="open" value="false">
         <button class="btn btn-danger">Cerrar pedidos</button>
       </form>
     {% else %}
-      <div class="alert alert-danger">La tienda está <strong>CERRADA</strong>. No se toman pedidos.</div>
-      <form method="post">
+      <div class="alert alert-danger">
+        La tienda está <strong>CERRADA</strong>. No se toman pedidos.
+      </div>
+      <form method="post" class="status-form" data-msg="¿Seguro que deseas abrir los pedidos?">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <input type="hidden" name="open" value="true">
         <button class="btn btn-success">Abrir pedidos</button>
       </form>
     {% endif %}
-    
+
   </div>
+
+  <script>
+    // Confirmación antes de cambiar el estado de la tienda
+    document.querySelectorAll('.status-form').forEach(form => {
+      form.addEventListener('submit', e => {
+        if (!confirm(form.dataset.msg)) {
+          e.preventDefault();
+        }
+      });
+    });
+  </script>
 </body>
 </html>
