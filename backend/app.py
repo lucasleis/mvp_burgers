@@ -8,7 +8,7 @@ from datetime import timedelta
 from dotenv import load_dotenv
 
 from flask import (
-    Flask, request, jsonify, render_template, redirect, url_for
+    Flask, request, jsonify, render_template, redirect, url_for, session
 )
 from flask_cors import CORS
 from flask_login import (
@@ -63,6 +63,7 @@ app.config["SESSION_COOKIE_HTTPONLY"] = True
 app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
 # En producción, activá Secure (requiere HTTPS)
 app.config["SESSION_COOKIE_SECURE"] = os.getenv("FORCE_HTTPS", "false").lower() == "true"
+app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(hours=8)
 
 # CORS: solo frontend permitido ✅
 frontend_url = os.getenv("FRONTEND_URL", "http://localhost:3001")
@@ -229,6 +230,52 @@ def obtener_pedidos_por_estado(estado):
 # Rutas públicas / API
 # -----------------------------------------------------------------------------
 
+# Estado tienda
+@app.get("/status")
+def get_status():
+    return jsonify({"open": is_store_open()})
+
+# -----------------------------------------------------------------------------
+# Autenticación admin (sesiones + CSRF en formularios) ✅
+# -----------------------------------------------------------------------------
+@app.route("/login", methods=["GET", "POST"])
+@limiter.limit("100/hour")
+def login():
+    if request.method == "GET":
+        return render_template("login.html")
+    
+    username = ""
+    password = ""
+
+    if request.is_json:
+        data = request.get_json(silent=True) or {}
+        username = data.get("username", "").strip()
+        password = data.get("password", "")
+    else:
+        username = request.form.get("username", "").strip()
+        password = request.form.get("password", "")
+
+    if username == ADMIN_USER and ADMIN_PASS_HASH and check_password_hash(ADMIN_PASS_HASH, password):
+        session.permanent = True
+        login_user(AdminUser(username))
+        return redirect(url_for("admin_dashboard"))
+
+    if request.is_json:
+        return {"error": "Credenciales inválidas"}, 401
+    else:
+        return render_template("login.html", error="Credenciales inválidas"), 401
+
+
+@app.route("/admin/logout", methods=["POST"])
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for("login"))
+
+# -----------------------------------------------------------------------------
+# Admin: pedidos
+# -----------------------------------------------------------------------------
+
 # Exentamos CSRF para API JSON sin cookies (no hace falta CSRF aquí) ✅
 @csrf.exempt
 @app.route('/enviarpedido', methods=['POST'])
@@ -266,65 +313,6 @@ def enviar_pedido():
 
     return jsonify({"success": True, "message": "Pedido procesado"}), 200
 
-@app.route("/menu", methods=["GET"])
-def obtener_menu_json():
-    ids = r.lrange("products", 0, -1)
-    productos = []
-    for pid in ids:
-        data = r.hgetall(f"product:{pid}")
-        if data:
-            data["id"] = int(pid)
-            data["price_simple"] = int(data.get("price_simple", 0))
-            data["price_double"] = int(data.get("price_double", 0))
-            data["price_triple"] = int(data.get("price_triple", 0))
-            data["removeOptions"] = r.lrange(f"removeOptions:{data['name']}", 0, -1)
-            productos.append(data)
-    return jsonify(productos)
-
-@app.route("/extras", methods=["GET"])
-def obtener_extras_json():
-    ids = r.lrange("extras", 0, -1)
-    extras = []
-    for eid in ids:
-        data = r.hgetall(f"extra:{eid}")
-        if data:
-            data["id"] = int(eid)
-            data["price"] = int(data.get("price", 0))
-            extras.append(data)
-    return jsonify(extras)
-
-# Estado tienda
-@app.get("/status")
-def get_status():
-    return jsonify({"open": is_store_open()})
-
-# -----------------------------------------------------------------------------
-# Autenticación admin (sesiones + CSRF en formularios) ✅
-# -----------------------------------------------------------------------------
-@app.route("/admin/login", methods=["GET", "POST"])
-@limiter.limit("10/hour")  # ✅ Rate limit en login
-def login():
-    if request.method == "GET":
-        return render_template("login.html")
-
-    username = request.form.get("username", "").strip()
-    password = request.form.get("password", "")
-
-    if username == ADMIN_USER and ADMIN_PASS_HASH and check_password_hash(ADMIN_PASS_HASH, password):
-        login_user(AdminUser(username), remember=False, duration=timedelta(hours=8))
-        return redirect(url_for("admin_dashboard"))
-
-    return render_template("login.html", error="Credenciales inválidas"), 401
-
-@app.route("/admin/logout", methods=["POST"])
-@login_required
-def logout():
-    logout_user()
-    return redirect(url_for("login"))
-
-# -----------------------------------------------------------------------------
-# Admin: pedidos
-# -----------------------------------------------------------------------------
 @app.route('/admin/pedidos')
 @login_required
 def ver_pedidos():
@@ -367,6 +355,21 @@ def ver_menu():
             data["removeOptions"] = r.lrange(f"removeOptions:{data['name']}", 0, -1)
             productos.append(data)
     return render_template("menu.html", productos=productos)
+
+@app.route("/menu", methods=["GET"])
+def obtener_menu_json():
+    ids = r.lrange("products", 0, -1)
+    productos = []
+    for pid in ids:
+        data = r.hgetall(f"product:{pid}")
+        if data:
+            data["id"] = int(pid)
+            data["price_simple"] = int(data.get("price_simple", 0))
+            data["price_double"] = int(data.get("price_double", 0))
+            data["price_triple"] = int(data.get("price_triple", 0))
+            data["removeOptions"] = r.lrange(f"removeOptions:{data['name']}", 0, -1)
+            productos.append(data)
+    return jsonify(productos)
 
 @app.post('/admin/menu')
 @login_required
@@ -467,6 +470,18 @@ def ver_extras():
             extras.append(data)
     return render_template("extras.html", extras=extras)
 
+@app.route("/extras", methods=["GET"])
+def obtener_extras_json():
+    ids = r.lrange("extras", 0, -1)
+    extras = []
+    for eid in ids:
+        data = r.hgetall(f"extra:{eid}")
+        if data:
+            data["id"] = int(eid)
+            data["price"] = int(data.get("price", 0))
+            extras.append(data)
+    return jsonify(extras)
+
 @app.post('/admin/extras')
 @login_required
 def agregar_extra_form():
@@ -478,6 +493,9 @@ def agregar_extra_form():
     except ValueError as e:
         return f"Error de validación: {e}", 400
 
+    if not all([name, price]):
+        return "Faltan campos", 400
+    
     eid = r.incr("extra:id")
     r.rpush("extras", eid)
     r.hset(f"extra:{eid}", mapping={"name": name, "price": price})
@@ -514,7 +532,9 @@ def editar_extra(extra_id):
 # Estado de toma de pedidos
 # -----------------------------------------------------------------------------
 def is_store_open() -> bool:
+    """Devuelve True si estamos aceptando pedidos."""
     value = r.get("store_open")
+    # Si la clave no existe asumimos tienda abierta
     return value != "false"
 
 def set_store_open(value: bool) -> None:
