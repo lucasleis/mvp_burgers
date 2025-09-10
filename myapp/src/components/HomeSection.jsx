@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import './HomeSection.css';
-import burgerImg from '../imgs/mascota_sinfondo.png';
-import { Link } from 'react-router-dom';
-import OrderInfoModal from './InfoHorarios';
+// src/components/HomeSection.jsx
+import React, { useState, useEffect } from "react";
+import "./HomeSection.css";
+import burgerImg from "../imgs/mascota_sinfondo.png";
+import { Link } from "react-router-dom";
+import OrderInfoModal from "./InfoHorarios";
 
 const HomeSection = () => {
   const [showModal, setShowModal] = useState(false);
@@ -32,11 +33,14 @@ const HomeSection = () => {
       <div className="text-content">
         <h1>MVP</h1>
         <h1>BURGERS</h1>
-        <Link to="/order" className="order-now-button" aria-label="Ir a la sección de pedidos">
+        <Link
+          to="/order"
+          className="order-now-button"
+          aria-label="Ir a la sección de pedidos online"
+        >
           Hacé tu pedido online
         </Link>
       </div>
-
     </section>
   );
 };
