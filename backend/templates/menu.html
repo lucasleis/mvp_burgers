@@ -15,7 +15,8 @@
     <h1>Administrar Menú</h1>
 
     <h3>Agregar nuevo producto</h3>
-    <form method="post" action="/admin/menu" class="mb-5">
+    <!-- Agregamos enctype para permitir archivos -->
+    <form method="post" action="/admin/menu" class="mb-5" enctype="multipart/form-data">
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
       <div class="mb-3">
@@ -42,8 +43,9 @@
       </div>
 
       <div class="mb-3">
-        <label class="form-label">URL de Imagen</label>
-        <input name="image" type="url" class="form-control" required>
+        <label class="form-label">Imagen</label>
+        <!-- cambiamos url por file -->
+        <input name="image" type="file" accept="image/*" class="form-control" required>
       </div>
 
       <div class="mb-3">
@@ -63,6 +65,9 @@
         <p><strong>Precio Doble:</strong> ${{ producto.price_double }}</p>
         <p><strong>Precio Triple:</strong> ${{ producto.price_triple }}</p>
         <p><strong>Ingredientes para quitar:</strong> {{ producto.removeOptions | join(", ") }}</p>
+        <p><strong>Imagen:</strong><br>
+          <img src="{{ url_for('static', filename='uploads/' ~ producto.image) }}" alt="Imagen de {{ producto.name }}" style="max-width:150px; border-radius:8px;">
+        </p>
 
         <div class="d-flex gap-2 mt-2">
           <form>
@@ -79,7 +84,7 @@
 
         <!-- Formulario de edición colapsable -->
         <div class="collapse mt-3" id="editForm{{ producto.id }}">
-          <form method="post" action="/admin/menu/editar/{{ producto.id }}">
+          <form method="post" action="/admin/menu/editar/{{ producto.id }}" enctype="multipart/form-data">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <input type="hidden" name="name" value="{{ producto.name }}">
 
@@ -104,8 +109,8 @@
               <input name="removeOptions" value="{{ producto.removeOptions | join(', ') }}" class="form-control" pattern="[A-Za-z\s,áéíóúÁÉÍÓÚñÑ.-]*">
             </div>
             <div class="mb-2">
-              <label class="form-label">URL de imagen</label>
-              <input name="image" type="url" value="{{ producto.image }}" class="form-control" required>
+              <label class="form-label">Cambiar imagen</label>
+              <input name="image" type="file" accept="image/*" class="form-control">
             </div>
             <button class="btn btn-success mt-2">Guardar cambios</button>
           </form>

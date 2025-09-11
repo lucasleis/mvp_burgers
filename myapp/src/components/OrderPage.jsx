@@ -67,7 +67,9 @@ const OrderPage = () => {
 
           const productosConImagen = productosOrdenados.map((prod) => ({
             ...prod,
-            image: imageBurger,
+            image: prod.image
+              ? `${backendUrl}/static/uploads/${prod.image}`
+              : imageBurger, // fallback si no tiene
             name: DOMPurify.sanitize(prod.name || ""),
             description: DOMPurify.sanitize(prod.description || ""),
           }));

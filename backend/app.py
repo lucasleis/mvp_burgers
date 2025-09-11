@@ -17,6 +17,7 @@ from flask_login import (
 )
 from flask_wtf import CSRFProtect
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 
 from flask_limiter import Limiter                          # ✅ Rate limiting
 from flask_limiter.util import get_remote_address
@@ -227,6 +228,17 @@ def obtener_pedidos_por_estado(estado):
     return pedidos_filtrados
 
 # -----------------------------------------------------------------------------
+# Imagenes - Configuración carpeta de uploads
+# -----------------------------------------------------------------------------
+UPLOAD_FOLDER = os.path.join(app.root_path, "static", "uploads")
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif", "webp"}
+
+def allowed_file(filename):
+    return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
+
+# -----------------------------------------------------------------------------
 # Rutas públicas / API
 # -----------------------------------------------------------------------------
 
@@ -380,7 +392,17 @@ def agregar_producto_form():
         price_simple = int(request.form.get("price_simple", "0"))
         price_double = int(request.form.get("price_double", "0"))
         price_triple = int(request.form.get("price_triple", "0"))
-        image = sanitize_str(request.form.get("image"), 2, 300)
+
+        # Procesar imagen subida
+        file = request.files.get("image")
+        if not file or file.filename == "":
+            raise ValueError("Imagen requerida")
+        if not allowed_file(file.filename):
+            raise ValueError("Formato de imagen no permitido")
+
+        filename = secure_filename(file.filename)
+        filepath = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+        file.save(filepath)
 
         if min(price_simple, price_double, price_triple) < 0:
             raise ValueError("Precios inválidos")
@@ -395,7 +417,7 @@ def agregar_producto_form():
         "price_simple": price_simple,
         "price_double": price_double,
         "price_triple": price_triple,
-        "image": image
+        "image": filename   # guardamos solo el nombre del archivo
     })
 
     remove_raw = request.form.get("removeOptions", "")
@@ -430,7 +452,20 @@ def editar_producto(producto_id):
         price_simple = int(request.form["price_simple"])
         price_double = int(request.form["price_double"])
         price_triple = int(request.form["price_triple"])
-        image = sanitize_str(request.form["image"], 2, 300)
+
+        # Imagen: si se subió, reemplazamos
+        file = request.files.get("image")
+        if file and file.filename != "":
+            if not allowed_file(file.filename):
+                raise ValueError("Formato de imagen no permitido")
+            filename = secure_filename(file.filename)
+            filepath = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+            file.save(filepath)
+            image = filename
+        else:
+            # mantener la existente
+            image = r.hget(key, "image")
+
         if min(price_simple, price_double, price_triple) < 0:
             raise ValueError("Precios inválidos")
     except ValueError as e:
@@ -444,7 +479,7 @@ def editar_producto(producto_id):
         "image": image
     })
 
-    # Actualizar ingredientes a quitar
+    # Ingredientes
     name = sanitize_str(request.form.get("name", ""), 2, 80)
     r.delete(f"removeOptions:{name}")
     remove_options = request.form.get("removeOptions", "").split(",")
