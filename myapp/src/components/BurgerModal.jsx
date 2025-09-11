@@ -1,28 +1,32 @@
+// src/components/BurgerModal.jsx
 import React, { useState, useEffect } from "react";
 import { Dialog } from "@headlessui/react";
 import { X } from "lucide-react";
+import DOMPurify from "dompurify";
 import "./BurgerModal.css";
 
 const BurgerModal = ({ isOpen, onClose, product }) => {
-  const backendUrl = process.env.REACT_APP_BACKEND_URL;   // ⬅️ igual que en OrderPage
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
-  /* ------------------- estados ------------------- */
-  const [extrasList, setExtrasList] = useState([]);       // ← nuevo
+  const [extrasList, setExtrasList] = useState([]);
   const [extras, setExtras] = useState({});
   const [quantity, setQuantity] = useState(1);
   const [removeOptions, setRemoveOptions] = useState([]);
   const [selectedRemoved, setSelectedRemoved] = useState([]);
   const [selectedType, setSelectedType] = useState("Simple");
 
-  /* --------- 1. traemos los extras una sola vez --------- */
+  // Traer extras desde backend
   useEffect(() => {
     fetch(`${backendUrl}/extras`)
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) throw new Error("Error al cargar extras");
+        return res.json();
+      })
       .then((data) => setExtrasList(data))
       .catch((err) => console.error("Error al cargar extras:", err));
   }, [backendUrl]);
 
-  /* --------- 2. cuando llega el producto o extrasList, reseteamos -------- */
+  // Resetear estados al cambiar producto o extrasList
   useEffect(() => {
     if (!product || extrasList.length === 0) return;
 
@@ -48,9 +52,9 @@ const BurgerModal = ({ isOpen, onClose, product }) => {
 
   /* ---------------- tipos de burger ---------------- */
   const burgerTypes = [
-    { name: "Simple",  description: "1 medallón", price: product.price_simple,  disabled: product.price_simple  === 0 },
-    { name: "Doble",   description: "2 medallones", price: product.price_double, disabled: product.price_double   === 0 },
-    { name: "Triple",  description: "3 medallones", price: product.price_triple, disabled: product.price_triple  === 0 },
+    { name: "Simple",  description: "1 medallón", price: product.price_simple,  disabled: !product.price_simple },
+    { name: "Doble",   description: "2 medallones", price: product.price_double, disabled: !product.price_double },
+    { name: "Triple",  description: "3 medallones", price: product.price_triple, disabled: !product.price_triple },
   ];
 
   /* ---------------- helpers ---------------- */
@@ -61,9 +65,9 @@ const BurgerModal = ({ isOpen, onClose, product }) => {
     burgerTypes.find((t) => t.name === selectedType) || burgerTypes[0];
 
   const calculateTotal = () => {
-    const basePrice = getSelectedTypeData().price || 0;
+    const basePrice = Number(getSelectedTypeData().price) || 0;
     const extrasTotal = extrasList.reduce(
-      (sum, extra) => sum + extras[extra.name] * extra.price,
+      (sum, extra) => sum + (extras[extra.name] || 0) * (Number(extra.price) || 0),
       0
     );
     return (basePrice + extrasTotal) * quantity;
@@ -72,7 +76,7 @@ const BurgerModal = ({ isOpen, onClose, product }) => {
   const handleAddToCart = () => {
     const selectedExtras = Object.entries(extras).filter(([_, qty]) => qty > 0);
     const item = {
-      name: `${product.name} ${selectedType}`,
+      name: DOMPurify.sanitize(`${product.name} ${selectedType}`),
       quantity,
       extras: selectedExtras,
       removed: selectedRemoved,
@@ -86,7 +90,7 @@ const BurgerModal = ({ isOpen, onClose, product }) => {
 
   /* ---------------- render ---------------- */
   return (
-    <Dialog open={isOpen} onClose={onClose} className="burger-modal-overlay">
+    <Dialog open={isOpen} onClose={onClose} className="burger-modal-overlay" role="dialog" aria-modal="true">
       <div className="burger-modal-container">
         <button onClick={onClose} className="close-button" aria-label="Cerrar modal">
           <X size={24} />
@@ -95,10 +99,10 @@ const BurgerModal = ({ isOpen, onClose, product }) => {
         <div className="burger-modal-content">
           {/* encabezado */}
           <div className="burger-header">
-            <img src={product.image} alt={product.name} className="burger-image" />
+            <img src={product.image} alt={DOMPurify.sanitize(product.name)} className="burger-image" />
             <div className="burger-header-texts">
-              <h2 className="burger-name">{product.name}</h2>
-              <p className="burger-description">{product.description}</p>
+              <h2 className="burger-name">{DOMPurify.sanitize(product.name)}</h2>
+              <p className="burger-description">{DOMPurify.sanitize(product.description)}</p>
               <p className="burger-remark">Todas las hamburguesas vienen con papas.</p>
             </div>
           </div>
@@ -119,7 +123,7 @@ const BurgerModal = ({ isOpen, onClose, product }) => {
                     <div className="type-name">{type.name}</div>
                     <div className="type-description">{type.description}</div>
                     <div className="type-price">
-                      {type.price > 0 ? `$${type.price.toLocaleString()}` : "No disponible"}
+                      {type.price > 0 ? `$${Number(type.price).toLocaleString()}` : "No disponible"}
                     </div>
                   </button>
                 ))}
@@ -136,8 +140,8 @@ const BurgerModal = ({ isOpen, onClose, product }) => {
                   {extrasList.map((extra) => (
                     <div key={extra.id} className="extra-item">
                       <div className="extra-details">
-                        <span>{extra.name}</span>
-                        <span className="extra-price">${extra.price.toLocaleString()}</span>
+                        <span>{DOMPurify.sanitize(extra.name)}</span>
+                        <span className="extra-price">${Number(extra.price).toLocaleString()}</span>
                       </div>
                       <div className="counter">
                         <button
@@ -158,7 +162,7 @@ const BurgerModal = ({ isOpen, onClose, product }) => {
               )}
             </div>
 
-            {/* quitar ingredientes (si los hay) */}
+            {/* quitar ingredientes */}
             {removeOptions.length > 0 && (
               <div className="section">
                 <h3 className="section-title">Quitar</h3>
@@ -175,8 +179,9 @@ const BurgerModal = ({ isOpen, onClose, product }) => {
                               : [...prev, opt]
                           )
                         }
+                        aria-label={`Quitar ${opt}`}
                       />{" "}
-                      {opt}
+                      {DOMPurify.sanitize(opt)}
                     </label>
                   ))}
                 </div>
@@ -194,7 +199,7 @@ const BurgerModal = ({ isOpen, onClose, product }) => {
               <p className="total-price">${calculateTotal().toLocaleString()}</p>
             </div>
 
-            <button className="add-to-order-button" onClick={handleAddToCart} aria-label="Agregar a mi pedido">
+            <button className="add-to-order-button" onClick={handleAddToCart} aria-label={`Agregar ${DOMPurify.sanitize(product.name)} a mi pedido`}>
               AGREGAR A MI PEDIDO (${calculateTotal().toLocaleString()})
             </button>
           </div>

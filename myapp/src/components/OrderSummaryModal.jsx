@@ -1,13 +1,26 @@
+// src/components/OrderSummaryModal.jsx
 import React, { useState, useEffect } from "react";
 import "./OrderSummaryModal.css";
 import { FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
+const ALLOWED_DELIVERY_TIMES = [
+  "20:00-20:30",
+  "20:30-21:00",
+  "21:00-21:30",
+  "21:30-22:00",
+  "22:00-22:30",
+  "22:30-23:00",
+  "23:00-23:30",
+];
+
 const OrderSummaryModal = ({ isOpen, onClose, cart, setCart }) => {
-  const [selectedOption, ] = useState(""); // usar  este estado para Take Away o Delivery 
+  const [selectedOption] = useState(""); // Take Away o Delivery (futuro)
   const [deliveryTime, setDeliveryTime] = useState("");
+  const [comments, setComments] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!Array.isArray(cart)) {
@@ -21,7 +34,6 @@ const OrderSummaryModal = ({ isOpen, onClose, cart, setCart }) => {
     }
   }, [cart]);
 
-
   const deliveryCharge = selectedOption === "Take Away" ? 5000 : 0;
   const subtotal = cart.reduce((acc, item) => acc + item.totalPrice, 0);
   const total = subtotal + deliveryCharge;
@@ -31,22 +43,40 @@ const OrderSummaryModal = ({ isOpen, onClose, cart, setCart }) => {
     setCart(updatedCart);
   };
 
-  const navigate = useNavigate();
   const handleConfirmClick = () => {
     if (cart.length === 0) {
       setErrorMessage("No hay productos en tu carrito.");
       return;
     }
 
-    setErrorMessage(""); 
-    navigate("/confirmar", { state: { method: selectedOption, total, deliveryTime } });
+    if (deliveryTime && !ALLOWED_DELIVERY_TIMES.includes(deliveryTime)) {
+      setErrorMessage("Horario de entrega inválido.");
+      return;
+    }
+
+    if (comments.length > 300) {
+      setErrorMessage("El comentario no puede superar los 300 caracteres.");
+      return;
+    }
+
+    setErrorMessage("");
+    navigate("/confirmar", {
+      state: {
+        method: selectedOption,
+        total,
+        deliveryTime,
+        comments: comments.trim(),
+      },
+    });
   };
 
   return (
     <div className={`order-summary-modal ${isOpen ? "open" : ""}`}>
       <div className="modal-header">
         <h2>MI PEDIDO</h2>
-        <button className="close-btn" onClick={onClose}>CERRAR</button>
+        <button className="close-btn" onClick={onClose} aria-label="Cerrar resumen del pedido">
+          CERRAR
+        </button>
       </div>
 
       <div className="modal-content">
@@ -56,18 +86,21 @@ const OrderSummaryModal = ({ isOpen, onClose, cart, setCart }) => {
         </p>
 
         {errorMessage && (
-          <div className="error-message">
+          <div className="error-message" role="alert">
             {errorMessage}
           </div>
         )}
-        
+
         {cart.map((item, index) => (
           <div className="cart-item" key={index}>
             {item.image ? (
               <img
                 src={item.image}
-                alt={item.name}
+                alt={`Imagen de ${item.name}`}
                 className="cart-item-image"
+                loading="lazy"
+                width="60"    // verificar que no rompa estetica
+                height="60"   // verificar que no rompa estetica
               />
             ) : (
               <div className="cart-item-no-image">Sin imagen</div>
@@ -77,18 +110,26 @@ const OrderSummaryModal = ({ isOpen, onClose, cart, setCart }) => {
               <strong>{item.name}</strong>
               <p>Cantidad: {item.quantity}</p>
               <div className="customizations">
-                {item.extras && item.extras.map(([name, qty], i) => (
-                  <p key={`extra-${i}`}>{name} x{qty}</p>
-                ))}
-                {item.removed && item.removed.map((rem, i) => (
-                  <p key={`removed-${i}`}>Sin {rem}</p>
-                ))}
+                {item.extras &&
+                  item.extras.map(([name, qty], i) => (
+                    <p key={`extra-${i}`}>{name} x{qty}</p>
+                  ))}
+                {item.removed &&
+                  item.removed.map((rem, i) => (
+                    <p key={`removed-${i}`}>Sin {rem}</p>
+                  ))}
               </div>
-              <p><strong>${item.totalPrice.toLocaleString()}</strong></p>
+              <p>
+                <strong>${item.totalPrice.toLocaleString()}</strong>
+              </p>
             </div>
 
-            <button className="icon-btn" onClick={() => handleRemoveItem(index)}>
-              <FaTrash />
+            <button
+              className="icon-btn"
+              onClick={() => handleRemoveItem(index)}
+              aria-label={`Eliminar ${item.name} del carrito`}
+            >
+              <FaTrash aria-hidden="true" />
             </button>
           </div>
         ))}
@@ -112,19 +153,32 @@ const OrderSummaryModal = ({ isOpen, onClose, cart, setCart }) => {
 
         {/* Horario de entrega */}
         <div className="delivery-time-section">
-        <select id="delivery-time" value={deliveryTime} onChange={(e) => setDeliveryTime(e.target.value)} >
-          <option value="" disabled hidden> Horario de Entrega </option>
-          <option value="20:00-20:30">20:00 - 20:30</option>
-          <option value="20:30-21:00">20:30 - 21:00</option>
-          <option value="21:00-21:30">21:00 - 21:30</option>
-          <option value="21:30-22:00">21:30 - 22:00</option>
-          <option value="22:00-22:30">22:00 - 22:30</option>
-          <option value="22:30-23:00">22:30 - 23:00</option>
-          <option value="23:00-23:30">23:00 - 23:30</option>
-        </select>
+          <label htmlFor="delivery-time">Horario de entrega</label>
+          <select
+            id="delivery-time"
+            value={deliveryTime}
+            onChange={(e) => setDeliveryTime(e.target.value)}
+          >
+            <option value="" disabled hidden>
+              Seleccioná un horario
+            </option>
+            {ALLOWED_DELIVERY_TIMES.map((time) => (
+              <option key={time} value={time}>
+                {time}
+              </option>
+            ))}
+          </select>
         </div>
 
-        <textarea placeholder="Añadir comentarios..."></textarea>
+        {/* Comentarios del usuario */}
+        <label htmlFor="comments">Comentarios adicionales</label>
+        <textarea
+          id="comments"
+          placeholder="Añadir comentarios..."
+          value={comments}
+          onChange={(e) => setComments(e.target.value)}
+          maxLength={300}
+        ></textarea>
 
         <div className="modal-buttons">
           <button className="secondary-btn" onClick={onClose}>

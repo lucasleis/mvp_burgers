@@ -1,9 +1,13 @@
+// src/components/OrderPage.jsx
 import React, { useState, useEffect, useRef } from "react";
 import "./OrderPage.css";
 import imageBurger from "../imgs/burger.png";
 import BurgerModal from "./BurgerModal";
 import OrderSummaryModal from "./OrderSummaryModal";
 import { FaShoppingCart } from "react-icons/fa";
+import DOMPurify from "dompurify";
+
+const ALLOWED_PRICE_FIELDS = ["price_simple", "price_double"];
 
 const OrderPage = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -21,7 +25,10 @@ const OrderPage = () => {
   // Verificamos si la tienda está abierta
   useEffect(() => {
     fetch(`${backendUrl}/status`)
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) throw new Error("Error al verificar estado de la tienda");
+        return res.json();
+      })
       .then((data) => {
         setBlocked(!data.open);
         setLoading(false);
@@ -37,23 +44,39 @@ const OrderPage = () => {
   useEffect(() => {
     if (!blocked) {
       fetch(`${backendUrl}/menu`)
-        .then((res) => res.json())
+        .then((res) => {
+          if (!res.ok) throw new Error("Error al cargar menú");
+          return res.json();
+        })
         .then((data) => {
-
-          // Ordenar los productos por precio (usando price_simple o price_double)
           const productosOrdenados = [...data].sort((a, b) => {
-            const precioA = Number(a.price_simple) || Number(a.price_double) || 0;
-            const precioB = Number(b.price_simple) || Number(b.price_double) || 0;
-            return precioA - precioB; // ascendente, de menor a mayor
+            const precioA =
+              !isNaN(Number(a.price_simple))
+                ? Number(a.price_simple)
+                : !isNaN(Number(a.price_double))
+                ? Number(a.price_double)
+                : 0;
+            const precioB =
+              !isNaN(Number(b.price_simple))
+                ? Number(b.price_simple)
+                : !isNaN(Number(b.price_double))
+                ? Number(b.price_double)
+                : 0;
+            return precioA - precioB;
           });
 
           const productosConImagen = productosOrdenados.map((prod) => ({
             ...prod,
             image: imageBurger,
+            name: DOMPurify.sanitize(prod.name || ""),
+            description: DOMPurify.sanitize(prod.description || ""),
           }));
           setProducts(productosConImagen);
         })
-        .catch((err) => console.error("Error al cargar menú:", err));
+        .catch((err) => {
+          console.error("Error al cargar menú:", err);
+          setProducts([]);
+        });
     }
   }, [backendUrl, blocked]);
 
@@ -68,7 +91,7 @@ const OrderPage = () => {
 
         if (wasEmpty && finalizeButtonRef.current) {
           setTimeout(() => {
-            finalizeButtonRef.current.scrollIntoView({ behavior: "smooth" });
+            finalizeButtonRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
           }, 100);
         }
 
@@ -107,25 +130,34 @@ const OrderPage = () => {
       </div>
 
       <div className="order-grid">
-        {products.map((product) => (
-          <div key={product.name} className="order-card">
-            <img src={product.image} alt={`Foto de ${product.name}`} />
-            <div className="order-card-content">
-              <h3>{product.name}</h3>
-              <p className="description">{product.description}</p>
-              <p className="price">
-                {Number(product.price_simple)
-                  ? `$ ${Number(product.price_simple).toLocaleString()}`
-                  : Number(product.price_double)
-                  ? `$ ${Number(product.price_double).toLocaleString()}`
-                  : "Precio no disponible"}
-              </p>
-              <button className="add-button" onClick={() => openModal(product)}>
-                AGREGAR
-              </button>
+        {products.map((product) => {
+          const precio =
+            !isNaN(Number(product.price_simple))
+              ? Number(product.price_simple)
+              : !isNaN(Number(product.price_double))
+              ? Number(product.price_double)
+              : null;
+
+          return (
+            <div key={product.name} className="order-card">
+              <img src={product.image} alt={`Foto de ${product.name}`} loading="lazy" />
+              <div className="order-card-content">
+                <h3>{product.name}</h3>
+                <p className="description">{product.description}</p>
+                <p className="price">
+                  {precio !== null ? `$ ${precio.toLocaleString()}` : "Precio no disponible"}
+                </p>
+                <button
+                  className="add-button"
+                  onClick={() => openModal(product)}
+                  aria-label={`Agregar ${product.name} al carrito`}
+                >
+                  AGREGAR
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {cart.length > 0 && (
@@ -137,6 +169,7 @@ const OrderPage = () => {
             ref={finalizeButtonRef}
             className="finalize-button"
             onClick={() => setIsSummaryOpen(true)}
+            aria-label="Finalizar pedido"
           >
             Finalizar Pedido
           </button>
@@ -146,6 +179,7 @@ const OrderPage = () => {
       <button
         className={`floating-cart ${isSummaryOpen ? "open" : ""}`}
         onClick={() => setIsSummaryOpen(!isSummaryOpen)}
+        aria-label="Ver carrito"
       >
         <FaShoppingCart />
       </button>
