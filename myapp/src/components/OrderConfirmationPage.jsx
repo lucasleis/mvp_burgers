@@ -1,13 +1,13 @@
 import React, { useState, useRef } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { X } from "lucide-react";
 import "leaflet/dist/leaflet.css";
 import "./OrderConfirmationPage.css";
-import { useNavigate } from "react-router-dom";
 
 const OrderConfirmationPage = () => {
   const location = useLocation();
-  const { method: initialMethod, total: initialTotal, deliveryTime } = location.state || {};
+  const { method: initialMethod, total: initialTotal, deliveryTime, paymentMethod: initialPaymentMethod } = location.state || {};
+  
   const [method, setMethod] = useState(initialMethod || "Take Away");
   const [address, setAddress] = useState("");
   const [telefono, setPhone] = useState("");
@@ -18,13 +18,13 @@ const OrderConfirmationPage = () => {
   const [addressError, setAddressError] = useState(false);
   const [telefonoError, setPhoneError] = useState(false);
   const [nombreError, setNameError] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState(initialMethod || "Efectivo");
-  // const [showTransferInfo, setShowTransferInfo] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState(initialPaymentMethod || "Efectivo");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
-  const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
-  // scrollear hasta errores
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
+  const navigate = useNavigate();
+
+  // Refs para scroll automático
   const telefonoRef = useRef(null);
   const nombreRef = useRef(null);
   const addressRef = useRef(null);
@@ -32,8 +32,6 @@ const OrderConfirmationPage = () => {
   const deliveryCharge = method === "Delivery" ? 5000 : 0;
   const baseTotal = initialTotal || 0;
   const finalTotal = baseTotal + deliveryCharge;
-
-  const navigate = useNavigate();
 
   const handleConfirm = () => {
     let hasError = false;
@@ -62,69 +60,56 @@ const OrderConfirmationPage = () => {
       return;
     }
 
-    // Si todo está OK, mostramos el modal de confirmación
     setShowModal(true);
   };
-
 
   const handleModalCancel = () => {
     setShowModal(false);
   };
 
-  const sendOrder = async ({
-    method,
-    paymentMethod,
-    finalTotal,
-    address,
-    phoneNumber
-  }) => {
+  const sendOrder = async ({ method, paymentMethod, finalTotal, address, phoneNumber, username, deliveryTime }) => {
     try {
-      
       const response = await fetch(`${backendUrl}/enviarpedido`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          method: method,
-          paymentMethod: paymentMethod,
-          address: address,
-          finalTotal: finalTotal,
-          phoneNumber: phoneNumber,
-          deliveryTime: deliveryTime
-        })
-      });
-  
-      const data = await response.json();
-  
-      if (data.success) {
-        // alert("Pedido enviado!");
-        navigate("/pedido-exitoso", {
-        state: {
           method,
           paymentMethod,
-          finalTotal: finalTotal.toLocaleString(),
-          address: address,
-          phoneNumber: telefono,
-          username: nombre,
-          deliveryTime: deliveryTime,
-        }
+          address,
+          finalTotal, // 👉 número, no string
+          phoneNumber,
+          username,
+          deliveryTime,
+        }),
       });
+
+      const data = await response.json();
+
+      if (data.success) {
+        navigate("/pedido-exitoso", {
+          state: {
+            method,
+            paymentMethod,
+            finalTotal, // 👉 número
+            address,
+            phoneNumber,
+            username,
+            deliveryTime,
+          },
+        });
       } else {
         alert("Error al enviar pedido");
       }
-      
-
     } catch (error) {
       console.error("Error al realizar el fetch:", error);
-      //alert("Error de conexión con el servidor: ", error);
     }
   };
-  
 
   return (
     <div className="confirmation-container">
       <h2>Confirmación de Pedido</h2>
 
-      {/* INSERTAR DATOS*/}
+      {/* Datos del contacto */}
       <div className="delivery-form">
         <label>Numero de contacto:</label>
         <input
@@ -134,19 +119,13 @@ const OrderConfirmationPage = () => {
           onChange={(e) => {
             const input = e.target.value;
             setPhone(input);
-            const numericOnly = input.replace(/\D/g, ""); // Quita todo lo que no sea número
-            if (numericOnly.length > 7) {
-              setPhoneError(false);
-            } else {
-              setPhoneError(true);
-            }
+            const numericOnly = input.replace(/\D/g, "");
+            setPhoneError(numericOnly.length < 8);
           }}
           placeholder="Ej: +541123456789"
           className={telefonoError ? "input-error" : ""}
         />
-        {telefonoError && (
-          <p className="error-message">Ingresá un número válido (mínimo 8 dígitos).</p>
-        )}
+        {telefonoError && <p className="error-message">Ingresá un número válido (mínimo 8 dígitos).</p>}
 
         <label>Nombre de contacto:</label>
         <input
@@ -155,18 +134,15 @@ const OrderConfirmationPage = () => {
           value={nombre}
           onChange={(e) => {
             setName(e.target.value);
-            if (e.target.value.trim() !== "") {
-              setNameError(false);
-            }
+            if (e.target.value.trim() !== "") setNameError(false);
           }}
           placeholder="Ej: Manuel"
           className={nombreError ? "input-error" : ""}
         />
-        {nombreError && (
-          <p className="error-message">Un nombre de contacto es obligatorio.</p>
-        )}
+        {nombreError && <p className="error-message">Un nombre de contacto es obligatorio.</p>}
       </div>
 
+      {/* Método de envío */}
       <p className="method">Método de envío:</p>
       <div className="method-toggle">
         <div
@@ -186,13 +162,14 @@ const OrderConfirmationPage = () => {
         </div>
       </div>
 
+      {/* Campos según método */}
       {method === "Take Away" && (
         <>
           <p className="takeaway-address">Dirección: Sarmiento 253, Avellaneda</p>
           <div className="map-container">
             <iframe
               title="Ubicación Take Away"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3282.7704576170363!2d-58.37150512342676!3d-34.63536437292671!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95a3335c0842fd3b%3A0x81b530bbf3f23968!2sSarmiento%20253%2C%20Avellaneda%2C%20Provincia%20de%20Buenos%20Aires!5e0!3m2!1ses-419!2sar!4v1712848461217!5m2!1ses-419!2sar"
+              src="https://www.google.com/maps/embed?pb=..."
               width="100%"
               height="250"
               style={{ border: 0, borderRadius: "8px", marginTop: "1rem" }}
@@ -214,36 +191,22 @@ const OrderConfirmationPage = () => {
             value={address}
             onChange={(e) => {
               setAddress(e.target.value);
-              if (e.target.value.trim() !== "") {
-                setAddressError(false);
-              }
+              if (e.target.value.trim() !== "") setAddressError(false);
             }}
             placeholder="Ej: Av. Mitre 123"
             className={addressError ? "input-error" : ""}
           />
-          {addressError && (
-            <p className="error-message">La dirección es obligatoria.</p>
-          )}
+          {addressError && <p className="error-message">La dirección es obligatoria.</p>}
 
           <label>Piso (opcional):</label>
-          <input
-            type="text"
-            value={floor}
-            onChange={(e) => setFloor(e.target.value)}
-            placeholder="Ej: 3"
-          />
+          <input type="text" value={floor} onChange={(e) => setFloor(e.target.value)} placeholder="Ej: 3" />
 
           <label>Departamento (opcional):</label>
-          <input
-            type="text"
-            value={apartment}
-            onChange={(e) => setApartment(e.target.value)}
-            placeholder="Ej: B"
-          />
-
+          <input type="text" value={apartment} onChange={(e) => setApartment(e.target.value)} placeholder="Ej: B" />
         </div>
       )}
 
+      {/* Método de pago */}
       <p className="method">Método de pago:</p>
       <div className="method-toggle">
         <div
@@ -260,7 +223,7 @@ const OrderConfirmationPage = () => {
         </div>
       </div>
 
-
+      {/* Footer */}
       <div className="order-footer">
         <div className="price-display">
           Total: <span className="price-amount">${finalTotal.toLocaleString()}</span>
@@ -270,6 +233,7 @@ const OrderConfirmationPage = () => {
         </button>
       </div>
 
+      {/* Modal de confirmación */}
       {showModal && (
         <div className="modal-overlay">
           <div className="modal-content">
@@ -287,7 +251,7 @@ const OrderConfirmationPage = () => {
             ) : (
               <p><strong>Dirección:</strong> Sarmiento 253, Avellaneda. Depto A.</p>
             )}
-            <p><strong>Método de pago: </strong>{paymentMethod}</p>
+            <p><strong>Método de pago:</strong> {paymentMethod}</p>
             <p><strong>Total:</strong> ${finalTotal.toLocaleString()}</p>
 
             <div className="modal-buttons">
@@ -299,25 +263,24 @@ const OrderConfirmationPage = () => {
                 className="modal-btn confirm"
                 disabled={isSubmitting}
                 onClick={async () => {
-                  setIsSubmitting(true); 
-                
+                  setIsSubmitting(true);
+
                   const addressFormatted =
                     method === "Take Away"
                       ? "Sarmiento 253, Avellaneda. Depto A."
                       : `${address}${floor ? ` - Piso ${floor}` : ""}${apartment ? ` - Depto ${apartment}` : ""}`;
-                
-                  
+
                   await sendOrder({
                     method,
                     paymentMethod,
-                    finalTotal: finalTotal.toLocaleString(),
+                    finalTotal,
                     address: addressFormatted,
                     phoneNumber: telefono,
                     username: nombre,
-                    deliveryTime: deliveryTime, 
+                    deliveryTime,
                   });
-                
-                  setIsSubmitting(false); 
+
+                  setIsSubmitting(false);
                 }}
               >
                 {isSubmitting ? "Enviando..." : "Confirmar"}
@@ -331,4 +294,3 @@ const OrderConfirmationPage = () => {
 };
 
 export default OrderConfirmationPage;
-
