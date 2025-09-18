@@ -8,7 +8,6 @@ Backend
 Frontend
 - Validad todas los paginas
 - Mostrar 1 imagen por cada hamburguesa (hoy todas tienen la misma)
-- Modificar footer para redirigir a instagram nivalis
 - Validar instragram, numero de telefono y cbu en footer y orderSuccess
 - Terminar de agregar seguridad en archivos jsx
 

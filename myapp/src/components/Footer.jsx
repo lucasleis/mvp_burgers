@@ -8,19 +8,6 @@ const Footer = () => {
 
   return (
     <footer className="footer" role="contentinfo">
-      {/* Logo opcional
-      <div className="footer-left">
-        <div className="footer-logo">
-          <img
-            src={logo}
-            alt="Logo de MVP Burgers"
-            loading="lazy"
-            width="120"
-            height="auto"
-          />
-        </div>
-      </div>
-      */}
 
       <div className="footer-contact-row">
         {/* WhatsApp */} 
@@ -57,10 +44,10 @@ const Footer = () => {
         <p>
           © {currentYear} MVP Burgers | Hecho con ❤️ por{" "}
           <a
-            href="https://nivalis.ar"
+            href="https://www.instagram.com/nivalis.techlab/"  
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Ir al sitio de Nivalis en una nueva pestaña"
+            aria-label="Ir al perfil de Instagram de Nivalis en una nueva pestaña"
           >
             Nivalis
           </a>
