@@ -250,7 +250,7 @@ def get_status():
 # -----------------------------------------------------------------------------
 # Autenticación admin (sesiones + CSRF en formularios) ✅
 # -----------------------------------------------------------------------------
-@app.route("/login", methods=["GET", "POST"])
+@app.route("/api/login", methods=["GET", "POST"])
 @limiter.limit("100/hour")
 def login():
     if request.method == "GET":
@@ -270,7 +270,12 @@ def login():
     if username == ADMIN_USER and ADMIN_PASS_HASH and check_password_hash(ADMIN_PASS_HASH, password):
         session.permanent = True
         login_user(AdminUser(username))
-        return redirect(url_for("admin_dashboard"))
+        
+        # Si es una request JSON, devolver JSON en lugar de redirigir
+        if request.is_json:
+            return jsonify({"success": True, "message": "Login exitoso"}), 200
+        else:
+            return redirect(url_for("admin_dashboard"))
 
     if request.is_json:
         return {"error": "Credenciales inválidas"}, 401
@@ -278,7 +283,7 @@ def login():
         return render_template("login.html", error="Credenciales inválidas"), 401
 
 
-@app.route("/admin/logout", methods=["POST"])
+@app.route("/api/admin/logout", methods=["POST"])
 @login_required
 def logout():
     logout_user()
@@ -325,7 +330,7 @@ def enviar_pedido():
 
     return jsonify({"success": True, "message": "Pedido procesado"}), 200
 
-@app.route('/admin/pedidos')
+@app.route('/api/admin/pedidos')
 @login_required
 def ver_pedidos():
     pendientes = obtener_pedidos_por_estado("pendiente")
@@ -337,22 +342,22 @@ def actualizar_estado_pedido(pedido_id, nuevo_estado):
     if r.exists(clave):
         r.hset(clave, "estado", nuevo_estado)
 
-@app.post('/admin/enviar/<int:pedido_id>')
+@app.post('/api/admin/enviar/<int:pedido_id>')
 @login_required
 def marcar_como_enviado(pedido_id):
     actualizar_estado_pedido(pedido_id, "enviado")
-    return redirect('/admin/pedidos')
+    return redirect('/api/admin/pedidos')
 
-@app.post('/admin/pendiente/<int:pedido_id>')
+@app.post('/api/admin/pendiente/<int:pedido_id>')
 @login_required
 def marcar_como_pendiente(pedido_id):
     actualizar_estado_pedido(pedido_id, "pendiente")
-    return redirect('/admin/pedidos')
+    return redirect('/api/admin/pedidos')
 
 # -----------------------------------------------------------------------------
 # Admin: menú
 # -----------------------------------------------------------------------------
-@app.route('/admin/menu')
+@app.route('/api/admin/menu')
 @login_required
 def ver_menu():
     ids = r.lrange("products", 0, -1)
@@ -424,9 +429,9 @@ def agregar_producto_form():
     for item in [x.strip() for x in remove_raw.split(",") if x.strip()]:
         r.rpush(f"removeOptions:{name}", item)
 
-    return redirect("/admin/menu")
+    return redirect("/api/admin/menu")
 
-@app.post('/admin/menu/eliminar/<int:product_id>')
+@app.post('/api/admin/menu/eliminar/<int:product_id>')
 @login_required
 def eliminar_producto_form(product_id):
     clave_producto = f"product:{product_id}"
@@ -438,9 +443,9 @@ def eliminar_producto_form(product_id):
     r.lrem("products", 0, str(product_id))
     r.delete(f"removeOptions:{nombre}")
 
-    return redirect("/admin/menu")
+    return redirect("/api/admin/menu")
 
-@app.route("/admin/menu/editar/<int:producto_id>", methods=["POST"])
+@app.route("/api/admin/menu/editar/<int:producto_id>", methods=["POST"])
 @login_required
 def editar_producto(producto_id):
     key = f"product:{producto_id}"
@@ -487,12 +492,12 @@ def editar_producto(producto_id):
     if clean_options:
         r.rpush(f"removeOptions:{name}", *clean_options)
 
-    return redirect("/admin/menu")
+    return redirect("/api/admin/menu")
 
 # -----------------------------------------------------------------------------
 # Admin: extras
 # -----------------------------------------------------------------------------
-@app.route('/admin/extras')
+@app.route('/api/admin/extras')
 @login_required
 def ver_extras():
     ids = r.lrange("extras", 0, -1)
@@ -534,9 +539,9 @@ def agregar_extra_form():
     eid = r.incr("extra:id")
     r.rpush("extras", eid)
     r.hset(f"extra:{eid}", mapping={"name": name, "price": price})
-    return redirect("/admin/extras")
+    return redirect("/api/admin/extras")
 
-@app.post('/admin/extras/eliminar/<int:extra_id>')
+@app.post('/api/admin/extras/eliminar/<int:extra_id>')
 @login_required
 def eliminar_extra_form(extra_id):
     clave_extra = f"extra:{extra_id}"
@@ -544,9 +549,9 @@ def eliminar_extra_form(extra_id):
         return "Extra no encontrado", 404
     r.delete(clave_extra)
     r.lrem("extras", 0, str(extra_id))
-    return redirect("/admin/extras")
+    return redirect("/api/admin/extras")
 
-@app.route("/admin/extras/editar/<int:extra_id>", methods=["POST"])
+@app.route("/api/admin/extras/editar/<int:extra_id>", methods=["POST"])
 @login_required
 def editar_extra(extra_id):
     key = f"extra:{extra_id}"
@@ -561,7 +566,7 @@ def editar_extra(extra_id):
         return f"Error de validación: {e}", 400
 
     r.hset(key, mapping={"name": name, "price": price})
-    return redirect("/admin/extras")
+    return redirect("/api/admin/extras")
 
 # -----------------------------------------------------------------------------
 # Estado de toma de pedidos
@@ -584,19 +589,19 @@ def set_status_api():
     set_store_open(bool(data["open"]))
     return jsonify({"success": True, "open": is_store_open()})
 
-@app.route("/admin/status", methods=["GET", "POST"])
+@app.route("/api/admin/status", methods=["GET", "POST"])
 @login_required
 def admin_status():
     if request.method == "POST":
         nuevo_estado = request.form.get("open", "true") == "true"
         set_store_open(nuevo_estado)
-        return redirect("/admin/status")
+        return redirect("/api/admin/status")
     return render_template("status.html", abierto=is_store_open())
 
 # -----------------------------------------------------------------------------
 # Admin dashboard
 # -----------------------------------------------------------------------------
-@app.route("/admin")
+@app.route("/api/admin")
 @login_required
 def admin_dashboard():
     return render_template("admin.html")
