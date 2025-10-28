@@ -84,3 +84,12 @@ En caso de solo querer levantar frontend o backend:
 6. Los pedidos se gestionan y su estado se actualiza a "enviado" cuando se completa el proceso.
 
 7. Todos los días, a las 15 horas, los pedidos se borran automáticamente para evitar la acumulación de datos innecesarios.
+
+
+# Accesos
+
+## Frontend
+http://mvp.com.ar/
+
+## Backend
+http://mvp.com.ar/api/admin

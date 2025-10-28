@@ -40,7 +40,9 @@ load_dotenv()
 # Redis
 # -----------------------------------------------------------------------------
 redis_host = os.getenv("REDIS_HOST", "localhost")
-r = redis.Redis(host=redis_host, port=6380, decode_responses=True)
+redis_port = int(os.getenv("REDIS_PORT", 6379))
+r = redis.Redis(host=redis_host, port=redis_port, decode_responses=True)
+
 
 # -----------------------------------------------------------------------------
 # Seguridad / Auth (sesiones + hash)  ✅
