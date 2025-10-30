@@ -18,5 +18,5 @@ Pagina
 - Produccion
     - [✅] Conectar con telegram
     - [✅] Validar pedidos en backend
-    - [ ] Eliminar pedidos viejos
-
+    - [✅] Eliminar pedidos viejos
+    - [ ] Cambio de pedido nuevo a enviado se rompe
