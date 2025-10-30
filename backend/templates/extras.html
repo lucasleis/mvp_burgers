@@ -42,7 +42,7 @@
             Editar
           </button>
 
-          <form method="post" action="/admin/extras/eliminar/{{ extra.id }}" class="delete-form">
+          <form method="post" action="/api/admin/extras/eliminar/{{ extra.id }}" class="delete-form">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <button class="btn btn-danger">Eliminar</button>
           </form>
@@ -50,7 +50,7 @@
 
         <!-- Formulario de edición colapsable -->
         <div class="collapse mt-3" id="editForm{{ extra.id }}">
-          <form method="post" action="/admin/extras/editar/{{ extra.id }}">
+          <form method="post" action="/api/admin/extras/editar/{{ extra.id }}">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
             <div class="mb-2">

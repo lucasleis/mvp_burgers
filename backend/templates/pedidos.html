@@ -24,7 +24,7 @@
           <p><strong>Teléfono:</strong> {{ pedido.telefono }}</p>
           <p><strong>Método de pago:</strong> {{ pedido.metodo_pago }}</p>
           <p><strong>Total:</strong> ${{ pedido.total }}</p>
-          <form method="post" action="/admin/enviar/{{ pedido.id }}" class="state-form" data-msg="¿Marcar este pedido como Enviado?">
+          <form method="post" action="/api/admin/enviar/{{ pedido.id }}" class="state-form" data-msg="¿Marcar este pedido como Enviado?">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <button class="btn btn-success">Marcar como Enviado</button>
           </form>
@@ -42,7 +42,7 @@
           <p><strong>Teléfono:</strong> {{ pedido.telefono }}</p>
           <p><strong>Método de pago:</strong> {{ pedido.metodo_pago }}</p>
           <p><strong>Total:</strong> ${{ pedido.total }}</p>
-          <form method="post" action="/admin/pendiente/{{ pedido.id }}" class="state-form" data-msg="¿Volver este pedido a Pendiente?">
+          <form method="post" action="/api/admin/pendiente/{{ pedido.id }}" class="state-form" data-msg="¿Volver este pedido a Pendiente?">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <button class="btn btn-warning">Volver a Pendiente</button>
           </form>
