@@ -10,13 +10,13 @@
 <body class="p-4">
   <div class="container">
 
-    <a href="/admin" class="btn btn-secondary mb-4">← Volver al Administrador</a>
+    <a href="/api/admin" class="btn btn-secondary mb-4">← Volver al Administrador</a>
 
     <h1>Administrar Menú</h1>
 
     <h3>Agregar nuevo producto</h3>
     <!-- Agregamos enctype para permitir archivos -->
-    <form method="post" action="/admin/menu" class="mb-5" enctype="multipart/form-data">
+    <form method="post" action="/api/admin/menu" class="mb-5" enctype="multipart/form-data">
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
       <div class="mb-3">
@@ -76,7 +76,7 @@
             </button>
           </form>
 
-          <form method="post" action="/admin/menu/eliminar/{{ producto.id }}" class="delete-form">
+          <form method="post" action="/api/admin/menu/eliminar/{{ producto.id }}" class="delete-form">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <button class="btn btn-danger">Eliminar</button>
           </form>
@@ -84,7 +84,7 @@
 
         <!-- Formulario de edición colapsable -->
         <div class="collapse mt-3" id="editForm{{ producto.id }}">
-          <form method="post" action="/admin/menu/editar/{{ producto.id }}" enctype="multipart/form-data">
+          <form method="post" action="/api/admin/menu/editar/{{ producto.id }}" enctype="multipart/form-data">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <input type="hidden" name="name" value="{{ producto.name }}">
 

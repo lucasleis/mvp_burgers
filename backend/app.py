@@ -73,7 +73,13 @@ frontend_url = os.getenv("FRONTEND_URL", "http://localhost:3001")
 CORS(
     app,
     supports_credentials=True,  # necesario solo para rutas que usan cookies (admin)
-    origins=[frontend_url, "http://localhost:3000", "http://localhost:3001"]
+    origins=[
+        frontend_url,
+        "http://localhost:3000",
+        "http://localhost:3001",
+        "http://mvp.com.ar",
+        "https://mvp.com.ar"
+    ]
 )
 
 # CSRF: solo si usás cookies (admin) ✅
