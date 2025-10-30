@@ -8,7 +8,7 @@ const OrderConfirmationPage = () => {
   const location = useLocation();
   const { method: initialMethod, total: initialTotal, deliveryTime, paymentMethod: initialPaymentMethod } = location.state || {};
   
-  const [method, setMethod] = useState(initialMethod || "Take Away");
+  const [method, setMethod] = useState(initialMethod || "Delivery");
   const [address, setAddress] = useState("");
   const [telefono, setPhone] = useState("");
   const [nombre, setName] = useState("");
@@ -169,7 +169,7 @@ const OrderConfirmationPage = () => {
           <div className="map-container">
             <iframe
               title="Ubicación Take Away"
-              src="https://www.google.com/maps/embed?pb=..."
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3282.9721766215867!2d-58.36454212422932!3d-34.66242205939474!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f16!3m3!1m2!1s0x95bccbaaf0e3eaa9%3A0x44b3d71a79a1a0cd!2sSarmiento%20253%2C%20B1870CBE%20Avellaneda%2C%20Provincia%20de%20Buenos%20Aires!5e0!3m2!1ses-419!2sar!4v1730289780000"
               width="100%"
               height="250"
               style={{ border: 0, borderRadius: "8px", marginTop: "1rem" }}
