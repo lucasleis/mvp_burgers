@@ -301,10 +301,10 @@ def logout():
 # Admin: pedidos
 # -----------------------------------------------------------------------------
 
-# Exentamos CSRF para API JSON sin cookies (no hace falta CSRF aquí) ✅
+# Exentamos CSRF para API JSON sin cookies (no hace falta CSRF aquí) 
 @csrf.exempt
-@app.route('/enviarpedido', methods=['POST'])
-@limiter.limit("5/minute")  # ✅ Rate limit en pedidos
+@app.route('/api/admin/enviarpedido', methods=['POST'])
+@limiter.limit("5/minute")  # Rate limit en pedidos
 def enviar_pedido():
     data = request.get_json(silent=True) or {}
     try:

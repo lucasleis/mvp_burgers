@@ -37,24 +37,31 @@ const OrderConfirmationPage = () => {
     let hasError = false;
     let firstErrorRef = null;
 
-    if (telefono.trim() === "") {
+    // --- Teléfono ---
+    if (telefono.trim() === "" || telefono.replace(/\D/g, "").length < 8) {
       setPhoneError(true);
       hasError = true;
       if (!firstErrorRef) firstErrorRef = telefonoRef;
     }
 
+    // --- Nombre ---
     if (nombre.trim() === "") {
       setNameError(true);
       hasError = true;
       if (!firstErrorRef) firstErrorRef = nombreRef;
     }
 
-    if (method === "Delivery" && address.trim() === "") {
-      setAddressError(true);
-      hasError = true;
-      if (!firstErrorRef) firstErrorRef = addressRef;
+    // --- Dirección (solo Delivery) ---
+    if (method === "Delivery") {
+      const trimmed = address.trim();
+      if (trimmed === "" || trimmed.length < 5) {
+        setAddressError(true);
+        hasError = true;
+        if (!firstErrorRef) firstErrorRef = addressRef;
+      }
     }
 
+    // --- Scroll y salida ---
     if (hasError && firstErrorRef?.current) {
       firstErrorRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
       return;
@@ -63,20 +70,21 @@ const OrderConfirmationPage = () => {
     setShowModal(true);
   };
 
+
   const handleModalCancel = () => {
     setShowModal(false);
   };
 
   const sendOrder = async ({ method, paymentMethod, finalTotal, address, phoneNumber, username, deliveryTime }) => {
     try {
-      const response = await fetch(`${backendUrl}/enviarpedido`, {
+      const response = await fetch(`${backendUrl}/api/admin/enviarpedido`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           method,
           paymentMethod,
           address,
-          finalTotal, // 👉 número, no string
+          finalTotal, 
           phoneNumber,
           username,
           deliveryTime,
@@ -90,7 +98,7 @@ const OrderConfirmationPage = () => {
           state: {
             method,
             paymentMethod,
-            finalTotal, // 👉 número
+            finalTotal, // número
             address,
             phoneNumber,
             username,
@@ -196,7 +204,7 @@ const OrderConfirmationPage = () => {
             placeholder="Ej: Av. Mitre 123"
             className={addressError ? "input-error" : ""}
           />
-          {addressError && <p className="error-message">La dirección es obligatoria.</p>}
+          {addressError && <p className="error-message">Ingresá una dirección válida.</p>}
 
           <label>Piso (opcional):</label>
           <input type="text" value={floor} onChange={(e) => setFloor(e.target.value)} placeholder="Ej: 3" />

@@ -13,3 +13,10 @@ Pagina
 - [✅] Comprar dominio
 - [✅] Settear nginx
 - [ ] Lets Encrypt y DeSEC
+
+
+- Produccion
+    - [✅] Conectar con telegram
+    - [✅] Validar pedidos en backend
+    - [ ] Eliminar pedidos viejos
+
