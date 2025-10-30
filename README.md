@@ -93,3 +93,10 @@ http://mvp.com.ar/
 
 ## Backend
 http://mvp.com.ar/api/admin
+
+
+## Docker
+docker exec mvp_burgers-backend-1 python /app/borrar_pedidos.py
+
+## Borrar pedidos
+docker exec mvp_burgers-backend-1 python /app/borrar_pedidos.py
