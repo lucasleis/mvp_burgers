@@ -307,6 +307,7 @@ def logout():
 @limiter.limit("5/minute")  # Rate limit en pedidos
 def enviar_pedido():
     data = request.get_json(silent=True) or {}
+    print("Datos recibidos:", data)
     try:
         payload = validate_order_payload(data)
     except ValueError as e:

@@ -278,6 +278,15 @@ const OrderConfirmationPage = () => {
                       ? "Sarmiento 253, Avellaneda. Depto A."
                       : `${address}${floor ? ` - Piso ${floor}` : ""}${apartment ? ` - Depto ${apartment}` : ""}`;
 
+                  // Hora estimada de entrega (30 min desde ahora)
+                  const currentTime = new Date();
+                  currentTime.setMinutes(currentTime.getMinutes() + 30);
+                  const formattedTime = `${currentTime.getHours().toString().padStart(2, "0")}:${currentTime
+                    .getMinutes()
+                    .toString()
+                    .padStart(2, "0")}`;
+
+                  // Enviar pedido al backend
                   await sendOrder({
                     method,
                     paymentMethod,
@@ -285,7 +294,7 @@ const OrderConfirmationPage = () => {
                     address: addressFormatted,
                     phoneNumber: telefono,
                     username: nombre,
-                    deliveryTime,
+                    deliveryTime: formattedTime,
                   });
 
                   setIsSubmitting(false);
