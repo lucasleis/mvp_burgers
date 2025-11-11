@@ -147,7 +147,7 @@ const OrderPage = () => {
                 <h3>{product.name}</h3>
                 <p className="description">{product.description}</p>
                 <p className="price">
-                  {precio !== null ? `$ ${precio.toLocaleString()}` : "Precio no disponible"}
+                  {precio !== null ? `$ ${precio.toLocaleString("es-AR")}` : "Precio no disponible"}
                 </p>
                 <button
                   className="add-button"
@@ -165,7 +165,7 @@ const OrderPage = () => {
       {cart.length > 0 && (
         <div className="finalize-container">
           <p className="finalize-total">
-            Total del pedido: <span>${totalCartPrice.toLocaleString()}</span>
+            Total del pedido: <span>${totalCartPrice.toLocaleString("es-AR")}</span>
           </p>
           <button
             ref={finalizeButtonRef}

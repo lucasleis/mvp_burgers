@@ -123,7 +123,7 @@ const BurgerModal = ({ isOpen, onClose, product }) => {
                     <div className="type-name">{type.name}</div>
                     <div className="type-description">{type.description}</div>
                     <div className="type-price">
-                      {type.price > 0 ? `$${Number(type.price).toLocaleString()}` : "No disponible"}
+                      {type.price > 0 ? `$${Number(type.price).toLocaleString("es-AR")}` : "No disponible"}
                     </div>
                   </button>
                 ))}
@@ -141,7 +141,7 @@ const BurgerModal = ({ isOpen, onClose, product }) => {
                     <div key={extra.id} className="extra-item">
                       <div className="extra-details">
                         <span>{DOMPurify.sanitize(extra.name)}</span>
-                        <span className="extra-price">${Number(extra.price).toLocaleString()}</span>
+                        <span className="extra-price">${Number(extra.price).toLocaleString("es-AR")}</span>
                       </div>
                       <div className="counter">
                         <button
@@ -196,11 +196,11 @@ const BurgerModal = ({ isOpen, onClose, product }) => {
                 <span>{quantity}</span>
                 <button onClick={() => setQuantity(quantity + 1)} className="qty-btn" aria-label="Aumentar cantidad">+</button>
               </div>
-              <p className="total-price">${calculateTotal().toLocaleString()}</p>
+              <p className="total-price">${calculateTotal().toLocaleString("es-AR")}</p>
             </div>
 
             <button className="add-to-order-button" onClick={handleAddToCart} aria-label={`Agregar ${DOMPurify.sanitize(product.name)} a mi pedido`}>
-              AGREGAR A MI PEDIDO (${calculateTotal().toLocaleString()})
+              AGREGAR A MI PEDIDO (${calculateTotal().toLocaleString("es-AR")})
             </button>
           </div>
         </div>

@@ -234,7 +234,7 @@ const OrderConfirmationPage = () => {
       {/* Footer */}
       <div className="order-footer">
         <div className="price-display">
-          Total: <span className="price-amount">${finalTotal.toLocaleString()}</span>
+          Total: <span className="price-amount">${finalTotal.toLocaleString("es-AR")}</span>
         </div>
         <button className="primary-btn" onClick={handleConfirm}>
           Confirmar Compra
@@ -260,7 +260,7 @@ const OrderConfirmationPage = () => {
               <p><strong>Dirección:</strong> Sarmiento 253, Avellaneda. Depto A.</p>
             )}
             <p><strong>Método de pago:</strong> {paymentMethod}</p>
-            <p><strong>Total:</strong> ${finalTotal.toLocaleString()}</p>
+            <p><strong>Total:</strong> ${finalTotal.toLocaleString("es-AR")}</p>
 
             <div className="modal-buttons">
               <button onClick={handleModalCancel} className="modal-btn cancel" disabled={isSubmitting}>

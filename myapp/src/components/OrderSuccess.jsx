@@ -67,7 +67,7 @@ const OrderSuccess = () => {
           )}
           {typeof finalTotal === "number" && (
             <p>
-              <strong>Total:</strong> ${finalTotal.toLocaleString()}
+              <strong>Total:</strong> ${finalTotal.toLocaleString("es-AR")}
             </p>
           )}
         </div>

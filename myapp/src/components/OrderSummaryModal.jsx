@@ -120,7 +120,7 @@ const OrderSummaryModal = ({ isOpen, onClose, cart, setCart }) => {
                   ))}
               </div>
               <p>
-                <strong>${item.totalPrice.toLocaleString()}</strong>
+                <strong>${item.totalPrice.toLocaleString("es-AR")}</strong>
               </p>
             </div>
 
@@ -137,17 +137,17 @@ const OrderSummaryModal = ({ isOpen, onClose, cart, setCart }) => {
         <div className="summary">
           <div className="row">
             <span>SUBTOTAL</span>
-            <span>${subtotal.toLocaleString()}</span>
+            <span>${subtotal.toLocaleString("es-AR")}</span>
           </div>
           {deliveryCharge > 0 && (
             <div className="row">
               <span>Delivery</span>
-              <span>${deliveryCharge.toLocaleString()}</span>
+              <span>${deliveryCharge.toLocaleString("es-AR")}</span>
             </div>
           )}
           <div className="row total">
             <strong>TOTAL</strong>
-            <strong>${total.toLocaleString()}</strong>
+            <strong>${total.toLocaleString("es-AR")}</strong>
           </div>
         </div>
 
