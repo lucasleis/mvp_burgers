@@ -1,0 +1,19 @@
+.pedido-detalle {
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    padding: 10px 15px;
+    margin-top: 10px;
+}
+.pedido-item {
+    margin-bottom: 6px;
+}
+.pedido-item small {
+    color: #555;
+}
+.pedido-comentario {
+    background-color: #fff3cd;
+    border-left: 4px solid #ffca2c;
+    padding: 8px 10px;
+    border-radius: 4px;
+    font-style: italic;
+}
