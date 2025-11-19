@@ -397,64 +397,73 @@
 
 @media (min-width: 768px) {
   .burger-name {
-    font-size: 1.8rem;
+    font-size: 1.4rem;
   }
 
   .burger-description {
-    font-size: 1rem;
+    font-size: 0.9rem;
   }
 
   .burger-remark {
-    font-size: 1.05rem;
+    font-size: 0.8rem;
   }
 
-  .type-name {
-    font-size: 1.25rem;
-  }
-
-  .type-description {
-    font-size: 1.05rem;
-  }
-
-  .type-price {
-    font-size: 1.1rem;
+  .burger-image {
+    width: 140px;
+    height: 140px;
   }
 
   .section-title {
-    font-size: 1.5rem;
+    font-size: 1.1rem;
+  }
+
+  .burger-type-btn {
+    padding: 0.6rem;
+    min-height: 70px;
+  }
+
+  .type-name {
+    font-size: 1rem;
+  }
+
+  .type-description {
+    font-size: 0.85rem;
+  }
+
+  .type-price {
+    font-size: 0.95rem;
   }
 
   .extras-grid,
   .remove-grid {
-    font-size: 1.2rem;
+    font-size: 0.95rem;
   }
 
   .extra-details {
-    font-size: 1.1rem;
+    font-size: 0.9rem;
   }
 
+  .remove-option,
   .extra-price {
-    font-size: 1rem;
-  }
-
-  .remove-option {
-    font-size: 1.1rem;
+    font-size: 0.85rem;
   }
 
   .quantity-control {
-    font-size: 1.1rem;
+    font-size: 0.95rem;
   }
 
   .qty-btn {
-    font-size: 1.3rem;
+    padding: 0.3rem 0.7rem;
+    font-size: 1rem;
   }
 
   .total-price {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
   }
 
   .add-to-order-button {
-    font-size: 1.3rem;
+    font-size: 1rem;
+    padding: 0.7rem;
   }
 }
 

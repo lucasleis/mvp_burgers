@@ -22,4 +22,4 @@ Pagina
     - [✅] Cambio de pedido nuevo a enviado se rompe
     - [✅] Actualizar imagen de logo de back
     - [✅] Montos se muestran como $1,000
-    - [ ] Settear primer horario de entrega 20:30
+    - [✅] Settear primer horario de entrega 20:30
