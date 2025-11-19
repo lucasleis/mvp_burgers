@@ -31,15 +31,19 @@ const HomeSection = () => {
       </div>
 
       <div className="text-content">
-        <h1>MVP</h1>
-        <h1>BURGERS</h1>
-        <Link
-          to="/order"
-          className="order-now-button"
-          aria-label="Ir a la sección de pedidos online"
-        >
-          Hacé tu pedido online
-        </Link>
+        <div className="text-content">
+          <div className="title-block">
+            <h1>MVP</h1>
+            <h1>BURGERS</h1>
+          </div>
+
+          <Link
+            to="/order"
+            className="order-now-button"
+          >
+            Hacé tu pedido online
+          </Link>
+        </div>
       </div>
     </section>
   );
