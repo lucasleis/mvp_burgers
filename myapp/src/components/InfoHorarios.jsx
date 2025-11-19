@@ -26,6 +26,8 @@ const OrderInfoModal = ({ onClose }) => {
 
     document.addEventListener("keydown", handleEsc);
     return () => document.removeEventListener("keydown", handleEsc);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleClose = () => {

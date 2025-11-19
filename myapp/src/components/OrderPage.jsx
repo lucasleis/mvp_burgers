@@ -7,7 +7,7 @@ import OrderSummaryModal from "./OrderSummaryModal";
 import { FaShoppingCart } from "react-icons/fa";
 import DOMPurify from "dompurify";
 
-const ALLOWED_PRICE_FIELDS = ["price_simple", "price_double"];
+// const ALLOWED_PRICE_FIELDS = ["price_simple", "price_double"];
 
 const OrderPage = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);

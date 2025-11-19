@@ -1,7 +1,7 @@
 // src/components/HomeSection.jsx
 import React, { useState, useEffect } from "react";
 import "./HomeSection.css";
-import burgerImg from "../imgs/mascota_sinfondo.png";
+import burgerImg from "../imgs/mascota_sinfondo_volteada.png";
 import { Link } from "react-router-dom";
 import OrderInfoModal from "./InfoHorarios";
 
