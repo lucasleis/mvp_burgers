@@ -3,7 +3,7 @@
 
 import os
 import re
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 from dotenv import load_dotenv
 
@@ -178,6 +178,26 @@ def validate_order_payload(data):
         "delivery_time": delivery_time or "",
     }
 
+def validar_horario_entrega(hora_str, minimo="20:30"):
+    """
+    Devuelve un horario válido:
+      - Si hora_str < mínimo → devuelve mínimo
+      - Si hora_str >= mínimo → devuelve hora_str
+      - Si hora_str es None o inválido → devuelve mínimo
+    """
+    hora_minima = datetime.strptime(minimo, "%H:%M")
+
+    if not hora_str:
+        return minimo
+
+    try:
+        hora_dt = datetime.strptime(hora_str, "%H:%M")
+        if hora_dt < hora_minima:
+            return minimo
+        return hora_str
+    except ValueError:
+        return minimo
+
 # -----------------------------------------------------------------------------
 # Notificaciones
 # -----------------------------------------------------------------------------
@@ -336,6 +356,7 @@ def enviar_pedido():
     cart = data.get("cart", [])
     comments = data.get("comments", "").strip()
     username = data.get("username", "").strip()
+    payload["delivery_time"] = validar_horario_entrega(payload.get("delivery_time"))
 
     # Texto del pedido
     mensaje = (
@@ -371,7 +392,7 @@ def enviar_pedido():
     if comments:
         mensaje += f"\n\n💬 Comentarios: {comments}"
 
-    print("Mensaje de pedido:\n", mensaje)
+    # print("Mensaje de pedido:\n", mensaje)
 
     # Notificaciones
     enviar_mail(mensaje)
