@@ -1,16 +1,16 @@
-/* 🟣 GLOBAL STYLES 🟣 */
+/* GLOBAL STYLES */
 body {
   font-family: 'Poppins', sans-serif;
 }
 
-/* 🟣 DESKTOP FOOTER 🟣 */
+/* DESKTOP FOOTER */
 .footer {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 3rem 1rem 1rem 3rem;
-  font-size: 1.4rem;
+  padding: 1.8rem 1rem 1.2rem 1rem; /* antes 3rem */
+  font-size: 1.05rem; /* antes 1.4rem */
   background-color: #121212;
   color: #e0e0e0;
   border-top: 1px solid #333;
@@ -39,7 +39,7 @@ body {
 }
 
 .footer-logo img {
-  height: 75px;
+  height: 60px; /* antes 75px */
   opacity: 0.9;
   transition: opacity 0.3s;
 }
@@ -50,39 +50,58 @@ body {
 
 .footer-center span,
 .footer-right span {
-  font-size: 1.2rem;
+  font-size: 0.95rem; /* antes 1.2rem */
 }
 
 .icon {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
 }
 
 .instagram-link,
 .whatsapp-link {
-  gap: 0.4rem;
-  font-size: 1.2rem;
+  gap: 0.3rem;
+  font-size: 1rem; /* antes 1.2rem */
   opacity: 0.8;
-  transition: opacity 0.3s, color 0.3s;
   display: flex;
   align-items: center;
-  color: white;
   text-decoration: none;
+  color: white;
 }
 
-.instagram-link:hover,
+/* transicion entre colores */
+.instagram-link,
+.whatsapp-link,
+.instagram-link .icon,
+.whatsapp-link .icon {
+  transition: color 0.3s ease-in-out;
+}
+
+/* Hover WhatsApp */
 .whatsapp-link:hover {
-  opacity: 1;
-  color: white;
+  color: #25D366 !important;
+}
+
+.whatsapp-link:hover .icon {
+  color: #25D366 !important;
+}
+
+/* Hover Instagram */
+.instagram-link:hover {
+  color: #E1306C !important;
+}
+
+.instagram-link:hover .icon {
+  color: #E1306C !important;
 }
 
 .footer-credits {
   width: 100%;
   text-align: center;
-  font-size: 1.1rem;
+  font-size: 0.85rem; /* antes 1.1rem */
   color: #999;
-  margin-top: 1rem;
+  margin-top: 0.5rem; /* antes 1rem */
+  padding-top: 0.7rem; /* antes 1rem */
   border-top: 1px solid #333;
-  padding-top: 1rem;
   font-style: italic;
 }
 
@@ -100,9 +119,9 @@ body {
 .footer-contact-row {
   display: flex;
   justify-content: center;
-  gap: 3rem;
+  gap: 1.6rem; /* antes 3rem */
   width: 100%;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem; /* antes 1rem */
 }
 
 
