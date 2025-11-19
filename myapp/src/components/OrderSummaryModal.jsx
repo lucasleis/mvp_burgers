@@ -66,6 +66,7 @@ const OrderSummaryModal = ({ isOpen, onClose, cart, setCart }) => {
         total,
         deliveryTime,
         comments: comments.trim(),
+        cart,
       },
     });
   };
@@ -99,8 +100,8 @@ const OrderSummaryModal = ({ isOpen, onClose, cart, setCart }) => {
                 alt={`Imagen de ${item.name}`}
                 className="cart-item-image"
                 loading="lazy"
-                width="60"    // verificar que no rompa estetica
-                height="60"   // verificar que no rompa estetica
+                width="60"    
+                height="60" 
               />
             ) : (
               <div className="cart-item-no-image">Sin imagen</div>

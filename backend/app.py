@@ -30,6 +30,8 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
 import redis
+import json
+
 
 # -----------------------------------------------------------------------------
 # Carga de entorno
@@ -223,16 +225,29 @@ def guardar_pedido(pedido):
 def obtener_pedidos_por_estado(estado):
     pedidos_ids = r.lrange("pedidos", 0, -1)
     pedidos_filtrados = []
+
     for pid in pedidos_ids:
         pedido = r.hgetall(f"pedido:{pid}")
-        if pedido.get("estado") == estado:
-            pedido["id"] = int(pid)
-            # total guardado como int
-            try:
-                pedido["total"] = int(pedido["total"])
-            except Exception:
-                pedido["total"] = 0
-            pedidos_filtrados.append(pedido)
+        if pedido.get("estado") != estado:
+            continue
+
+        pedido["id"] = int(pid)
+
+        # total numérico
+        try:
+            pedido["total"] = int(pedido["total"])
+        except Exception:
+            pedido["total"] = 0
+
+        # detalle → parse JSON
+        detalle_raw = pedido.get("detalle", "")
+        try:
+            pedido["detalle"] = json.loads(detalle_raw.replace("'", '"'))
+        except Exception:
+            pedido["detalle"] = []
+
+        pedidos_filtrados.append(pedido)
+
     return pedidos_filtrados
 
 # -----------------------------------------------------------------------------
@@ -304,37 +319,71 @@ def logout():
 # Exentamos CSRF para API JSON sin cookies (no hace falta CSRF aquí) 
 @csrf.exempt
 @app.route('/api/admin/enviarpedido', methods=['POST'])
-@limiter.limit("5/minute")  # Rate limit en pedidos
+@limiter.limit("5/minute")
 def enviar_pedido():
     data = request.get_json(silent=True) or {}
-    print("Datos recibidos:", data)
+
     try:
         payload = validate_order_payload(data)
     except ValueError as e:
         return jsonify({"error": str(e)}), 400
 
+    # Datos adicionales del pedido
+    cart = data.get("cart", [])
+    comments = data.get("comments", "").strip()
+    username = data.get("username", "").strip()
+
+    # Texto del pedido
     mensaje = (
-        f"Nuevo Pedido!\n"
-        f"Método de pago: {payload['paymentMethod']}\n"
+        f"🧾 Nuevo Pedido!\n"
+        f"Cliente: {username or '—'}\n"
         f"Método de envío: {payload['method']}\n"
         f"Dirección: {payload['address']}\n"
         f"Teléfono: {payload['phoneNumber']}\n"
+        f"Método de pago: {payload['paymentMethod']}\n"
+        f"Entrega estimada: {payload['delivery_time'] or '-'}\n"
         f"Total: ${payload['finalTotal']:,}".replace(",", ".") + "\n"
-        f"Entrega estimada: {payload['delivery_time'] or '-'}"
     )
 
-    print("Mensaje: " + mensaje)
+    # Detalle del carrito
+    if isinstance(cart, list) and cart:
+        mensaje += "\n🍔 *Detalle del pedido:*\n"
+        for item in cart:
+            nombre = item.get("name", "—")
+            cantidad = item.get("quantity", 1)
+            total = item.get("totalPrice", 0)
+            extras = item.get("extras", [])
+            removed = item.get("removed", [])
 
+            mensaje += f"\n- {nombre} x{cantidad}  (${total:,})".replace(",", ".")
+            if extras:
+                extras_txt = ", ".join(f"{e[0]} x{e[1]}" for e in extras)
+                mensaje += f"\n   + Extras: {extras_txt}"
+            if removed:
+                removed_txt = ", ".join(removed)
+                mensaje += f"\n   - Sin: {removed_txt}"
+
+    # Comentarios
+    if comments:
+        mensaje += f"\n\n💬 Comentarios: {comments}"
+
+    print("Mensaje de pedido:\n", mensaje)
+
+    # Notificaciones
     enviar_mail(mensaje)
     enviar_telegram(mensaje)
 
+    # Guardar en Redis
     guardar_pedido({
         "direccion": payload["address"],
         "total": payload["finalTotal"],
         "telefono": payload["phoneNumber"],
         "metodo_envio": payload["method"],
         "metodo_pago": payload["paymentMethod"],
-        "tiempo_entrega": payload["delivery_time"]
+        "tiempo_entrega": payload["delivery_time"],
+        "cliente": username,
+        "comentarios": comments,
+        "detalle": str(cart),  
     })
 
     return jsonify({"success": True, "message": "Pedido procesado"}), 200

@@ -6,7 +6,7 @@ import "./OrderConfirmationPage.css";
 
 const OrderConfirmationPage = () => {
   const location = useLocation();
-  const { method: initialMethod, total: initialTotal, deliveryTime, paymentMethod: initialPaymentMethod } = location.state || {};
+  const { method: initialMethod, total: initialTotal, deliveryTime, comments, cart = [], paymentMethod: initialPaymentMethod } = location.state || {};
   
   const [method, setMethod] = useState(initialMethod || "Delivery");
   const [address, setAddress] = useState("");
@@ -84,10 +84,12 @@ const OrderConfirmationPage = () => {
           method,
           paymentMethod,
           address,
-          finalTotal, 
+          finalTotal,
           phoneNumber,
           username,
           deliveryTime,
+          comments,
+          cart, 
         }),
       });
 
