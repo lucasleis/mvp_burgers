@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/pedidos.css') }}">
+  <link rel="icon" href="/api/mascota.ico">
 </head>
 
 <body class="p-4">
@@ -102,9 +103,14 @@
         <div class="card mb-3 p-3 bg-light">
 
           <!-- ENCABEZADO -->
-          <p><strong>Pedido N°:</strong> {{ pedido.id }}</p>
-          <p><strong>Cliente:</strong> {{ pedido.cliente or '—' }}</p>
+          <p><strong>Pedido N°:</strong> {{ pedido.id }} - {{ pedido.cliente or '—' }}</p>
+          <!-- <p><strong>Cliente:</strong> {{ pedido.cliente or '—' }}</p> -->
           <p><strong>Método de envío:</strong> {{ pedido.metodo_envio }}</p>
+
+          <!-- TOTAL + MÉTODO DE PAGO -->
+          <p class="mt-2">
+            <strong>Total:</strong> ${{ pedido.total }} — {{ pedido.metodo_pago }}
+          </p>
 
           <!-- DETALLE SIEMPRE VISIBLE -->
           {% if pedido.detalle %}
@@ -135,11 +141,6 @@
             {% endfor %}
           </div>
           {% endif %}
-
-          <!-- TOTAL + MÉTODO DE PAGO -->
-          <p class="mt-2">
-            <strong>Total:</strong> ${{ pedido.total }} — {{ pedido.metodo_pago }}
-          </p>
 
           <!-- BOTÓN PARA INFO -->
           <button class="btn btn-sm btn-outline-primary w-100"

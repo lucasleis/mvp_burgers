@@ -8,7 +8,7 @@ from datetime import timedelta
 from dotenv import load_dotenv
 
 from flask import (
-    Flask, request, jsonify, render_template, redirect, url_for, session
+    Flask, request, jsonify, render_template, redirect, url_for, session, send_from_directory
 )
 from flask_cors import CORS
 from flask_login import (
@@ -260,6 +260,10 @@ ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif", "webp"}
 
 def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route('/api/mascota.ico')
+def backend_favicon():
+    return send_from_directory('static', 'mascota.ico', mimetype='image/vnd.microsoft.icon')
 
 # -----------------------------------------------------------------------------
 # Rutas públicas / API
