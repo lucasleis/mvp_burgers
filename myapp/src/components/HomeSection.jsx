@@ -17,35 +17,41 @@ const HomeSection = () => {
   };
 
   return (
-    <section className="home-section">
-      {showModal && <OrderInfoModal onClose={handleCloseModal} />}
+<section className="home-section">
+  {showModal && <OrderInfoModal onClose={handleCloseModal} />}
 
-      <div className="image-container">
-        <img
-          src={burgerImg}
-          alt="Ilustración de hamburguesa"
-          loading="lazy"
-          width="300"
-          height="300"
-        />
-      </div>
+  <div className="image-container home-image">
+    <img
+      src={burgerImg}
+      alt="Ilustración de hamburguesa"
+      loading="lazy"
+      width="300"
+      height="300"
+    />
+  </div>
 
-      <div className="text-content">
-        <div className="text-content">
-          <div className="title-block">
-            <h1>MVP</h1>
-            <h1>BURGERS</h1>
-          </div>
+  <Link
+    to="/order"
+    className="order-now-button mobile-button home-mobile-button"
+  >
+    Hacé tu pedido online
+  </Link>
 
-          <Link
-            to="/order"
-            className="order-now-button"
-          >
-            Hacé tu pedido online
-          </Link>
-        </div>
-      </div>
-    </section>
+  <div className="text-content home-title">
+    <div className="title-block">
+      <h1>MVP</h1>
+      <h1>BURGERS</h1>
+    </div>
+
+    <Link
+      to="/order"
+      className="order-now-button desktop-button"
+    >
+      Hacé tu pedido online
+    </Link>
+  </div>
+</section>
+
   );
 };
 

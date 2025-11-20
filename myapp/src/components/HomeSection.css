@@ -101,7 +101,7 @@
 @media (max-width: 768px) {
 
   .home-section {
-    flex-direction: column-reverse;
+    flex-direction: column;
     padding-top: 2rem;
     text-align: center;
     align-items: center;
@@ -117,5 +117,59 @@
 
   .order-now-button {
     font-size: 1.2rem;
+  }
+}
+
+/* Desktop by default */
+.mobile-button {
+  display: none;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Mobile: mostrar mobile button y ocultar desktop button */
+@media (max-width: 768px) {
+  .desktop-button {
+    display: none;
+  }
+
+  .mobile-button {
+    display: inline-block;
+    margin-bottom: 1.5rem; /* separarlo de la imagen */
+  }
+}
+
+@media (max-width: 768px) {
+  .home-section {
+    display: grid;
+    grid-template-areas:
+      "title"
+      "image"
+      "button";
+    justify-items: center;
+    padding-top: 2rem;
+    gap: 2rem;
+  }
+
+  .home-title {
+    grid-area: title;
+    text-align: center;
+  }
+
+  .home-image {
+    grid-area: image;
+  }
+
+  .home-mobile-button {
+    grid-area: button;
+  }
+
+  /* Ocultar botón desktop, mostrar mobile */
+  .desktop-button {
+    display: none;
+  }
+
+  .mobile-button {
+    display: inline-block;
   }
 }
