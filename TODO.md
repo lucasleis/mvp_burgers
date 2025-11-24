@@ -23,3 +23,4 @@ Pagina
     - [✅] Actualizar imagen de logo de back
     - [✅] Montos se muestran como $1,000
     - [✅] Settear primer horario de entrega 20:30
+    - [ ] Cambiar Nivalis de footer por algo mas vistoso
