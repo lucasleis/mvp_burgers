@@ -44,10 +44,10 @@ const Footer = () => {
         <p>
           © {currentYear} MVP Burgers | Hecho con ❤️ por{" "}
           <a
-            href="https://www.instagram.com/nivalis.techlab/"  
+            href="https://nivalistechlab.com/"  
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Ir al perfil de Instagram de Nivalis en una nueva pestaña"
+            aria-label="Visitar el sitio web de Nivalis en una nueva pestaña"
           >
             Nivalis
           </a>
