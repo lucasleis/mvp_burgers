@@ -232,6 +232,49 @@ def enviar_mail(cuerpo):
     except Exception as e:
         print(f"Error al enviar el correo: {e}")
 
+def enviar_pedido_a_fudo(cart, payload, comments, username):
+    """Inyecta el pedido en Fudo para que se imprima la comanda."""
+    fudo_url = os.getenv("FUDO_API_URL")  # e.g. https://app-v2.fu.do/api/integrations/...
+    fudo_token = os.getenv("FUDO_API_TOKEN")
+    
+    if not fudo_url or not fudo_token:
+        return  # si no está configurado, se omite silenciosamente
+    
+    items = []
+    for item in cart:
+        items.append({
+            "name": item.get("name"),
+            "quantity": item.get("quantity", 1),
+            "price": item.get("totalPrice", 0),
+            "notes": ", ".join([
+                *[f"+{e[0]} x{e[1]}" for e in item.get("extras", [])],
+                *[f"Sin {r}" for r in item.get("removed", [])]
+            ])
+        })
+    
+    body = {
+        "customer": {
+            "name": username,
+            "phone": payload["phoneNumber"],
+            "address": payload["address"],
+        },
+        "items": items,
+        "total": payload["finalTotal"],
+        "delivery_type": "delivery" if payload["method"] == "Delivery" else "takeaway",
+        "notes": comments,
+    }
+    
+    headers = {
+        "Authorization": f"Bearer {fudo_token}",
+        "Content-Type": "application/json"
+    }
+    
+    try:
+        resp = requests.post(fudo_url, json=body, headers=headers, timeout=10)
+        resp.raise_for_status()
+    except requests.RequestException as e:
+        print(f"Error al enviar pedido a Fudo: {e}")
+
 # -----------------------------------------------------------------------------
 # Persistencia de pedidos
 # -----------------------------------------------------------------------------
